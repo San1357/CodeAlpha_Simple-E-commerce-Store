@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Checkout</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background: #f7f7f7;
+      font-family: Arial, sans-serif;
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 430px;
+      margin: 3rem auto;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      padding: 2rem 2.5rem 2.5rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .section-title {
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: #0074d9;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    .summary {
+      width: 100%;
+      margin-bottom: 2rem;
+      background: #f1f1f1;
+      border-radius: 7px;
+      padding: 1rem 1.2rem;
+      box-sizing: border-box;
+    }
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.7rem;
+      font-size: 1.05rem;
+    }
+    .summary-row.total {
+      font-weight: bold;
+      color: #0074d9;
+      font-size: 1.15rem;
+      margin-top: 0.5rem;
+    }
+    form {
+      width: 100%;
+      margin-bottom: 1.5rem;
+    }
+    .form-group {
+      margin-bottom: 1rem;
+      display: flex;
+      flex-direction: column;
+    }
+    label {
+      margin-bottom: 0.3rem;
+      font-size: 1rem;
+      color: #222;
+    }
+    input[type="text"], input[type="number"] {
+      padding: 0.5rem;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      outline: none;
+      transition: border 0.2s;
+    }
+    input[type="text"]:focus, input[type="number"]:focus {
+      border: 1.5px solid #0074d9;
+    }
+    .delivery-options {
+      margin-bottom: 1rem;
+      width: 100%;
+    }
+    .delivery-options label {
+      margin-right: 1.5rem;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .pickup-message {
+      background: #e7f7ff;
+      color: #0074d9;
+      border-radius: 5px;
+      padding: 0.7rem;
+      margin-bottom: 1rem;
+      text-align: center;
+      display: none;
+    }
+    .proceed-btn {
+      width: 100%;
+      padding: 0.8rem 0;
+      font-size: 1.1rem;
+      background: #0074d9;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.2s;
+      margin-top: 1rem;
+    }
+    .proceed-btn:hover {
+      background: #005fa3;
+    }
+    @media (max-width: 500px) {
+      .container {
+        padding: 1rem 0.5rem;
+      }
+      .summary {
+        padding: 0.7rem 0.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="section-title">Checkout Summary</div>
+    <div class="summary" id="checkout-summary">
+      <!-- Product summary will be injected here -->
+    </div>
+
+    <form id="address-form" autocomplete="off">
+      <div class="section-title" style="font-size:1.1rem;">Delivery Address</div>
+      <div class="form-group">
+        <label for="fullname">Full Name</label>
+        <input type="text" id="fullname" required>
+      </div>
+      <div class="form-group">
+        <label for="mobile">Mobile Number</label>
+        <input type="text" id="mobile" required pattern="[0-9]{10}" maxlength="10">
+      </div>
+      <div class="form-group">
+        <label for="street">Street Address</label>
+        <input type="text" id="street" required>
+      </div>
+      <div class="form-group">
+        <label for="city">City</label>
+        <input type="text" id="city" required>
+      </div>
+      <div class="form-group">
+        <label for="state">State</label>
+        <input type="text" id="state" required>
+      </div>
+      <div class="form-group">
+        <label for="pincode">Pincode</label>
+        <input type="text" id="pincode" required pattern="[0-9]{6}" maxlength="6">
+      </div>
+      <div class="section-title" style="font-size:1.1rem;">Delivery Option</div>
+      <div class="delivery-options">
+        <label>
+          <input type="radio" name="delivery" value="home" required> Home Delivery
+        </label>
+        <label>
+          <input type="radio" name="delivery" value="pickup"> Pickup from Store
+        </label>
+      </div>
+      <div class="pickup-message" id="pickup-message">
+        You can collect your order from the nearest store.
+      </div>
+      <button type="submit" class="proceed-btn">Proceed</button>
+    </form>
+  </div>
+  <script>
+    // Read product data from localStorage
+    // Example: { name: "Reynolds Pen", price: 10, quantity: 3 }
+    let product = localStorage.getItem('checkoutProduct');
+    product = product ? JSON.parse(product) : null;
+
+    // Render checkout summary
+    function renderSummary() {
+      const summaryDiv = document.getElementById('checkout-summary');
+      if (!product) {
+        summaryDiv.innerHTML = "<div style='color:red;'>No product found for checkout.</div>";
+        document.getElementById('address-form').style.display = 'none';
+        return;
+      }
+      const total = product.price * product.quantity;
+      summaryDiv.innerHTML = `
+        <div class="summary-row"><span>Product Name:</span><span>${product.name}</span></div>
+        <div class="summary-row"><span>Price per unit:</span><span>₹${product.price}</span></div>
+        <div class="summary-row"><span>Quantity:</span><span>${product.quantity}</span></div>
+        <div class="summary-row total"><span>Total Price:</span><span>₹${total}</span></div>
+      `;
+    }
+
+    renderSummary();
+
+    // Delivery option logic
+    const deliveryRadios = document.querySelectorAll('input[name="delivery"]');
+    const pickupMsg = document.getElementById('pickup-message');
+    deliveryRadios.forEach(radio => {
+      radio.addEventListener('change', function() {
+        if (this.value === 'pickup') {
+          pickupMsg.style.display = 'block';
+        } else {
+          pickupMsg.style.display = 'none';
+        }
+      });
+    });
+
+    // Form validation and proceed logic
+    document.getElementById('address-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      // Basic validation
+      const fullname = document.getElementById('fullname').value.trim();
+      const mobile = document.getElementById('mobile').value.trim();
+      const street = document.getElementById('street').value.trim();
+      const city = document.getElementById('city').value.trim();
+      const state = document.getElementById('state').value.trim();
+      const pincode = document.getElementById('pincode').value.trim();
+      const delivery = document.querySelector('input[name="delivery"]:checked");
+
+      if (!fullname || !mobile || !street || !city || !state || !pincode || !delivery) {
+        alert("Please fill all required fields and select a delivery option.");
+        return;
+      }
+      if (!/^[0-9]{10}$/.test(mobile)) {
+        alert("Please enter a valid 10-digit mobile number.");
+        return;
+      }
+      if (!/^[0-9]{6}$/.test(pincode)) {
+        alert("Please enter a valid 6-digit pincode.");
+        return;
+      }
+
+      // Save order details (optional, for demo)
+      const orderDetails = {
+        product,
+        fullname,
+        mobile,
+        street,
+        city,
+        state,
+        pincode,
+        delivery: delivery.value
+      };
+      localStorage.setItem('orderDetails', JSON.stringify(orderDetails));
+
+      alert("Order details saved. Proceeding to next step.");
+      // You can redirect or clear cart here if needed
+    });
+  </script>
+</body>
+</html>

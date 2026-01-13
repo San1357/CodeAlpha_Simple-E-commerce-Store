@@ -310,7 +310,14 @@
 
     // Buy Now button
     document.getElementById('buy-now-btn').onclick = () => {
-      alert(`Proceeding to checkout with ${product.brand} ${product.category}`);
+    // Save product info to localStorage
+    localStorage.setItem('checkoutProduct', JSON.stringify({
+        name: product.brand + " " + product.category,
+        price: Number(product.price),
+        quantity: quantity
+    }));
+    // Redirect to checkout page
+    window.location.href = "checkout.html";
     };
   };
 </script>
