@@ -294,13 +294,23 @@
       let html = `<h2>Pen Brands</h2>
         <div class="product-grid">`;
       penProducts.forEach(product => {
-        html += `
-          <div class="product-card">
-            <div class="product-title">${product.brand}</div>
-            <div class="product-desc">${product.desc}</div>
-            <div class="product-price">${product.price}</div>
-          </div>
-        `;
+        if (product.brand === "Pilot" || product.brand === "Flair" || product.brand === "Cello" || product.brand === "Linc" || product.brand === "Parker" || product.brand === "Reynolds") {
+          html += `
+            <div class="product-card" style="cursor:pointer" onclick="window.location.href='product-detail.html?brand=${encodeURIComponent(product.brand)}';">
+              <div class="product-title">${product.brand}</div>
+              <div class="product-desc">${product.desc}</div>
+              <div class="product-price">${product.price}</div>
+            </div>
+          `;
+        } else {
+          html += `
+            <div class="product-card">
+              <div class="product-title">${product.brand}</div>
+              <div class="product-desc">${product.desc}</div>
+              <div class="product-price">${product.price}</div>
+            </div>
+          `;
+        }
       });
       html += `</div>`;
       mainContent.innerHTML = html;
@@ -312,7 +322,7 @@
         <div class="product-grid">`;
       pencilProducts.forEach(product => {
         html += `
-          <div class="product-card">
+          <div class="product-card" style="cursor:pointer" onclick="window.location.href='product-detail.html?brand=${encodeURIComponent(product.brand)}'">
             <div class="product-title">${product.brand}</div>
             <div class="product-desc">${product.desc}</div>
             <div class="product-price">${product.price}</div>
@@ -329,7 +339,7 @@
         <div class="product-grid">`;
       notebookProducts.forEach(product => {
         html += `
-          <div class="product-card">
+          <div class="product-card" style="cursor:pointer" onclick="window.location.href='product-detail.html?brand=${encodeURIComponent(product.brand)}'">
             <div class="product-title">${product.brand}</div>
             <div class="product-desc">${product.desc}</div>
             <div class="product-price">${product.price}</div>
@@ -346,7 +356,7 @@
         <div class="product-grid">`;
       sharpenerProducts.forEach(product => {
         html += `
-          <div class="product-card">
+          <div class="product-card" style="cursor:pointer" onclick="window.location.href='product-detail.html?brand=${encodeURIComponent(product.brand)}'">
             <div class="product-title">${product.brand}</div>
             <div class="product-desc">${product.desc}</div>
             <div class="product-price">${product.price}</div>
@@ -363,7 +373,7 @@
         <div class="product-grid">`;
       eraserProducts.forEach(product => {
         html += `
-          <div class="product-card">
+          <div class="product-card" style="cursor:pointer" onclick="window.location.href='product-detail.html?brand=${encodeURIComponent(product.brand)}'">
             <div class="product-title">${product.brand}</div>
             <div class="product-desc">${product.desc}</div>
             <div class="product-price">${product.price}</div>
