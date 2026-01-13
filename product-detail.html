@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Product Detail</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background: #f7f7f7;
+      font-family: Arial, sans-serif;
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 420px;
+      margin: 3rem auto;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      padding: 2rem 2.5rem 2.5rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .brand-name {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #0074d9;
+      margin-bottom: 0.5rem;
+      text-align: center;
+    }
+    .category {
+      font-size: 1.1rem;
+      color: #555;
+      margin-bottom: 1.2rem;
+      text-align: center;
+    }
+    .description {
+      font-size: 1.05rem;
+      color: #333;
+      margin-bottom: 1.2rem;
+      text-align: center;
+    }
+    .price {
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: #222;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+    .quantity-selector {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      margin-bottom: 2rem;
+    }
+    .qty-btn {
+      background: #0074d9;
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: background 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .qty-btn:hover {
+      background: #005fa3;
+    }
+    .qty-number {
+      font-size: 1.2rem;
+      min-width: 24px;
+      text-align: center;
+    }
+    .actions {
+      display: flex;
+      gap: 1.2rem;
+      margin-top: 1rem;
+      width: 100%;
+      justify-content: center;
+    }
+    .action-btn {
+      padding: 0.7rem 1.6rem;
+      font-size: 1.08rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.2s, color 0.2s;
+    }
+    .add-cart {
+      background: #fff;
+      color: #0074d9;
+      border: 2px solid #0074d9;
+    }
+    .add-cart:hover {
+      background: #0074d9;
+      color: #fff;
+    }
+    .buy-now {
+      background: #0074d9;
+      color: #fff;
+      border: 2px solid #0074d9;
+    }
+    .buy-now:hover {
+      background: #005fa3;
+      border-color: #005fa3;
+    }
+    /* Responsive */
+    @media (max-width: 500px) {
+      .container {
+        padding: 1rem 0.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="brand-name"></div>
+    <div class="category"></div>
+    <div class="description"></div>
+    <div class="price"></div>
+    <div class="quantity-selector">
+      <button class="qty-btn" id="decrease-btn">-</button>
+      <span class="qty-number" id="qty-number">1</span>
+      <button class="qty-btn" id="increase-btn">+</button>
+    </div>
+    <div class="actions">
+      <button class="action-btn add-cart" id="add-cart-btn">Add to Cart</button>
+      <button class="action-btn buy-now" id="buy-now-btn">Buy Now</button>
+    </div>
+  </div>
+  <script>
+  // Sample product data
+  const products = [
+    //Pens
+    {
+      brand: "Reynolds",
+      category: "Pen",
+      description: "Reynolds smooth writing ball pen with long-lasting blue ink, ideal for daily writing. Comfortable grip and lightweight design for effortless note-taking and exams.",
+      price: "10"
+    },
+    {
+        brand: "Cello",
+        category: "Pen",
+        description: "Fine tip gel pen, assorted colors.",
+        price: "15"
+    },
+    {
+        brand: "Parker",
+        category: "Pen",
+        description: "Premium rollerball pen, black ink.",
+        price: "120"
+    },
+    {
+
+        brand: "Linc",
+        category: "Pen",
+        description: "Affordable ball pen, blue ink.",
+        price: "8"
+    },
+    {
+        brand: "Flair",
+        category: "Pen",
+        description: "Stylish gel pen, quick dry.",
+        price: "12"
+      },
+    {
+        brand: "Pilot",
+        category: "Pen",
+        description: "Pilot premium gel pen with ultra-smooth ink flow, perfect for professionals and students.",
+        price: "50"
+    },
+
+    //Pencils
+    {
+      brand: "Nataraj",
+      category: "Pencil",
+      description: "Nataraj HB wooden pencil, smooth writing.",
+      price: "5"
+    },
+    {
+      brand: "Apsara",
+      category: "Pencil",
+      description: "Apsara premium graphite pencil, dark lead.",
+      price: "7"
+    },
+    {
+      brand: "Camlin",
+      category: "Pencil",
+      description: "Camlin colored pencils, vibrant colors.",
+      price: "20"
+    },
+    //Notebooks
+    {
+      brand: "Classmate",
+      category: "Notebook",
+      description: "Classmate ruled notebook, 200 pages.",
+      price: "40"
+    },
+    {
+      brand: "Navneet",
+      category: "Notebook",
+      description: "Navneet spiral notebook, 150 pages.",
+      price: "35"
+    },
+    {
+      brand: "Doms",
+      category: "Notebook",
+      description: "Doms hardcover notebook, 250 pages.",
+      price: "60"
+    },
+    //Sharpeners
+    {
+      brand: "Apsara",
+      category: "Sharpener",
+      description: "Apsara plastic sharpener, single hole.",
+      price: "10"
+    },
+    {
+      brand: "Nataraj",
+      category: "Sharpener",
+      description: "Nataraj metal sharpener, double hole.",
+      price: "15"
+    },
+    {
+      brand: "Camlin",
+      category: "Sharpener",
+      description: "Camlin electric sharpener, battery operated.",
+      price: "150"
+    },
+    //Erasers
+    {
+        brand: "Nataraj",
+        category: "Eraser",
+        description: "Nataraj soft eraser, ideal for pencil marks.",
+        price: "8"
+    },
+    {
+        brand: "Apsara",
+        category: "Eraser",
+        description: "Apsara plastic eraser, non-smudging.",
+        price: "10"
+    },
+    {
+        brand: "Camlin",
+        category: "Eraser",
+        description: "Camlin dust-free eraser, easy to use.",
+        price: "9"
+    }
+    // Add more products here...
+  ];
+
+  // Get brand from URL
+  function getBrandFromURL() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('brand');
+  }
+
+  // Find product by brand
+  function getProductByBrand(brand) {
+    return products.find(p => p.brand.toLowerCase() === brand.toLowerCase());
+  }
+
+  // Render product details
+  function renderProductDetail(product) {
+    document.querySelector('.brand-name').textContent = product.brand;
+    document.querySelector('.category').textContent = `Category: ${product.category}`;
+    document.querySelector('.description').textContent = product.description;
+    document.querySelector('.price').textContent = `₹${product.price}`;
+  }
+
+  // Cart array to store added products
+  const cart = [];
+
+  // Quantity logic
+  let quantity = 1;
+  const qtyNumber = document.getElementById('qty-number');
+  document.getElementById('decrease-btn').addEventListener('click', () => {
+    if (quantity > 1) {
+      quantity--;
+      qtyNumber.textContent = quantity;
+    }
+  });
+  document.getElementById('increase-btn').addEventListener('click', () => {
+    quantity++;
+    qtyNumber.textContent = quantity;
+  });
+
+  // On page load
+  window.onload = function() {
+    const brand = getBrandFromURL();
+    const product = getProductByBrand(brand) || products[0]; // fallback to first product
+    renderProductDetail(product);
+
+    // Add to Cart button
+    document.getElementById('add-cart-btn').onclick = () => {
+      cart.push({
+        ...product,
+        quantity: quantity
+      });
+      alert('Added to cart!');
+      console.log('Cart:', cart);
+    };
+
+    // Buy Now button
+    document.getElementById('buy-now-btn').onclick = () => {
+      alert(`Proceeding to checkout with ${product.brand} ${product.category}`);
+    };
+  };
+</script>
+</body>
+</html>
