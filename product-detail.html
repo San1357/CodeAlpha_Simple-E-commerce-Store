@@ -67,6 +67,62 @@
     }
     .lang-selector:hover { background: #e7f7ff; }
     .lang-selector:focus { box-shadow: 0 0 0 3px rgba(0, 116, 217, 0.15); }
+    /* Cart Icon */
+    .cart-icon-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.5rem 1rem;
+      color: #333;
+      text-decoration: none;
+      border-radius: 4px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .cart-icon-wrapper:hover {
+      background: #0074d9;
+      color: #fff;
+    }
+    .cart-icon { font-size: 1.3rem; }
+    .cart-badge {
+      position: absolute;
+      top: -2px;
+      right: 2px;
+      background: #e74c3c;
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 700;
+      min-width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .cart-badge.hidden { display: none; }
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #27ae60;
+      color: #fff;
+      padding: 1rem 2rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      z-index: 1000;
+      opacity: 0;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+    .toast-icon { font-size: 1.2rem; }
     @media (max-width: 500px) {
       .header { flex-direction: column; gap: 1rem; padding: 1rem; }
     }
@@ -191,8 +247,18 @@
         </select>
       </div>
       <a href="index.html" data-i18n="home">Home</a>
+      <a href="cart.html" class="cart-icon-wrapper">
+        <span class="cart-icon">🛒</span>
+        <span class="cart-badge hidden" id="cartBadge">0</span>
+      </a>
     </nav>
   </header>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast">
+    <span class="toast-icon">✓</span>
+    <span id="toastMessage">Added to cart!</span>
+  </div>
 
   <div class="container">
     <div class="brand-name"></div>
@@ -352,8 +418,74 @@
     document.querySelector('.price').textContent = `₹${product.price}`;
   }
 
-  // Cart array to store added products
-  const cart = [];
+  // ========================================
+  // CART MANAGEMENT FUNCTIONS
+  // ========================================
+
+  // Get cart from localStorage
+  function getCart() {
+    return JSON.parse(localStorage.getItem('cartItems')) || [];
+  }
+
+  // Save cart to localStorage
+  function saveCart(cart) {
+    localStorage.setItem('cartItems', JSON.stringify(cart));
+    updateCartBadge();
+  }
+
+  // Update cart badge count
+  function updateCartBadge() {
+    const cart = getCart();
+    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+    const badge = document.getElementById('cartBadge');
+    if (badge) {
+      badge.textContent = totalItems;
+      if (totalItems > 0) {
+        badge.classList.remove('hidden');
+      } else {
+        badge.classList.add('hidden');
+      }
+    }
+  }
+
+  // Add item to cart
+  function addToCart(product, qty) {
+    const cart = getCart();
+    const productId = product.brand + '_' + product.category;
+
+    // Check if product already exists in cart
+    const existingIndex = cart.findIndex(item => item.id === productId);
+
+    if (existingIndex !== -1) {
+      // Increase quantity if already in cart
+      cart[existingIndex].quantity += qty;
+    } else {
+      // Add new item to cart
+      cart.push({
+        id: productId,
+        name: product.brand + ' ' + product.category,
+        price: Number(product.price),
+        quantity: qty,
+        brand: product.brand,
+        category: product.category
+      });
+    }
+
+    saveCart(cart);
+    showToast(t('itemAddedToCart'));
+  }
+
+  // Show toast notification
+  function showToast(message) {
+    const toast = document.getElementById('toast');
+    const toastMessage = document.getElementById('toastMessage');
+    toastMessage.textContent = message;
+    toast.classList.add('show');
+
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, 2500);
+  }
 
   // Quantity logic
   let quantity = 1;
@@ -374,27 +506,24 @@
     const brand = getBrandFromURL();
     const product = getProductByBrand(brand) || products[0]; // fallback to first product
     renderProductDetail(product);
+    updateCartBadge(); // Initialize cart badge
 
     // Add to Cart button
     document.getElementById('add-cart-btn').onclick = () => {
-      cart.push({
-        ...product,
-        quantity: quantity
-      });
-      alert(t('addedToCart'));
-      console.log('Cart:', cart);
+      addToCart(product, quantity);
     };
 
     // Buy Now button
     document.getElementById('buy-now-btn').onclick = () => {
-    // Save product info to localStorage
-    localStorage.setItem('checkoutProduct', JSON.stringify({
-        name: product.brand + " " + product.category,
+      // Save product info to localStorage for direct checkout
+      localStorage.setItem('checkoutProduct', JSON.stringify({
+        name: product.brand + ' ' + product.category,
         price: Number(product.price),
         quantity: quantity
-    }));
-    // Redirect to checkout page
-    window.location.href = "checkout.html";
+      }));
+      localStorage.removeItem('checkoutFromCart'); // Clear cart checkout flag
+      // Redirect to checkout page
+      window.location.href = 'checkout.html';
     };
 
     // Re-render on language change
