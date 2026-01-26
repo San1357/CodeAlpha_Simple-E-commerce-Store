@@ -30,7 +30,7 @@
       margin-bottom: 1rem;
       text-align: center;
     }
-    .summary {
+    .summary, .payment-section {
       width: 100%;
       margin-bottom: 2rem;
       background: #f1f1f1;
@@ -93,7 +93,7 @@
       text-align: center;
       display: none;
     }
-    .proceed-btn {
+    .proceed-btn, .pay-btn {
       width: 100%;
       padding: 0.8rem 0;
       font-size: 1.1rem;
@@ -106,14 +106,29 @@
       transition: background 0.2s;
       margin-top: 1rem;
     }
-    .proceed-btn:hover {
+    .proceed-btn:hover, .pay-btn:hover {
       background: #005fa3;
+    }
+    .payment-section {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+    }
+    .payment-methods {
+      margin-bottom: 1rem;
+    }
+    .loading {
+      text-align: center;
+      color: #0074d9;
+      font-weight: bold;
+      margin-top: 1rem;
+      font-size: 1.1rem;
     }
     @media (max-width: 500px) {
       .container {
         padding: 1rem 0.5rem;
       }
-      .summary {
+      .summary, .payment-section {
         padding: 0.7rem 0.5rem;
       }
     }
@@ -166,12 +181,34 @@
       </div>
       <button type="submit" class="proceed-btn">Proceed</button>
     </form>
+
+    <!-- Payment Section -->
+    <div class="payment-section" id="payment-section">
+      <div class="section-title">Payment</div>
+      <div class="payment-methods">
+        <label>
+          <input type="radio" name="payment" value="upi" checked> UPI
+        </label>
+      </div>
+      <div class="form-group">
+        <label for="upi-id">UPI ID</label>
+        <input type="text" id="upi-id" placeholder="example@upi" required>
+      </div>
+      <button class="pay-btn" id="pay-btn">Pay Now</button>
+      <div class="loading" id="payment-loading" style="display:none;">Processing payment...</div>
+    </div>
   </div>
   <script>
+    // Delivery charge for Home Delivery
+    const DELIVERY_CHARGE = 40;
+
     // Read product data from localStorage
-    // Example: { name: "Reynolds Pen", price: 10, quantity: 3 }
     let product = localStorage.getItem('checkoutProduct');
     product = product ? JSON.parse(product) : null;
+
+    // State variables
+    let deliveryType = "home";
+    let finalTotal = 0;
 
     // Render checkout summary
     function renderSummary() {
@@ -181,12 +218,16 @@
         document.getElementById('address-form').style.display = 'none';
         return;
       }
-      const total = product.price * product.quantity;
+      const productTotal = product.price * product.quantity;
+      let deliveryCharge = (deliveryType === "home") ? DELIVERY_CHARGE : 0;
+      finalTotal = productTotal + deliveryCharge;
       summaryDiv.innerHTML = `
         <div class="summary-row"><span>Product Name:</span><span>${product.name}</span></div>
         <div class="summary-row"><span>Price per unit:</span><span>₹${product.price}</span></div>
         <div class="summary-row"><span>Quantity:</span><span>${product.quantity}</span></div>
-        <div class="summary-row total"><span>Total Price:</span><span>₹${total}</span></div>
+        <div class="summary-row"><span>Product Total:</span><span>₹${productTotal}</span></div>
+        <div class="summary-row"><span>Delivery Charge:</span><span>₹${deliveryCharge}</span></div>
+        <div class="summary-row total"><span>Final Payable:</span><span>₹${finalTotal}</span></div>
       `;
     }
 
@@ -197,11 +238,13 @@
     const pickupMsg = document.getElementById('pickup-message');
     deliveryRadios.forEach(radio => {
       radio.addEventListener('change', function() {
-        if (this.value === 'pickup') {
+        deliveryType = this.value === 'pickup' ? 'pickup' : 'home';
+        if (deliveryType === 'pickup') {
           pickupMsg.style.display = 'block';
         } else {
           pickupMsg.style.display = 'none';
         }
+        renderSummary();
       });
     });
 
@@ -216,7 +259,7 @@
       const city = document.getElementById('city').value.trim();
       const state = document.getElementById('state').value.trim();
       const pincode = document.getElementById('pincode').value.trim();
-      const delivery = document.querySelector('input[name="delivery"]:checked");
+      const delivery = document.querySelector('input[name="delivery"]:checked');
 
       if (!fullname || !mobile || !street || !city || !state || !pincode || !delivery) {
         alert("Please fill all required fields and select a delivery option.");
@@ -231,7 +274,7 @@
         return;
       }
 
-      // Save order details (optional, for demo)
+      // Save order details (for payment step)
       const orderDetails = {
         product,
         fullname,
@@ -240,12 +283,41 @@
         city,
         state,
         pincode,
-        delivery: delivery.value
+        delivery: delivery.value,
+        deliveryCharge: (delivery.value === 'home') ? DELIVERY_CHARGE : 0,
+        finalTotal: (product.price * product.quantity) + ((delivery.value === 'home') ? DELIVERY_CHARGE : 0)
       };
       localStorage.setItem('orderDetails', JSON.stringify(orderDetails));
 
-      alert("Order details saved. Proceeding to next step.");
-      // You can redirect or clear cart here if needed
+      // Show payment section if Home Delivery, else show success directly
+      if (delivery.value === 'home') {
+        document.getElementById('address-form').style.display = 'none';
+        document.getElementById('payment-section').style.display = 'flex';
+      } else {
+        // For Pickup, simulate order success (no payment)
+        localStorage.setItem('paymentStatus', 'SUCCESS');
+        localStorage.setItem('paymentMethod', 'N/A');
+        window.location.href = 'order-success.html';
+      }
+    });
+
+    // Payment logic
+    document.getElementById('pay-btn').addEventListener('click', function(e) {
+      e.preventDefault();
+      const upiId = document.getElementById('upi-id').value.trim();
+      if (!upiId) {
+        alert('Please enter your UPI ID.');
+        return;
+      }
+      // Simulate payment
+      document.getElementById('pay-btn').disabled = true;
+      document.getElementById('payment-loading').style.display = 'block';
+      setTimeout(() => {
+        document.getElementById('payment-loading').style.display = 'none';
+        localStorage.setItem('paymentStatus', 'SUCCESS');
+        localStorage.setItem('paymentMethod', 'UPI');
+        window.location.href = 'order-success.html';
+      }, 2000);
     });
   </script>
 </body>
