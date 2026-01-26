@@ -151,7 +151,27 @@ const translations = {
     language: "Language",
     english: "English",
     hindi: "Hindi",
-    bhojpuri: "Bhojpuri"
+    bhojpuri: "Bhojpuri",
+
+    // Shopping Cart
+    shoppingCart: "Shopping Cart",
+    cart: "Cart",
+    emptyCart: "Your cart is empty",
+    emptyCartText: "Looks like you haven't added anything to your cart yet.",
+    clearCart: "Clear Cart",
+    removeFromCart: "Remove from cart",
+    orderSummary: "Order Summary",
+    totalItems: "Total Items",
+    subtotal: "Subtotal",
+    grandTotal: "Grand Total",
+    proceedToCheckout: "Proceed to Checkout",
+    confirmClearCart: "Are you sure you want to clear your cart?",
+    emptyCartCheckout: "Your cart is empty. Add some items first!",
+    itemAddedToCart: "Item added to cart!",
+    cartUpdated: "Cart updated!",
+    viewCart: "View Cart",
+    items: "items",
+    item: "item"
   },
 
   // --------------------------
@@ -287,7 +307,27 @@ const translations = {
     language: "भाषा",
     english: "अंग्रेज़ी",
     hindi: "हिंदी",
-    bhojpuri: "भोजपुरी"
+    bhojpuri: "भोजपुरी",
+
+    // Shopping Cart
+    shoppingCart: "शॉपिंग कार्ट",
+    cart: "कार्ट",
+    emptyCart: "आपका कार्ट खाली है",
+    emptyCartText: "लगता है आपने अभी तक कुछ नहीं जोड़ा है।",
+    clearCart: "कार्ट खाली करें",
+    removeFromCart: "कार्ट से हटाएं",
+    orderSummary: "ऑर्डर सारांश",
+    totalItems: "कुल आइटम",
+    subtotal: "उप-योग",
+    grandTotal: "कुल योग",
+    proceedToCheckout: "चेकआउट करें",
+    confirmClearCart: "क्या आप वाकई कार्ट खाली करना चाहते हैं?",
+    emptyCartCheckout: "आपका कार्ट खाली है। पहले कुछ जोड़ें!",
+    itemAddedToCart: "कार्ट में जोड़ा गया!",
+    cartUpdated: "कार्ट अपडेट हो गया!",
+    viewCart: "कार्ट देखें",
+    items: "आइटम",
+    item: "आइटम"
   },
 
   // --------------------------
@@ -423,7 +463,27 @@ const translations = {
     language: "भाषा",
     english: "अंग्रेज़ी",
     hindi: "हिंदी",
-    bhojpuri: "भोजपुरी"
+    bhojpuri: "भोजपुरी",
+
+    // Shopping Cart
+    shoppingCart: "खरीदारी के कार्ट",
+    cart: "कार्ट",
+    emptyCart: "कार्ट खाली बा",
+    emptyCartText: "लागत बा कि रउआ अभी तक कुछ नइखीं डालले।",
+    clearCart: "कार्ट खाली करीं",
+    removeFromCart: "कार्ट से हटाईं",
+    orderSummary: "ऑर्डर के जानकारी",
+    totalItems: "कुल सामान",
+    subtotal: "जोड़",
+    grandTotal: "कुल रकम",
+    proceedToCheckout: "चेकआउट करीं",
+    confirmClearCart: "सच में कार्ट खाली करे के बा?",
+    emptyCartCheckout: "कार्ट खाली बा। पहिले कुछ डालीं!",
+    itemAddedToCart: "कार्ट में गइल!",
+    cartUpdated: "कार्ट अपडेट हो गइल!",
+    viewCart: "कार्ट देखीं",
+    items: "सामान",
+    item: "सामान"
   }
 };
 
