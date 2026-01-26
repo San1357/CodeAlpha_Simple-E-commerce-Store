@@ -59,6 +59,38 @@
       color: #fff;
     }
 
+    /* Language Selector */
+    .lang-selector-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .lang-icon {
+      font-size: 1.1rem;
+    }
+
+    .lang-selector {
+      padding: 0.4rem 0.6rem;
+      font-size: 0.9rem;
+      border: 1.5px solid #0074d9;
+      border-radius: 5px;
+      background: #fff;
+      color: #0074d9;
+      cursor: pointer;
+      outline: none;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .lang-selector:hover {
+      background: #e7f7ff;
+    }
+
+    .lang-selector:focus {
+      box-shadow: 0 0 0 3px rgba(0, 116, 217, 0.15);
+    }
+
     /* Main Container */
     .main-container {
       flex: 1;
@@ -334,10 +366,18 @@
   <!-- Header -->
   <header class="header">
     <div class="header-content">
-      <a href="index.html" class="logo">ShopEase</a>
+      <a href="index.html" class="logo" data-i18n="shopease">ShopEase</a>
       <nav class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="signup.html">Sign Up</a>
+        <div class="lang-selector-wrapper">
+          <span class="lang-icon">🌐</span>
+          <select id="language-selector" class="lang-selector">
+            <option value="en">English</option>
+            <option value="hi">हिंदी</option>
+            <option value="bho">भोजपुरी</option>
+          </select>
+        </div>
+        <a href="index.html" data-i18n="home">Home</a>
+        <a href="signup.html" data-i18n="signup">Sign Up</a>
       </nav>
     </div>
   </header>
@@ -345,8 +385,8 @@
   <!-- Main Content -->
   <main class="main-container">
     <div class="auth-card">
-      <h1 class="auth-title">Welcome Back</h1>
-      <p class="auth-subtitle">Login to your account</p>
+      <h1 class="auth-title" data-i18n="welcomeBack">Welcome Back</h1>
+      <p class="auth-subtitle" data-i18n="loginToAccount">Login to your account</p>
 
       <!-- Message Display -->
       <div id="formMessage" class="message"></div>
@@ -354,20 +394,21 @@
       <!-- Login Form -->
       <form id="loginForm" novalidate>
         <div class="form-group">
-          <label for="email">Email Address</label>
+          <label for="email" data-i18n="email">Email Address</label>
           <input
             type="email"
             id="email"
             name="email"
+            data-i18n-placeholder="enterEmail"
             placeholder="Enter your email"
             required
             autocomplete="email"
           >
-          <div class="field-error" id="emailError">Please enter a valid email address</div>
+          <div class="field-error" id="emailError" data-i18n="emailRequired">Please enter a valid email address</div>
         </div>
 
         <div class="form-group">
-          <label for="password">Password</label>
+          <label for="password" data-i18n="password">Password</label>
           <div class="password-container">
             <input
               type="password"
@@ -381,25 +422,27 @@
               Show
             </button>
           </div>
-          <div class="field-error" id="passwordError">Password is required</div>
+          <div class="field-error" id="passwordError" data-i18n="passwordRequired">Password is required</div>
         </div>
 
         <div class="remember-group">
           <input type="checkbox" id="rememberMe" name="rememberMe">
-          <label for="rememberMe">Remember me</label>
+          <label for="rememberMe" data-i18n="rememberMe">Remember me</label>
         </div>
 
-        <button type="submit" class="submit-btn" id="submitBtn">
+        <button type="submit" class="submit-btn" id="submitBtn" data-i18n="login">
           Login
         </button>
       </form>
 
       <p class="auth-link">
-        Don't have an account? <a href="signup.html">Sign up here</a>
+        <span data-i18n="dontHaveAccount">Don't have an account?</span> <a href="signup.html" data-i18n="signUpHere">Sign up here</a>
       </p>
     </div>
   </main>
 
+  <!-- Language/i18n Script -->
+  <script src="lang.js"></script>
   <script>
     // DOM Elements
     const loginForm = document.getElementById('loginForm');
@@ -484,14 +527,14 @@
       return users.find(user => user.email.toLowerCase() === email.toLowerCase());
     }
 
-    // Authenticate user
+    // Authenticate user (with i18n support)
     function authenticateUser(email, password) {
       const user = findUserByEmail(email);
       if (!user) {
-        return { success: false, message: 'No account found with this email address' };
+        return { success: false, message: t('noAccountFound') };
       }
       if (user.password !== password) {
-        return { success: false, message: 'Incorrect password. Please try again.' };
+        return { success: false, message: t('incorrectPassword') };
       }
       return { success: true, user: user };
     }
@@ -576,7 +619,7 @@
           createSession(result.user, remember);
 
           // Show success message
-          showMessage('Login successful! Redirecting...', 'success');
+          showMessage(t('loginSuccess'), 'success');
 
           // Redirect to profile page
           setTimeout(function() {

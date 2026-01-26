@@ -123,6 +123,41 @@
       display: none !important;
     }
 
+    /* Language Selector Styles */
+    .lang-selector-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-right: 0.5rem;
+      padding-right: 0.8rem;
+      border-right: 1px solid #ddd;
+    }
+
+    .lang-icon {
+      font-size: 1.1rem;
+    }
+
+    .lang-selector {
+      padding: 0.4rem 0.6rem;
+      font-size: 0.9rem;
+      border: 1.5px solid #0074d9;
+      border-radius: 5px;
+      background: #fff;
+      color: #0074d9;
+      cursor: pointer;
+      outline: none;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .lang-selector:hover {
+      background: #e7f7ff;
+    }
+
+    .lang-selector:focus {
+      box-shadow: 0 0 0 3px rgba(0, 116, 217, 0.15);
+    }
+
     /* Search Bar Styles */
     .search-bar-container {
       display: flex;
@@ -271,33 +306,42 @@
 <body>
   <!-- Header with Auth Navigation -->
   <header class="header">
-    <a href="index.html" class="logo">ShopEase</a>
+    <a href="index.html" class="logo" data-i18n="shopease">ShopEase</a>
     <nav class="auth-nav">
+      <!-- Language Selector -->
+      <div class="lang-selector-wrapper">
+        <span class="lang-icon">🌐</span>
+        <select id="language-selector" class="lang-selector">
+          <option value="en">English</option>
+          <option value="hi">हिंदी</option>
+          <option value="bho">भोजपुरी</option>
+        </select>
+      </div>
       <!-- Shown when NOT logged in -->
-      <a href="login.html" class="auth-btn btn-login" id="loginBtn">Login</a>
-      <a href="signup.html" class="auth-btn btn-signup" id="signupBtn">Sign Up</a>
+      <a href="login.html" class="auth-btn btn-login" id="loginBtn" data-i18n="login">Login</a>
+      <a href="signup.html" class="auth-btn btn-signup" id="signupBtn" data-i18n="signup">Sign Up</a>
       <!-- Shown when logged in -->
       <a href="profile.html" class="auth-btn btn-profile hidden" id="profileBtn">
         <span class="user-avatar" id="userAvatar">U</span>
-        <span id="userName">Profile</span>
+        <span id="userName" data-i18n="profile">Profile</span>
       </a>
-      <button class="auth-btn btn-logout hidden" id="logoutBtn">Logout</button>
+      <button class="auth-btn btn-logout hidden" id="logoutBtn" data-i18n="logout">Logout</button>
     </nav>
   </header>
 
   <!-- Search Bar -->
   <div class="search-bar-container">
-    <input type="text" id="search-input" placeholder="Search for a product (Pen, Pencil, Notebook, Sharpener, Eraser)...">
-    <button id="search-btn">Search</button>
+    <input type="text" id="search-input" data-i18n-placeholder="searchPlaceholder" placeholder="Search for a product (Pen, Pencil, Notebook, Sharpener, Eraser)...">
+    <button id="search-btn" data-i18n="searchBtn">Search</button>
   </div>
   <!-- Navbar -->
   <nav class="navbar">
     <ul class="navbar-list">
-      <li class="navbar-item active" data-product="Pen">Pen</li>
-      <li class="navbar-item" data-product="Pencil">Pencil</li>
-      <li class="navbar-item" data-product="Notebook">Notebook</li>
-      <li class="navbar-item" data-product="Sharpener">Sharpener</li>
-      <li class="navbar-item" data-product="Eraser">Eraser</li>
+      <li class="navbar-item active" data-product="Pen" data-i18n="pen">Pen</li>
+      <li class="navbar-item" data-product="Pencil" data-i18n="pencil">Pencil</li>
+      <li class="navbar-item" data-product="Notebook" data-i18n="notebook">Notebook</li>
+      <li class="navbar-item" data-product="Sharpener" data-i18n="sharpener">Sharpener</li>
+      <li class="navbar-item" data-product="Eraser" data-i18n="eraser">Eraser</li>
     </ul>
   </nav>
 
@@ -306,6 +350,8 @@
     <!-- Content will be injected here -->
   </div>
 
+  <!-- Language/i18n Script -->
+  <script src="lang.js"></script>
   <script>
     // Product data for "Pen"
     const penProducts = [
@@ -421,11 +467,11 @@
     // Reference to main content area
     const mainContent = document.getElementById('main-content');
 
-    // Function to render welcome text
+    // Function to render welcome text (with i18n support)
     function renderWelcome() {
       mainContent.innerHTML = `
-        <h2>Welcome!</h2>
-        <p>Select a product from the navbar</p>
+        <h2 data-i18n="welcome">${t('welcome')}</h2>
+        <p data-i18n="selectProduct">${t('selectProduct')}</p>
       `;
     }
 
@@ -583,7 +629,7 @@
       } else if (value === '') {
         renderWelcome();
       } else {
-        mainContent.innerHTML = `<h2>Product not found</h2><p>Please search for: Pen, Pencil, Notebook, Sharpener, or Eraser.</p>`;
+        mainContent.innerHTML = `<h2 data-i18n="productNotFound">${t('productNotFound')}</h2><p data-i18n="searchSuggestion">${t('searchSuggestion')}</p>`;
       }
     }
 
@@ -660,6 +706,25 @@
 
     // Initialize auth UI on page load
     updateAuthUI();
+
+    // ========================================
+    // LANGUAGE CHANGE LISTENER
+    // ========================================
+    // Re-render welcome text when language changes
+    window.addEventListener('languageChanged', function() {
+      // Check which view is currently active and re-render
+      const activeItem = document.querySelector('.navbar-item.active');
+      if (activeItem) {
+        const product = activeItem.getAttribute('data-product');
+        if (product === "Pen") renderPenProducts();
+        else if (product === "Pencil") renderPencilProducts();
+        else if (product === "Notebook") renderNotebookProducts();
+        else if (product === "Sharpener") renderSharpenerProducts();
+        else if (product === "Eraser") renderEraserProducts();
+      } else {
+        renderWelcome();
+      }
+    });
   </script>
 </body>
 </html>

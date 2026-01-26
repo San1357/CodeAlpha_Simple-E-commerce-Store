@@ -69,6 +69,38 @@
       font-weight: 500;
     }
 
+    /* Language Selector */
+    .lang-selector-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .lang-icon {
+      font-size: 1.1rem;
+    }
+
+    .lang-selector {
+      padding: 0.4rem 0.6rem;
+      font-size: 0.9rem;
+      border: 1.5px solid #0074d9;
+      border-radius: 5px;
+      background: #fff;
+      color: #0074d9;
+      cursor: pointer;
+      outline: none;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .lang-selector:hover {
+      background: #e7f7ff;
+    }
+
+    .lang-selector:focus {
+      box-shadow: 0 0 0 3px rgba(0, 116, 217, 0.15);
+    }
+
     /* Main Container */
     .main-container {
       flex: 1;
@@ -406,9 +438,17 @@
   <!-- Header -->
   <header class="header">
     <div class="header-content">
-      <a href="index.html" class="logo">ShopEase</a>
+      <a href="index.html" class="logo" data-i18n="shopease">ShopEase</a>
       <nav class="nav-links">
-        <a href="index.html">Home</a>
+        <div class="lang-selector-wrapper">
+          <span class="lang-icon">🌐</span>
+          <select id="language-selector" class="lang-selector">
+            <option value="en">English</option>
+            <option value="hi">हिंदी</option>
+            <option value="bho">भोजपुरी</option>
+          </select>
+        </div>
+        <a href="index.html" data-i18n="home">Home</a>
         <span class="user-badge" id="headerUserName">User</span>
       </nav>
     </div>
@@ -427,45 +467,45 @@
       <div class="profile-body">
         <!-- Account Status -->
         <div class="status-section">
-          <span class="status-label">Account Status</span>
+          <span class="status-label" data-i18n="accountStatus">Account Status</span>
           <div class="status-badge">
             <span class="status-dot"></span>
-            Active
+            <span data-i18n="active">Active</span>
           </div>
         </div>
 
         <!-- Info Cards -->
         <div class="info-grid">
           <div class="info-card">
-            <div class="info-card-label">Member Since</div>
+            <div class="info-card-label" data-i18n="memberSince">Member Since</div>
             <div class="info-card-value" id="memberSince">-</div>
           </div>
           <div class="info-card">
-            <div class="info-card-label">Last Login</div>
+            <div class="info-card-label" data-i18n="lastLogin">Last Login</div>
             <div class="info-card-value" id="lastLogin">-</div>
           </div>
         </div>
 
         <!-- Activity Section -->
         <div class="activity-list">
-          <h3 class="section-title">Quick Actions</h3>
+          <h3 class="section-title" data-i18n="quickActions">Quick Actions</h3>
           <div class="activity-item">
             <div class="activity-icon">🛒</div>
             <div class="activity-details">
-              <div class="activity-text">Continue Shopping</div>
-              <div class="activity-time">Browse our latest products</div>
+              <div class="activity-text" data-i18n="continueShopping">Continue Shopping</div>
+              <div class="activity-time" data-i18n="browseProducts">Browse our latest products</div>
             </div>
-            <a href="index.html" class="btn btn-outline" style="padding: 0.5rem 1rem; font-size: 0.9rem;">Shop Now</a>
+            <a href="index.html" class="btn btn-outline" style="padding: 0.5rem 1rem; font-size: 0.9rem;" data-i18n="shopNow">Shop Now</a>
           </div>
         </div>
 
         <!-- Actions -->
         <div class="actions-section">
           <a href="index.html" class="btn btn-primary">
-            <span>🏠</span> Back to Store
+            <span>🏠</span> <span data-i18n="backToStore">Back to Store</span>
           </a>
           <button class="btn btn-danger" id="logoutBtn">
-            <span>🚪</span> Logout
+            <span>🚪</span> <span data-i18n="logout">Logout</span>
           </button>
         </div>
       </div>
@@ -475,15 +515,17 @@
   <!-- Logout Confirmation Modal -->
   <div class="modal-overlay" id="logoutModal">
     <div class="modal">
-      <h2 class="modal-title">Confirm Logout</h2>
-      <p class="modal-text">Are you sure you want to logout from your account?</p>
+      <h2 class="modal-title" data-i18n="confirmLogout">Confirm Logout</h2>
+      <p class="modal-text" data-i18n="logoutConfirmMessage">Are you sure you want to logout from your account?</p>
       <div class="modal-actions">
-        <button class="btn btn-outline" id="cancelLogout">Cancel</button>
-        <button class="btn btn-danger" id="confirmLogout">Logout</button>
+        <button class="btn btn-outline" id="cancelLogout" data-i18n="cancel">Cancel</button>
+        <button class="btn btn-danger" id="confirmLogout" data-i18n="logout">Logout</button>
       </div>
     </div>
   </div>
 
+  <!-- Language/i18n Script -->
+  <script src="lang.js"></script>
   <script>
     // DOM Elements
     const profileAvatar = document.getElementById('profileAvatar');
