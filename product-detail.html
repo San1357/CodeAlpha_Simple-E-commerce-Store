@@ -5,12 +5,70 @@
   <title>Product Detail</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
     body {
       background: #f7f7f7;
       font-family: Arial, sans-serif;
       min-height: 100vh;
-      margin: 0;
-      padding: 0;
+    }
+    /* Header */
+    .header {
+      background: #fff;
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #0074d9;
+      text-decoration: none;
+    }
+    .nav-links {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+    .nav-links a {
+      color: #333;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .nav-links a:hover {
+      background: #0074d9;
+      color: #fff;
+    }
+    /* Language Selector */
+    .lang-selector-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .lang-icon { font-size: 1.1rem; }
+    .lang-selector {
+      padding: 0.4rem 0.6rem;
+      font-size: 0.9rem;
+      border: 1.5px solid #0074d9;
+      border-radius: 5px;
+      background: #fff;
+      color: #0074d9;
+      cursor: pointer;
+      outline: none;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    .lang-selector:hover { background: #e7f7ff; }
+    .lang-selector:focus { box-shadow: 0 0 0 3px rgba(0, 116, 217, 0.15); }
+    @media (max-width: 500px) {
+      .header { flex-direction: column; gap: 1rem; padding: 1rem; }
     }
     .container {
       max-width: 420px;
@@ -120,6 +178,22 @@
   </style>
 </head>
 <body>
+  <!-- Header -->
+  <header class="header">
+    <a href="index.html" class="logo" data-i18n="shopease">ShopEase</a>
+    <nav class="nav-links">
+      <div class="lang-selector-wrapper">
+        <span class="lang-icon">🌐</span>
+        <select id="language-selector" class="lang-selector">
+          <option value="en">English</option>
+          <option value="hi">हिंदी</option>
+          <option value="bho">भोजपुरी</option>
+        </select>
+      </div>
+      <a href="index.html" data-i18n="home">Home</a>
+    </nav>
+  </header>
+
   <div class="container">
     <div class="brand-name"></div>
     <div class="category"></div>
@@ -131,10 +205,13 @@
       <button class="qty-btn" id="increase-btn">+</button>
     </div>
     <div class="actions">
-      <button class="action-btn add-cart" id="add-cart-btn">Add to Cart</button>
-      <button class="action-btn buy-now" id="buy-now-btn">Buy Now</button>
+      <button class="action-btn add-cart" id="add-cart-btn" data-i18n="addToCart">Add to Cart</button>
+      <button class="action-btn buy-now" id="buy-now-btn" data-i18n="buyNow">Buy Now</button>
     </div>
   </div>
+
+  <!-- Language/i18n Script -->
+  <script src="lang.js"></script>
   <script>
   // Sample product data
   const products = [
@@ -267,10 +344,10 @@
     return products.find(p => p.brand.toLowerCase() === brand.toLowerCase());
   }
 
-  // Render product details
+  // Render product details (with i18n support)
   function renderProductDetail(product) {
     document.querySelector('.brand-name').textContent = product.brand;
-    document.querySelector('.category').textContent = `Category: ${product.category}`;
+    document.querySelector('.category').textContent = `${t('category')}: ${product.category}`;
     document.querySelector('.description').textContent = product.description;
     document.querySelector('.price').textContent = `₹${product.price}`;
   }
@@ -304,7 +381,7 @@
         ...product,
         quantity: quantity
       });
-      alert('Added to cart!');
+      alert(t('addedToCart'));
       console.log('Cart:', cart);
     };
 
@@ -319,6 +396,11 @@
     // Redirect to checkout page
     window.location.href = "checkout.html";
     };
+
+    // Re-render on language change
+    window.addEventListener('languageChanged', function() {
+      renderProductDetail(product);
+    });
   };
 </script>
 </body>
