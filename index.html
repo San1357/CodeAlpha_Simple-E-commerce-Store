@@ -18,6 +18,111 @@
       min-height: 100vh;
     }
 
+    /* Header Styles */
+    .header {
+      background: #fff;
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 100%;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #0074d9;
+      text-decoration: none;
+    }
+
+    .auth-nav {
+      display: flex;
+      gap: 0.8rem;
+      align-items: center;
+    }
+
+    .auth-btn {
+      padding: 0.5rem 1.2rem;
+      font-size: 0.95rem;
+      border-radius: 5px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-weight: 500;
+    }
+
+    .btn-login {
+      background: #fff;
+      color: #0074d9;
+      border: 2px solid #0074d9;
+    }
+
+    .btn-login:hover {
+      background: #0074d9;
+      color: #fff;
+    }
+
+    .btn-signup {
+      background: #0074d9;
+      color: #fff;
+      border: 2px solid #0074d9;
+    }
+
+    .btn-signup:hover {
+      background: #005fa3;
+      border-color: #005fa3;
+    }
+
+    .btn-profile {
+      background: #e7f7ff;
+      color: #0074d9;
+      border: 2px solid #0074d9;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .btn-profile:hover {
+      background: #0074d9;
+      color: #fff;
+    }
+
+    .user-avatar {
+      width: 24px;
+      height: 24px;
+      background: #0074d9;
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .btn-profile:hover .user-avatar {
+      background: #fff;
+      color: #0074d9;
+    }
+
+    .btn-logout {
+      background: #fff;
+      color: #e74c3c;
+      border: 2px solid #e74c3c;
+      padding: 0.5rem 1rem;
+    }
+
+    .btn-logout:hover {
+      background: #e74c3c;
+      color: #fff;
+    }
+
+    /* Hide elements by default */
+    .hidden {
+      display: none !important;
+    }
+
     /* Search Bar Styles */
     .search-bar-container {
       display: flex;
@@ -142,9 +247,44 @@
       color: #0074d9;
       margin-top: auto;
     }
+
+    /* Responsive Header */
+    @media (max-width: 600px) {
+      .header {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+      }
+
+      .auth-nav {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .auth-btn {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.85rem;
+      }
+    }
   </style>
 </head>
 <body>
+  <!-- Header with Auth Navigation -->
+  <header class="header">
+    <a href="index.html" class="logo">ShopEase</a>
+    <nav class="auth-nav">
+      <!-- Shown when NOT logged in -->
+      <a href="login.html" class="auth-btn btn-login" id="loginBtn">Login</a>
+      <a href="signup.html" class="auth-btn btn-signup" id="signupBtn">Sign Up</a>
+      <!-- Shown when logged in -->
+      <a href="profile.html" class="auth-btn btn-profile hidden" id="profileBtn">
+        <span class="user-avatar" id="userAvatar">U</span>
+        <span id="userName">Profile</span>
+      </a>
+      <button class="auth-btn btn-logout hidden" id="logoutBtn">Logout</button>
+    </nav>
+  </header>
+
   <!-- Search Bar -->
   <div class="search-bar-container">
     <input type="text" id="search-input" placeholder="Search for a product (Pen, Pencil, Notebook, Sharpener, Eraser)...">
@@ -462,6 +602,64 @@
 
     // Optionally, you can make "Pen" selected by default and show its products:
     // renderPenProducts();
+
+    // ========================================
+    // AUTH STATE MANAGEMENT
+    // ========================================
+    const loginBtn = document.getElementById('loginBtn');
+    const signupBtn = document.getElementById('signupBtn');
+    const profileBtn = document.getElementById('profileBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const userAvatar = document.getElementById('userAvatar');
+    const userName = document.getElementById('userName');
+
+    // Get user initials for avatar
+    function getInitials(name) {
+      if (!name) return 'U';
+      const parts = name.trim().split(' ');
+      if (parts.length >= 2) {
+        return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+      }
+      return parts[0][0].toUpperCase();
+    }
+
+    // Update UI based on auth state
+    function updateAuthUI() {
+      const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+      const activeUser = JSON.parse(localStorage.getItem('activeUser'));
+
+      if (isLoggedIn && activeUser) {
+        // User is logged in - show profile, hide login/signup
+        loginBtn.classList.add('hidden');
+        signupBtn.classList.add('hidden');
+        profileBtn.classList.remove('hidden');
+        logoutBtn.classList.remove('hidden');
+
+        // Update user info display
+        userAvatar.textContent = getInitials(activeUser.name);
+        userName.textContent = activeUser.name.split(' ')[0]; // First name only
+      } else {
+        // User is not logged in - show login/signup, hide profile
+        loginBtn.classList.remove('hidden');
+        signupBtn.classList.remove('hidden');
+        profileBtn.classList.add('hidden');
+        logoutBtn.classList.add('hidden');
+      }
+    }
+
+    // Handle logout
+    function handleLogout() {
+      localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('activeUser');
+      sessionStorage.removeItem('sessionActive');
+      updateAuthUI();
+    }
+
+    // Event listener for logout button
+    logoutBtn.addEventListener('click', handleLogout);
+
+    // Initialize auth UI on page load
+    updateAuthUI();
   </script>
 </body>
 </html>
