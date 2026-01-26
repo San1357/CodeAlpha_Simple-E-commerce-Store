@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Order Success</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background: #f7f7f7;
+      font-family: Arial, sans-serif;
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 430px;
+      margin: 3rem auto;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      padding: 2rem 2.5rem 2.5rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .success-icon {
+      font-size: 3rem;
+      color: #2ecc40;
+      margin-bottom: 1rem;
+      animation: pop 0.5s;
+    }
+    @keyframes pop {
+      0% { transform: scale(0.5);}
+      100% { transform: scale(1);}
+    }
+    .section-title {
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: #0074d9;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    .receipt {
+      width: 100%;
+      background: #f1f1f1;
+      border-radius: 7px;
+      padding: 1rem 1.2rem;
+      margin-bottom: 1.5rem;
+      box-sizing: border-box;
+    }
+    .receipt-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.7rem;
+      font-size: 1.05rem;
+    }
+    .receipt-row.total {
+      font-weight: bold;
+      color: #0074d9;
+      font-size: 1.15rem;
+      margin-top: 0.5rem;
+    }
+    .download-btn {
+      width: 100%;
+      padding: 0.8rem 0;
+      font-size: 1.1rem;
+      background: #0074d9;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.2s;
+      margin-bottom: 1.2rem;
+    }
+    .download-btn:hover {
+      background: #005fa3;
+    }
+    .otp-section {
+      background: #e7f7ff;
+      color: #0074d9;
+      border-radius: 5px;
+      padding: 0.7rem;
+      margin-bottom: 1rem;
+      text-align: center;
+      font-size: 1.1rem;
+      font-weight: bold;
+    }
+    @media (max-width: 500px) {
+      .container {
+        padding: 1rem 0.5rem;
+      }
+      .receipt {
+        padding: 0.7rem 0.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="print-area">
+    <div class="success-icon">✔️</div>
+    <div class="section-title">Order Placed Successfully!</div>
+    <div class="receipt" id="receipt">
+      <!-- Receipt details will be injected here -->
+    </div>
+    <button class="download-btn" onclick="window.print()">Download Bill</button>
+    <div class="otp-section" id="otp-section">
+      <!-- OTP will be shown here -->
+    </div>
+  </div>
+  <script>
+    // Helper to generate random order number and OTP
+    function generateOrderNumber() {
+      return 'OD' + Math.floor(100000 + Math.random() * 900000);
+    }
+    function generateOTP() {
+      return Math.floor(1000 + Math.random() * 9000);
+    }
+
+    // Get order details from localStorage
+    const orderDetails = JSON.parse(localStorage.getItem('orderDetails') || '{}');
+    const paymentStatus = localStorage.getItem('paymentStatus') || 'SUCCESS';
+    const paymentMethod = localStorage.getItem('paymentMethod') || 'UPI';
+    const deliveryType = orderDetails.delivery === 'pickup' ? 'Pickup from Store' : 'Home Delivery';
+
+    // Generate order number and OTP (store in localStorage for delivery)
+    let orderNumber = localStorage.getItem('orderNumber');
+    if (!orderNumber) {
+      orderNumber = generateOrderNumber();
+      localStorage.setItem('orderNumber', orderNumber);
+    }
+    let otp = localStorage.getItem('deliveryOTP');
+    if (!otp) {
+      otp = generateOTP();
+      localStorage.setItem('deliveryOTP', otp);
+    }
+
+    // Render receipt
+    function renderReceipt() {
+      const receiptDiv = document.getElementById('receipt');
+      if (!orderDetails.product) {
+        receiptDiv.innerHTML = '<div style="color:red;">No order details found.</div>';
+        return;
+      }
+      receiptDiv.innerHTML = `
+        <div class="receipt-row"><span>Order Number:</span><span>${orderNumber}</span></div>
+        <div class="receipt-row"><span>Product Name:</span><span>${orderDetails.product.name}</span></div>
+        <div class="receipt-row"><span>Price per item:</span><span>₹${orderDetails.product.price}</span></div>
+        <div class="receipt-row"><span>Quantity:</span><span>${orderDetails.product.quantity}</span></div>
+        <div class="receipt-row"><span>Delivery Charge:</span><span>₹${orderDetails.deliveryCharge}</span></div>
+        <div class="receipt-row total"><span>Final Total:</span><span>₹${orderDetails.finalTotal}</span></div>
+        <div class="receipt-row"><span>Payment Method:</span><span>${paymentMethod}</span></div>
+        <div class="receipt-row"><span>Payment Status:</span><span>${paymentStatus}</span></div>
+        <div class="receipt-row"><span>Delivery Type:</span><span>${deliveryType}</span></div>
+      `;
+    }
+    renderReceipt();
+
+    // Show OTP for delivery
+    function renderOTP() {
+      const otpDiv = document.getElementById('otp-section');
+      if (deliveryType === 'Home Delivery') {
+        otpDiv.innerHTML = `Share this OTP with delivery agent to receive your order<br>OTP: <b>${otp}</b>`;
+      } else {
+        otpDiv.innerHTML = '';
+      }
+    }
+    renderOTP();
+  </script>
+</body>
+</html>
