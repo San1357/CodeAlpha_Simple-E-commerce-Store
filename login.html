@@ -91,6 +91,40 @@
       box-shadow: 0 0 0 3px rgba(0, 116, 217, 0.15);
     }
 
+    /* Cart Icon */
+    .cart-icon-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.5rem 1rem;
+      color: #333;
+      text-decoration: none;
+      border-radius: 4px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .cart-icon-wrapper:hover {
+      background: #0074d9;
+      color: #fff;
+    }
+    .cart-icon { font-size: 1.3rem; }
+    .cart-badge {
+      position: absolute;
+      top: -2px;
+      right: 2px;
+      background: #e74c3c;
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 700;
+      min-width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .cart-badge.hidden { display: none; }
+
     /* Main Container */
     .main-container {
       flex: 1;
@@ -377,6 +411,10 @@
           </select>
         </div>
         <a href="index.html" data-i18n="home">Home</a>
+        <a href="cart.html" class="cart-icon-wrapper">
+          <span class="cart-icon">🛒</span>
+          <span class="cart-badge hidden" id="cartBadge">0</span>
+        </a>
         <a href="signup.html" data-i18n="signup">Sign Up</a>
       </nav>
     </div>
@@ -632,9 +670,31 @@
       }, 800);
     });
 
+    // ========================================
+    // CART BADGE
+    // ========================================
+    function getCart() {
+      return JSON.parse(localStorage.getItem('cartItems')) || [];
+    }
+
+    function updateCartBadge() {
+      const cart = getCart();
+      const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+      const badge = document.getElementById('cartBadge');
+      if (badge) {
+        badge.textContent = totalItems;
+        if (totalItems > 0) {
+          badge.classList.remove('hidden');
+        } else {
+          badge.classList.add('hidden');
+        }
+      }
+    }
+
     // Initialize
     checkExistingSession();
     checkRegistrationRedirect();
+    updateCartBadge();
   </script>
 </body>
 </html>
