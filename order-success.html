@@ -5,12 +5,70 @@
   <title>Order Success</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
     body {
       background: #f7f7f7;
       font-family: Arial, sans-serif;
       min-height: 100vh;
-      margin: 0;
-      padding: 0;
+    }
+    /* Header */
+    .header {
+      background: #fff;
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #0074d9;
+      text-decoration: none;
+    }
+    .nav-links {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+    .nav-links a {
+      color: #333;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .nav-links a:hover {
+      background: #0074d9;
+      color: #fff;
+    }
+    /* Language Selector */
+    .lang-selector-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .lang-icon { font-size: 1.1rem; }
+    .lang-selector {
+      padding: 0.4rem 0.6rem;
+      font-size: 0.9rem;
+      border: 1.5px solid #0074d9;
+      border-radius: 5px;
+      background: #fff;
+      color: #0074d9;
+      cursor: pointer;
+      outline: none;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    .lang-selector:hover { background: #e7f7ff; }
+    .lang-selector:focus { box-shadow: 0 0 0 3px rgba(0, 116, 217, 0.15); }
+    @media (max-width: 500px) {
+      .header { flex-direction: column; gap: 1rem; padding: 1rem; }
     }
     .container {
       max-width: 430px;
@@ -97,17 +155,36 @@
   </style>
 </head>
 <body>
+  <!-- Header -->
+  <header class="header">
+    <a href="index.html" class="logo" data-i18n="shopease">ShopEase</a>
+    <nav class="nav-links">
+      <div class="lang-selector-wrapper">
+        <span class="lang-icon">🌐</span>
+        <select id="language-selector" class="lang-selector">
+          <option value="en">English</option>
+          <option value="hi">हिंदी</option>
+          <option value="bho">भोजपुरी</option>
+        </select>
+      </div>
+      <a href="index.html" data-i18n="home">Home</a>
+    </nav>
+  </header>
+
   <div class="container" id="print-area">
     <div class="success-icon">✔️</div>
-    <div class="section-title">Order Placed Successfully!</div>
+    <div class="section-title" data-i18n="orderPlacedSuccessfully">Order Placed Successfully!</div>
     <div class="receipt" id="receipt">
       <!-- Receipt details will be injected here -->
     </div>
-    <button class="download-btn" onclick="window.print()">Download Bill</button>
+    <button class="download-btn" onclick="window.print()" data-i18n="downloadBill">Download Bill</button>
     <div class="otp-section" id="otp-section">
       <!-- OTP will be shown here -->
     </div>
   </div>
+
+  <!-- Language/i18n Script -->
+  <script src="lang.js"></script>
   <script>
     // Helper to generate random order number and OTP
     function generateOrderNumber() {
@@ -135,37 +212,43 @@
       localStorage.setItem('deliveryOTP', otp);
     }
 
-    // Render receipt
+    // Render receipt (with i18n support)
     function renderReceipt() {
       const receiptDiv = document.getElementById('receipt');
       if (!orderDetails.product) {
-        receiptDiv.innerHTML = '<div style="color:red;">No order details found.</div>';
+        receiptDiv.innerHTML = `<div style="color:red;">${t('noOrderDetails')}</div>`;
         return;
       }
       receiptDiv.innerHTML = `
-        <div class="receipt-row"><span>Order Number:</span><span>${orderNumber}</span></div>
-        <div class="receipt-row"><span>Product Name:</span><span>${orderDetails.product.name}</span></div>
-        <div class="receipt-row"><span>Price per item:</span><span>₹${orderDetails.product.price}</span></div>
-        <div class="receipt-row"><span>Quantity:</span><span>${orderDetails.product.quantity}</span></div>
-        <div class="receipt-row"><span>Delivery Charge:</span><span>₹${orderDetails.deliveryCharge}</span></div>
-        <div class="receipt-row total"><span>Final Total:</span><span>₹${orderDetails.finalTotal}</span></div>
-        <div class="receipt-row"><span>Payment Method:</span><span>${paymentMethod}</span></div>
-        <div class="receipt-row"><span>Payment Status:</span><span>${paymentStatus}</span></div>
-        <div class="receipt-row"><span>Delivery Type:</span><span>${deliveryType}</span></div>
+        <div class="receipt-row"><span>${t('orderNumber')}:</span><span>${orderNumber}</span></div>
+        <div class="receipt-row"><span>${t('productName')}:</span><span>${orderDetails.product.name}</span></div>
+        <div class="receipt-row"><span>${t('pricePerItem')}:</span><span>₹${orderDetails.product.price}</span></div>
+        <div class="receipt-row"><span>${t('quantity')}:</span><span>${orderDetails.product.quantity}</span></div>
+        <div class="receipt-row"><span>${t('deliveryCharge')}:</span><span>₹${orderDetails.deliveryCharge}</span></div>
+        <div class="receipt-row total"><span>${t('finalTotal')}:</span><span>₹${orderDetails.finalTotal}</span></div>
+        <div class="receipt-row"><span>${t('paymentMethod')}:</span><span>${paymentMethod}</span></div>
+        <div class="receipt-row"><span>${t('paymentStatus')}:</span><span>${paymentStatus}</span></div>
+        <div class="receipt-row"><span>${t('deliveryType')}:</span><span>${deliveryType}</span></div>
       `;
     }
     renderReceipt();
 
-    // Show OTP for delivery
+    // Show OTP for delivery (with i18n support)
     function renderOTP() {
       const otpDiv = document.getElementById('otp-section');
       if (deliveryType === 'Home Delivery') {
-        otpDiv.innerHTML = `Share this OTP with delivery agent to receive your order<br>OTP: <b>${otp}</b>`;
+        otpDiv.innerHTML = `${t('shareOtpMessage')}<br>OTP: <b>${otp}</b>`;
       } else {
         otpDiv.innerHTML = '';
       }
     }
     renderOTP();
+
+    // Re-render on language change
+    window.addEventListener('languageChanged', function() {
+      renderReceipt();
+      renderOTP();
+    });
   </script>
 </body>
 </html>
