@@ -362,6 +362,98 @@
     saveOrderToHistory();
 
     // ========================================
+    // STOCK MANAGEMENT
+    // ========================================
+    const defaultStock = {
+      'Reynolds_Pen': 15,
+      'Cello_Pen': 8,
+      'Parker_Pen': 3,
+      'Linc_Pen': 20,
+      'Flair_Pen': 12,
+      'Pilot_Pen': 5,
+      'Nataraj_Pencil': 25,
+      'Apsara_Pencil': 18,
+      'Camlin_Pencil': 10,
+      'Classmate_Notebook': 7,
+      'Navneet_Notebook': 4,
+      'Doms_Notebook': 0,
+      'Apsara_Sharpener': 30,
+      'Nataraj_Sharpener': 15,
+      'Camlin_Sharpener': 2,
+      'Nataraj_Eraser': 22,
+      'Apsara_Eraser': 0,
+      'Camlin_Eraser': 6
+    };
+
+    function initializeStock() {
+      let stock = localStorage.getItem('productStock');
+      if (!stock) {
+        localStorage.setItem('productStock', JSON.stringify(defaultStock));
+      }
+    }
+
+    function getAllStock() {
+      initializeStock();
+      return JSON.parse(localStorage.getItem('productStock'));
+    }
+
+    function getProductStock(productId) {
+      const stock = getAllStock();
+      return stock[productId] !== undefined ? stock[productId] : 0;
+    }
+
+    function updateProductStock(productId, quantity) {
+      const stock = getAllStock();
+      stock[productId] = Math.max(0, quantity);
+      localStorage.setItem('productStock', JSON.stringify(stock));
+    }
+
+    function reduceStock(productId, quantity) {
+      const currentStock = getProductStock(productId);
+      const newStock = Math.max(0, currentStock - quantity);
+      updateProductStock(productId, newStock);
+      console.log(`Stock reduced for ${productId}: ${currentStock} -> ${newStock}`);
+      return newStock;
+    }
+
+    /**
+     * Reduce stock for all items in the order
+     * Should be called after order is successfully saved
+     */
+    function reduceStockForOrder() {
+      // Check if stock has already been reduced for this order
+      const stockReducedKey = 'stockReduced_' + orderNumber;
+      if (localStorage.getItem(stockReducedKey)) {
+        console.log('Stock already reduced for this order');
+        return;
+      }
+
+      // Get products from order details
+      let products = [];
+      if (orderDetails.items && orderDetails.items.length > 0) {
+        // Multiple items from cart checkout
+        products = orderDetails.items;
+      } else if (orderDetails.product) {
+        // Single product (Buy Now)
+        products = [orderDetails.product];
+      }
+
+      // Reduce stock for each product
+      products.forEach(item => {
+        const productId = item.id || item.name.replace(/\s+/g, '_');
+        reduceStock(productId, item.quantity);
+      });
+
+      // Mark stock as reduced for this order
+      localStorage.setItem(stockReducedKey, 'true');
+      console.log('Stock reduced for order:', orderNumber);
+    }
+
+    // Initialize stock and reduce for this order
+    initializeStock();
+    reduceStockForOrder();
+
+    // ========================================
     // CART BADGE
     // ========================================
     function getCart() {

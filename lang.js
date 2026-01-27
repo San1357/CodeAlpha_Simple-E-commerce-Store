@@ -252,7 +252,18 @@ const translations = {
     movedToCart: "Moved to cart!",
     browseProductsWishlist: "Browse products to add to your wishlist",
     wishlistItems: "items in wishlist",
-    wishlistItem: "item in wishlist"
+    wishlistItem: "item in wishlist",
+
+    // Stock Management
+    inStock: "In Stock",
+    lowStock: "Only {count} left in stock",
+    outOfStock: "Out of Stock",
+    stockWarning: "Only {count} items available in stock",
+    insufficientStock: "Out of stock or insufficient quantity",
+    stockUpdated: "Stock updated — please reduce quantity",
+    someItemsOutOfStock: "Some items are out of stock. Please update your cart.",
+    available: "Available",
+    stockStatus: "Stock Status"
   },
 
   // --------------------------
@@ -489,7 +500,18 @@ const translations = {
     movedToCart: "कार्ट में डाला गया!",
     browseProductsWishlist: "विशलिस्ट में जोड़ने के लिए उत्पाद देखें",
     wishlistItems: "आइटम विशलिस्ट में",
-    wishlistItem: "आइटम विशलिस्ट में"
+    wishlistItem: "आइटम विशलिस्ट में",
+
+    // Stock Management
+    inStock: "स्टॉक में है",
+    lowStock: "केवल {count} बचे हैं",
+    outOfStock: "स्टॉक में नहीं है",
+    stockWarning: "केवल {count} आइटम स्टॉक में उपलब्ध हैं",
+    insufficientStock: "स्टॉक में नहीं है या मात्रा कम है",
+    stockUpdated: "स्टॉक अपडेट हुआ — कृपया मात्रा कम करें",
+    someItemsOutOfStock: "कुछ आइटम स्टॉक में नहीं हैं। कृपया अपना कार्ट अपडेट करें।",
+    available: "उपलब्ध",
+    stockStatus: "स्टॉक स्थिति"
   },
 
   // --------------------------
@@ -726,7 +748,18 @@ const translations = {
     movedToCart: "कार्ट में गइल!",
     browseProductsWishlist: "विशलिस्ट में डाले खातिर सामान देखीं",
     wishlistItems: "सामान विशलिस्ट में",
-    wishlistItem: "सामान विशलिस्ट में"
+    wishlistItem: "सामान विशलिस्ट में",
+
+    // Stock Management
+    inStock: "स्टॉक में बा",
+    lowStock: "बस {count} गो बचल बा",
+    outOfStock: "स्टॉक में नइखे",
+    stockWarning: "बस {count} गो सामान स्टॉक में बा",
+    insufficientStock: "स्टॉक में नइखे या कम बा",
+    stockUpdated: "स्टॉक अपडेट भइल — मात्रा कम करीं",
+    someItemsOutOfStock: "कुछ सामान स्टॉक में नइखे। कार्ट अपडेट करीं।",
+    available: "उपलब्ध बा",
+    stockStatus: "स्टॉक के हालत"
   }
 };
 

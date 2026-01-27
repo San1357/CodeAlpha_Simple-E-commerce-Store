@@ -348,6 +348,94 @@
     }
 
     // ========================================
+    // STOCK MANAGEMENT FUNCTIONS
+    // ========================================
+
+    /**
+     * Default stock values
+     */
+    const defaultStock = {
+      'Reynolds_Pen': 15,
+      'Cello_Pen': 8,
+      'Parker_Pen': 3,
+      'Linc_Pen': 20,
+      'Flair_Pen': 12,
+      'Pilot_Pen': 5,
+      'Nataraj_Pencil': 25,
+      'Apsara_Pencil': 18,
+      'Camlin_Pencil': 10,
+      'Classmate_Notebook': 7,
+      'Navneet_Notebook': 4,
+      'Doms_Notebook': 0,
+      'Apsara_Sharpener': 30,
+      'Nataraj_Sharpener': 15,
+      'Camlin_Sharpener': 2,
+      'Nataraj_Eraser': 22,
+      'Apsara_Eraser': 0,
+      'Camlin_Eraser': 6
+    };
+
+    /**
+     * Initialize stock if not exists
+     */
+    function initializeStock() {
+      const existingStock = localStorage.getItem('productStock');
+      if (!existingStock) {
+        localStorage.setItem('productStock', JSON.stringify(defaultStock));
+      }
+    }
+
+    /**
+     * Get all stock data
+     */
+    function getAllStock() {
+      initializeStock();
+      return JSON.parse(localStorage.getItem('productStock')) || {};
+    }
+
+    /**
+     * Get stock for specific product
+     */
+    function getProductStock(productId) {
+      const stock = getAllStock();
+      return stock[productId] !== undefined ? stock[productId] : 0;
+    }
+
+    /**
+     * Validate stock for all checkout items
+     * @returns {Object} { valid: boolean, issues: array }
+     */
+    function validateCheckoutStock(items) {
+      const issues = [];
+
+      items.forEach(item => {
+        const productId = item.id || item.name.replace(' ', '_');
+        const stock = getProductStock(productId);
+
+        if (stock === 0) {
+          issues.push({
+            name: item.name,
+            issue: 'out_of_stock',
+            available: 0,
+            requested: item.quantity
+          });
+        } else if (item.quantity > stock) {
+          issues.push({
+            name: item.name,
+            issue: 'insufficient',
+            available: stock,
+            requested: item.quantity
+          });
+        }
+      });
+
+      return {
+        valid: issues.length === 0,
+        issues: issues
+      };
+    }
+
+    // ========================================
     // CHECKOUT LOGIC - SUPPORTS CART & SINGLE PRODUCT
     // ========================================
 
@@ -470,6 +558,21 @@
       }
       if (!/^[0-9]{6}$/.test(pincode)) {
         alert(t('validPincode'));
+        return;
+      }
+
+      // Validate stock before proceeding
+      const stockValidation = validateCheckoutStock(checkoutItems);
+      if (!stockValidation.valid) {
+        let errorMessage = t('someItemsOutOfStock') + '\n\n';
+        stockValidation.issues.forEach(issue => {
+          if (issue.issue === 'out_of_stock') {
+            errorMessage += `• ${issue.name}: ${t('outOfStock')}\n`;
+          } else {
+            errorMessage += `• ${issue.name}: ${t('stockWarning').replace('{count}', issue.available)}\n`;
+          }
+        });
+        alert(errorMessage);
         return;
       }
 
