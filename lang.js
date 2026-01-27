@@ -236,7 +236,23 @@ const translations = {
     customerName: "Customer Name",
     address: "Address",
     mobile: "Mobile",
-    close: "Close"
+    close: "Close",
+
+    // Wishlist
+    wishlist: "Wishlist",
+    myWishlist: "My Wishlist",
+    emptyWishlist: "Your wishlist is empty",
+    emptyWishlistText: "Save your favorite items here to buy them later!",
+    addToWishlist: "Add to Wishlist",
+    removeFromWishlist: "Remove from Wishlist",
+    moveToCart: "Move to Cart",
+    alreadyInWishlist: "Already in wishlist!",
+    addedToWishlist: "Added to wishlist!",
+    removedFromWishlist: "Removed from wishlist!",
+    movedToCart: "Moved to cart!",
+    browseProductsWishlist: "Browse products to add to your wishlist",
+    wishlistItems: "items in wishlist",
+    wishlistItem: "item in wishlist"
   },
 
   // --------------------------
@@ -457,7 +473,23 @@ const translations = {
     customerName: "ग्राहक का नाम",
     address: "पता",
     mobile: "मोबाइल",
-    close: "बंद करें"
+    close: "बंद करें",
+
+    // Wishlist
+    wishlist: "विशलिस्ट",
+    myWishlist: "मेरी विशलिस्ट",
+    emptyWishlist: "आपकी विशलिस्ट खाली है",
+    emptyWishlistText: "बाद में खरीदने के लिए अपनी पसंदीदा चीजें यहां सेव करें!",
+    addToWishlist: "विशलिस्ट में जोड़ें",
+    removeFromWishlist: "विशलिस्ट से हटाएं",
+    moveToCart: "कार्ट में डालें",
+    alreadyInWishlist: "पहले से विशलिस्ट में है!",
+    addedToWishlist: "विशलिस्ट में जोड़ा गया!",
+    removedFromWishlist: "विशलिस्ट से हटाया गया!",
+    movedToCart: "कार्ट में डाला गया!",
+    browseProductsWishlist: "विशलिस्ट में जोड़ने के लिए उत्पाद देखें",
+    wishlistItems: "आइटम विशलिस्ट में",
+    wishlistItem: "आइटम विशलिस्ट में"
   },
 
   // --------------------------
@@ -678,7 +710,23 @@ const translations = {
     customerName: "ग्राहक के नाम",
     address: "पता",
     mobile: "मोबाइल",
-    close: "बंद करीं"
+    close: "बंद करीं",
+
+    // Wishlist
+    wishlist: "विशलिस्ट",
+    myWishlist: "हमार विशलिस्ट",
+    emptyWishlist: "विशलिस्ट खाली बा",
+    emptyWishlistText: "बाद में खरीदे खातिर आपन पसंद के सामान इहां सेव करीं!",
+    addToWishlist: "विशलिस्ट में डालीं",
+    removeFromWishlist: "विशलिस्ट से हटाईं",
+    moveToCart: "कार्ट में डालीं",
+    alreadyInWishlist: "पहिले से विशलिस्ट में बा!",
+    addedToWishlist: "विशलिस्ट में गइल!",
+    removedFromWishlist: "विशलिस्ट से हटल!",
+    movedToCart: "कार्ट में गइल!",
+    browseProductsWishlist: "विशलिस्ट में डाले खातिर सामान देखीं",
+    wishlistItems: "सामान विशलिस्ट में",
+    wishlistItem: "सामान विशलिस्ट में"
   }
 };
 

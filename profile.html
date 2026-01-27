@@ -135,6 +135,40 @@
     }
     .cart-badge.hidden { display: none; }
 
+    /* Wishlist Icon */
+    .wishlist-icon-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.5rem 1rem;
+      color: #333;
+      text-decoration: none;
+      border-radius: 4px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .wishlist-icon-wrapper:hover {
+      background: #e74c3c;
+      color: #fff;
+    }
+    .wishlist-icon { font-size: 1.3rem; }
+    .wishlist-badge {
+      position: absolute;
+      top: -2px;
+      right: 2px;
+      background: #e74c3c;
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 700;
+      min-width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .wishlist-badge.hidden { display: none; }
+
     /* Main Container */
     .main-container {
       flex: 1;
@@ -923,6 +957,12 @@
           </select>
         </div>
         <a href="index.html" data-i18n="home">Home</a>
+        <!-- Wishlist Icon -->
+        <a href="wishlist.html" class="wishlist-icon-wrapper">
+          <span class="wishlist-icon">❤️</span>
+          <span class="wishlist-badge hidden" id="wishlistBadge">0</span>
+        </a>
+        <!-- Cart Icon -->
         <a href="cart.html" class="cart-icon-wrapper">
           <span class="cart-icon">🛒</span>
           <span class="cart-badge hidden" id="cartBadge">0</span>
@@ -1181,6 +1221,26 @@
       if (badge) {
         badge.textContent = totalItems;
         if (totalItems > 0) {
+          badge.classList.remove('hidden');
+        } else {
+          badge.classList.add('hidden');
+        }
+      }
+    }
+
+    // ========================================
+    // WISHLIST BADGE
+    // ========================================
+    function getWishlist() {
+      return JSON.parse(localStorage.getItem('wishlistItems')) || [];
+    }
+
+    function updateWishlistBadge() {
+      const wishlist = getWishlist();
+      const badge = document.getElementById('wishlistBadge');
+      if (badge) {
+        badge.textContent = wishlist.length;
+        if (wishlist.length > 0) {
           badge.classList.remove('hidden');
         } else {
           badge.classList.add('hidden');
@@ -1561,6 +1621,7 @@
       loadUserProfile();
     }
     updateCartBadge();
+    updateWishlistBadge();
     renderOrderHistory(); // Render order history on page load
   </script>
 </body>
