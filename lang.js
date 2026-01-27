@@ -263,7 +263,33 @@ const translations = {
     stockUpdated: "Stock updated — please reduce quantity",
     someItemsOutOfStock: "Some items are out of stock. Please update your cart.",
     available: "Available",
-    stockStatus: "Stock Status"
+    stockStatus: "Stock Status",
+
+    // Address Book
+    myAddresses: "My Addresses",
+    addNewAddress: "Add New Address",
+    editAddress: "Edit Address",
+    deleteAddress: "Delete Address",
+    setAsDefault: "Set as Default",
+    defaultAddress: "Default",
+    noAddresses: "No saved addresses",
+    noAddressesText: "Add a delivery address to make checkout faster!",
+    saveAddress: "Save Address",
+    updateAddress: "Update Address",
+    addressSaved: "Address saved successfully!",
+    addressUpdated: "Address updated successfully!",
+    addressDeleted: "Address deleted successfully!",
+    confirmDeleteAddress: "Are you sure you want to delete this address?",
+    selectAddress: "Select Address",
+    savedAddresses: "Saved Addresses",
+    useThisAddress: "Use This Address",
+    addAddressInProfile: "Please add a delivery address in your profile",
+    orEnterManually: "Or enter address manually",
+
+    // Dark Mode
+    darkMode: "Dark Mode",
+    lightMode: "Light Mode",
+    theme: "Theme"
   },
 
   // --------------------------
@@ -511,7 +537,33 @@ const translations = {
     stockUpdated: "स्टॉक अपडेट हुआ — कृपया मात्रा कम करें",
     someItemsOutOfStock: "कुछ आइटम स्टॉक में नहीं हैं। कृपया अपना कार्ट अपडेट करें।",
     available: "उपलब्ध",
-    stockStatus: "स्टॉक स्थिति"
+    stockStatus: "स्टॉक स्थिति",
+
+    // Address Book
+    myAddresses: "मेरे पते",
+    addNewAddress: "नया पता जोड़ें",
+    editAddress: "पता संपादित करें",
+    deleteAddress: "पता हटाएं",
+    setAsDefault: "डिफ़ॉल्ट बनाएं",
+    defaultAddress: "डिफ़ॉल्ट",
+    noAddresses: "कोई सहेजा हुआ पता नहीं",
+    noAddressesText: "चेकआउट तेज़ बनाने के लिए डिलीवरी पता जोड़ें!",
+    saveAddress: "पता सहेजें",
+    updateAddress: "पता अपडेट करें",
+    addressSaved: "पता सफलतापूर्वक सहेजा गया!",
+    addressUpdated: "पता सफलतापूर्वक अपडेट हुआ!",
+    addressDeleted: "पता सफलतापूर्वक हटाया गया!",
+    confirmDeleteAddress: "क्या आप वाकई इस पते को हटाना चाहते हैं?",
+    selectAddress: "पता चुनें",
+    savedAddresses: "सहेजे गए पते",
+    useThisAddress: "यह पता उपयोग करें",
+    addAddressInProfile: "कृपया अपनी प्रोफाइल में डिलीवरी पता जोड़ें",
+    orEnterManually: "या मैन्युअल रूप से पता दर्ज करें",
+
+    // Dark Mode
+    darkMode: "डार्क मोड",
+    lightMode: "लाइट मोड",
+    theme: "थीम"
   },
 
   // --------------------------
@@ -759,7 +811,33 @@ const translations = {
     stockUpdated: "स्टॉक अपडेट भइल — मात्रा कम करीं",
     someItemsOutOfStock: "कुछ सामान स्टॉक में नइखे। कार्ट अपडेट करीं।",
     available: "उपलब्ध बा",
-    stockStatus: "स्टॉक के हालत"
+    stockStatus: "स्टॉक के हालत",
+
+    // Address Book
+    myAddresses: "हमार पता",
+    addNewAddress: "नया पता जोड़ीं",
+    editAddress: "पता बदलीं",
+    deleteAddress: "पता हटाईं",
+    setAsDefault: "डिफ़ॉल्ट बनाईं",
+    defaultAddress: "डिफ़ॉल्ट",
+    noAddresses: "कवनो पता नइखे सेव",
+    noAddressesText: "चेकआउट जल्दी करे खातिर डिलीवरी पता जोड़ीं!",
+    saveAddress: "पता सेव करीं",
+    updateAddress: "पता अपडेट करीं",
+    addressSaved: "पता सेव हो गइल!",
+    addressUpdated: "पता अपडेट हो गइल!",
+    addressDeleted: "पता हटा दिहल गइल!",
+    confirmDeleteAddress: "सच में ई पता हटावे के बा?",
+    selectAddress: "पता चुनीं",
+    savedAddresses: "सेव कइल पता",
+    useThisAddress: "ई पता इस्तेमाल करीं",
+    addAddressInProfile: "प्रोफाइल में डिलीवरी पता जोड़ीं",
+    orEnterManually: "या खुद पता डालीं",
+
+    // Dark Mode
+    darkMode: "डार्क मोड",
+    lightMode: "लाइट मोड",
+    theme: "थीम"
   }
 };
 

@@ -5,6 +5,46 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>My Profile - E-commerce Store</title>
   <style>
+    /* ========================================
+       CSS VARIABLES FOR THEMING
+       ======================================== */
+    :root {
+      --bg-primary: #f7f7f7;
+      --bg-secondary: #fff;
+      --bg-card: #fff;
+      --bg-input: #fff;
+      --bg-hover: #f0f7ff;
+      --text-primary: #333;
+      --text-secondary: #666;
+      --text-muted: #888;
+      --border-color: #ddd;
+      --border-light: #eee;
+      --shadow-color: rgba(0,0,0,0.08);
+      --accent-color: #0074d9;
+      --accent-hover: #005fa3;
+      --accent-light: #e7f7ff;
+      --danger-color: #e74c3c;
+      --success-color: #27ae60;
+      --theme-transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    }
+
+    body.dark-mode {
+      --bg-primary: #1a1a2e;
+      --bg-secondary: #16213e;
+      --bg-card: #1f2940;
+      --bg-input: #2a3a5a;
+      --bg-hover: #2a3a5a;
+      --text-primary: #e8e8e8;
+      --text-secondary: #b8b8b8;
+      --text-muted: #888;
+      --border-color: #3a4a6a;
+      --border-light: #2a3a5a;
+      --shadow-color: rgba(0,0,0,0.3);
+      --accent-color: #4da6ff;
+      --accent-hover: #3d96ef;
+      --accent-light: #1a3a5a;
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
@@ -13,17 +53,20 @@
 
     body {
       font-family: Arial, sans-serif;
-      background: #f7f7f7;
+      background: var(--bg-primary);
+      color: var(--text-primary);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      transition: var(--theme-transition);
     }
 
     /* Header */
     .header {
-      background: #fff;
+      background: var(--bg-secondary);
       padding: 1rem 2rem;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      box-shadow: 0 2px 8px var(--shadow-color);
+      transition: var(--theme-transition);
     }
 
     .header-content {
@@ -37,7 +80,7 @@
     .logo {
       font-size: 1.5rem;
       font-weight: 700;
-      color: #0074d9;
+      color: var(--accent-color);
       text-decoration: none;
     }
 
@@ -48,26 +91,51 @@
     }
 
     .nav-links a {
-      color: #333;
+      color: var(--text-primary);
       text-decoration: none;
       padding: 0.5rem 1rem;
       border-radius: 4px;
-      transition: background 0.2s, color 0.2s;
+      transition: var(--theme-transition);
     }
 
     .nav-links a:hover {
-      background: #0074d9;
+      background: var(--accent-color);
       color: #fff;
     }
 
     .user-badge {
-      background: #e7f7ff;
-      color: #0074d9;
+      background: var(--accent-light);
+      color: var(--accent-color);
       padding: 0.4rem 0.8rem;
       border-radius: 20px;
       font-size: 0.9rem;
       font-weight: 500;
     }
+
+    /* Dark Mode Toggle */
+    .theme-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--bg-hover);
+      border: 2px solid var(--border-color);
+      cursor: pointer;
+      font-size: 1.2rem;
+      transition: var(--theme-transition);
+    }
+
+    .theme-toggle:hover {
+      background: var(--accent-light);
+      border-color: var(--accent-color);
+    }
+
+    .theme-toggle .sun-icon { display: none; }
+    .theme-toggle .moon-icon { display: block; }
+    body.dark-mode .theme-toggle .sun-icon { display: block; }
+    body.dark-mode .theme-toggle .moon-icon { display: none; }
 
     /* Language Selector */
     .lang-selector-wrapper {
@@ -214,10 +282,11 @@
 
     /* Profile Body */
     .profile-body {
-      background: #fff;
+      background: var(--bg-card);
       padding: 2rem;
       border-radius: 0 0 10px 10px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      box-shadow: 0 4px 24px var(--shadow-color);
+      transition: var(--theme-transition);
     }
 
     /* Account Status */
@@ -226,13 +295,13 @@
       align-items: center;
       justify-content: space-between;
       padding: 1rem 1.5rem;
-      background: #f1f1f1;
+      background: var(--bg-hover);
       border-radius: 8px;
       margin-bottom: 1.5rem;
     }
 
     .status-label {
-      color: #555;
+      color: var(--text-secondary);
       font-size: 0.95rem;
     }
 
@@ -270,15 +339,16 @@
     }
 
     .info-card {
-      background: #f9f9f9;
+      background: var(--bg-hover);
       padding: 1.2rem;
       border-radius: 8px;
-      border-left: 4px solid #0074d9;
+      border-left: 4px solid var(--accent-color);
+      transition: var(--theme-transition);
     }
 
     .info-card-label {
       font-size: 0.85rem;
-      color: #777;
+      color: var(--text-muted);
       margin-bottom: 0.3rem;
       text-transform: uppercase;
       letter-spacing: 0.5px;
@@ -286,7 +356,7 @@
 
     .info-card-value {
       font-size: 1.1rem;
-      color: #333;
+      color: var(--text-primary);
       font-weight: 500;
     }
 
@@ -869,6 +939,299 @@
       justify-content: center;
     }
 
+    /* ========================================
+       ADDRESS BOOK SECTION STYLES
+       ======================================== */
+
+    /* Addresses Section Container */
+    .addresses-section {
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid #eee;
+    }
+
+    .addresses-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .addresses-title {
+      font-size: 1.3rem;
+      color: #333;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .addresses-title-icon {
+      font-size: 1.4rem;
+    }
+
+    .btn-add-address {
+      padding: 0.6rem 1.2rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      background: #0074d9;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: background 0.2s;
+    }
+
+    .btn-add-address:hover {
+      background: #005fa3;
+    }
+
+    /* Empty Addresses State */
+    .empty-addresses {
+      text-align: center;
+      padding: 3rem 2rem;
+      background: #f9f9f9;
+      border-radius: 10px;
+      border: 2px dashed #ddd;
+    }
+
+    .empty-addresses-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+
+    .empty-addresses-title {
+      font-size: 1.2rem;
+      color: #555;
+      margin-bottom: 0.5rem;
+    }
+
+    .empty-addresses-text {
+      color: #888;
+      font-size: 0.95rem;
+    }
+
+    /* Address Cards List */
+    .addresses-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+
+    /* Individual Address Card */
+    .address-card {
+      background: #fff;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      padding: 1.2rem;
+      transition: all 0.2s;
+      position: relative;
+    }
+
+    .address-card:hover {
+      border-color: #0074d9;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .address-card.default {
+      border-color: #27ae60;
+      background: #f8fff8;
+    }
+
+    /* Default Badge */
+    .default-badge {
+      position: absolute;
+      top: -10px;
+      right: 12px;
+      background: #27ae60;
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.3rem 0.8rem;
+      border-radius: 12px;
+      text-transform: uppercase;
+    }
+
+    /* Address Card Content */
+    .address-name {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 0.3rem;
+    }
+
+    .address-mobile {
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 0.8rem;
+    }
+
+    .address-details {
+      font-size: 0.95rem;
+      color: #555;
+      line-height: 1.5;
+      margin-bottom: 1rem;
+    }
+
+    /* Address Card Actions */
+    .address-actions {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      padding-top: 0.8rem;
+      border-top: 1px solid #eee;
+    }
+
+    .address-btn {
+      padding: 0.4rem 0.8rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .btn-edit-addr {
+      background: #fff;
+      color: #0074d9;
+      border: 1.5px solid #0074d9;
+    }
+
+    .btn-edit-addr:hover {
+      background: #0074d9;
+      color: #fff;
+    }
+
+    .btn-delete-addr {
+      background: #fff;
+      color: #e74c3c;
+      border: 1.5px solid #e74c3c;
+    }
+
+    .btn-delete-addr:hover {
+      background: #e74c3c;
+      color: #fff;
+    }
+
+    .btn-set-default {
+      background: #fff;
+      color: #27ae60;
+      border: 1.5px solid #27ae60;
+    }
+
+    .btn-set-default:hover {
+      background: #27ae60;
+      color: #fff;
+    }
+
+    /* Address Modal */
+    .address-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1002;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+    }
+
+    .address-modal.show {
+      display: flex;
+    }
+
+    .address-modal-content {
+      background: #fff;
+      border-radius: 10px;
+      max-width: 450px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      animation: modalSlide 0.3s ease;
+    }
+
+    .address-modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 1.5rem;
+      border-bottom: 1px solid #eee;
+    }
+
+    .address-modal-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .address-modal-close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: #888;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .address-modal-close:hover {
+      color: #333;
+    }
+
+    .address-modal-body {
+      padding: 1.5rem;
+    }
+
+    .address-form-group {
+      margin-bottom: 1rem;
+    }
+
+    .address-form-group label {
+      display: block;
+      margin-bottom: 0.4rem;
+      font-size: 0.95rem;
+      color: #333;
+      font-weight: 500;
+    }
+
+    .address-form-group input {
+      width: 100%;
+      padding: 0.7rem 1rem;
+      font-size: 1rem;
+      border: 1.5px solid #ddd;
+      border-radius: 6px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .address-form-group input:focus {
+      border-color: #0074d9;
+    }
+
+    .address-form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .address-modal-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: flex-end;
+      padding: 1rem 1.5rem;
+      border-top: 1px solid #eee;
+    }
+
     /* Responsive */
     @media (max-width: 600px) {
       .main-container {
@@ -939,6 +1302,34 @@
       .invoice-content {
         max-height: 95vh;
       }
+
+      /* Address Book Responsive */
+      .addresses-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .btn-add-address {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .addresses-list {
+        grid-template-columns: 1fr;
+      }
+
+      .address-actions {
+        flex-direction: column;
+      }
+
+      .address-btn {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .address-form-row {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
@@ -948,6 +1339,11 @@
     <div class="header-content">
       <a href="index.html" class="logo" data-i18n="shopease">ShopEase</a>
       <nav class="nav-links">
+        <!-- Dark Mode Toggle -->
+        <button class="theme-toggle" id="themeToggle" title="Toggle Dark Mode">
+          <span class="moon-icon">🌙</span>
+          <span class="sun-icon">☀️</span>
+        </button>
         <div class="lang-selector-wrapper">
           <span class="lang-icon">🌐</span>
           <select id="language-selector" class="lang-selector">
@@ -1018,6 +1414,27 @@
         </div>
 
         <!-- ========================================
+             MY ADDRESSES SECTION
+             ======================================== -->
+        <div class="addresses-section">
+          <div class="addresses-header">
+            <h3 class="addresses-title">
+              <span class="addresses-title-icon">📍</span>
+              <span data-i18n="myAddresses">My Addresses</span>
+            </h3>
+            <button class="btn-add-address" id="addAddressBtn">
+              <span>➕</span>
+              <span data-i18n="addNewAddress">Add New Address</span>
+            </button>
+          </div>
+
+          <!-- Addresses will be rendered here by JavaScript -->
+          <div id="addressesContainer">
+            <!-- Address cards will be injected here -->
+          </div>
+        </div>
+
+        <!-- ========================================
              MY ORDERS SECTION
              ======================================== -->
         <div class="orders-section">
@@ -1061,6 +1478,51 @@
   <div class="invoice-modal" id="invoiceModal">
     <div class="invoice-content" id="invoiceContent">
       <!-- Invoice content will be injected here -->
+    </div>
+  </div>
+
+  <!-- Address Modal -->
+  <div class="address-modal" id="addressModal">
+    <div class="address-modal-content">
+      <div class="address-modal-header">
+        <h3 class="address-modal-title" id="addressModalTitle" data-i18n="addNewAddress">Add New Address</h3>
+        <button class="address-modal-close" id="closeAddressModal">&times;</button>
+      </div>
+      <div class="address-modal-body">
+        <form id="addressForm">
+          <input type="hidden" id="addressId">
+          <div class="address-form-group">
+            <label for="addrFullName" data-i18n="fullName">Full Name</label>
+            <input type="text" id="addrFullName" required>
+          </div>
+          <div class="address-form-group">
+            <label for="addrMobile" data-i18n="mobileNumber">Mobile Number</label>
+            <input type="text" id="addrMobile" required pattern="[0-9]{10}" maxlength="10">
+          </div>
+          <div class="address-form-group">
+            <label for="addrStreet" data-i18n="streetAddress">Street Address</label>
+            <input type="text" id="addrStreet" required>
+          </div>
+          <div class="address-form-row">
+            <div class="address-form-group">
+              <label for="addrCity" data-i18n="city">City</label>
+              <input type="text" id="addrCity" required>
+            </div>
+            <div class="address-form-group">
+              <label for="addrState" data-i18n="state">State</label>
+              <input type="text" id="addrState" required>
+            </div>
+          </div>
+          <div class="address-form-group">
+            <label for="addrPincode" data-i18n="pincode">Pincode</label>
+            <input type="text" id="addrPincode" required pattern="[0-9]{6}" maxlength="6">
+          </div>
+        </form>
+      </div>
+      <div class="address-modal-actions">
+        <button class="btn btn-outline" id="cancelAddressBtn" data-i18n="cancel">Cancel</button>
+        <button class="btn btn-primary" id="saveAddressBtn" data-i18n="saveAddress">Save Address</button>
+      </div>
     </div>
   </div>
 
@@ -1614,15 +2076,373 @@
     // Re-render orders when language changes
     window.addEventListener('languageChanged', function() {
       renderOrderHistory();
+      renderAddresses();
     });
 
+    // ========================================
+    // ADDRESS BOOK FUNCTIONS
+    // ========================================
+
+    /**
+     * Get all addresses from localStorage
+     * @returns {Array} Array of address objects
+     */
+    function getAddresses() {
+      return JSON.parse(localStorage.getItem('userAddresses')) || [];
+    }
+
+    /**
+     * Save addresses to localStorage
+     * @param {Array} addresses - Array of address objects
+     */
+    function saveAddresses(addresses) {
+      localStorage.setItem('userAddresses', JSON.stringify(addresses));
+    }
+
+    /**
+     * Generate unique ID for address
+     * @returns {string} Unique ID
+     */
+    function generateAddressId() {
+      return 'addr_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    }
+
+    /**
+     * Get default address
+     * @returns {Object|null} Default address or null
+     */
+    function getDefaultAddress() {
+      const addresses = getAddresses();
+      return addresses.find(addr => addr.isDefault) || null;
+    }
+
+    /**
+     * Set an address as default
+     * @param {string} addressId - ID of address to set as default
+     */
+    function setDefaultAddress(addressId) {
+      const addresses = getAddresses();
+      addresses.forEach(addr => {
+        addr.isDefault = (addr.id === addressId);
+      });
+      saveAddresses(addresses);
+      renderAddresses();
+    }
+
+    /**
+     * Add a new address
+     * @param {Object} addressData - Address data object
+     */
+    function addAddress(addressData) {
+      const addresses = getAddresses();
+
+      // If this is the first address, make it default
+      if (addresses.length === 0) {
+        addressData.isDefault = true;
+      }
+
+      addresses.push({
+        id: generateAddressId(),
+        ...addressData
+      });
+
+      saveAddresses(addresses);
+      renderAddresses();
+    }
+
+    /**
+     * Update an existing address
+     * @param {string} addressId - ID of address to update
+     * @param {Object} addressData - New address data
+     */
+    function updateAddressData(addressId, addressData) {
+      const addresses = getAddresses();
+      const index = addresses.findIndex(addr => addr.id === addressId);
+
+      if (index !== -1) {
+        addresses[index] = {
+          ...addresses[index],
+          ...addressData
+        };
+        saveAddresses(addresses);
+        renderAddresses();
+      }
+    }
+
+    /**
+     * Delete an address
+     * @param {string} addressId - ID of address to delete
+     */
+    function deleteAddress(addressId) {
+      if (!confirm(t('confirmDeleteAddress'))) {
+        return;
+      }
+
+      let addresses = getAddresses();
+      const deletedAddr = addresses.find(addr => addr.id === addressId);
+      addresses = addresses.filter(addr => addr.id !== addressId);
+
+      // If deleted address was default and there are other addresses, set first as default
+      if (deletedAddr && deletedAddr.isDefault && addresses.length > 0) {
+        addresses[0].isDefault = true;
+      }
+
+      saveAddresses(addresses);
+      renderAddresses();
+    }
+
+    /**
+     * Render empty state for addresses
+     * @returns {string} HTML string
+     */
+    function renderEmptyAddresses() {
+      return `
+        <div class="empty-addresses">
+          <div class="empty-addresses-icon">📍</div>
+          <div class="empty-addresses-title" data-i18n="noAddresses">${t('noAddresses')}</div>
+          <div class="empty-addresses-text" data-i18n="noAddressesText">${t('noAddressesText')}</div>
+        </div>
+      `;
+    }
+
+    /**
+     * Render a single address card
+     * @param {Object} address - Address object
+     * @returns {string} HTML string
+     */
+    function renderAddressCard(address) {
+      return `
+        <div class="address-card ${address.isDefault ? 'default' : ''}" data-id="${address.id}">
+          ${address.isDefault ? `<span class="default-badge" data-i18n="defaultAddress">${t('defaultAddress')}</span>` : ''}
+          <div class="address-name">${address.fullName}</div>
+          <div class="address-mobile">📞 ${address.mobile}</div>
+          <div class="address-details">
+            ${address.street}<br>
+            ${address.city}, ${address.state} - ${address.pincode}
+          </div>
+          <div class="address-actions">
+            <button class="address-btn btn-edit-addr" onclick="editAddress('${address.id}')">
+              <span>✏️</span>
+              <span data-i18n="editAddress">${t('editAddress')}</span>
+            </button>
+            <button class="address-btn btn-delete-addr" onclick="deleteAddress('${address.id}')">
+              <span>🗑️</span>
+              <span data-i18n="deleteAddress">${t('deleteAddress')}</span>
+            </button>
+            ${!address.isDefault ? `
+              <button class="address-btn btn-set-default" onclick="setDefaultAddress('${address.id}')">
+                <span>⭐</span>
+                <span data-i18n="setAsDefault">${t('setAsDefault')}</span>
+              </button>
+            ` : ''}
+          </div>
+        </div>
+      `;
+    }
+
+    /**
+     * Render all addresses
+     */
+    function renderAddresses() {
+      const container = document.getElementById('addressesContainer');
+      const addresses = getAddresses();
+
+      if (addresses.length === 0) {
+        container.innerHTML = renderEmptyAddresses();
+        return;
+      }
+
+      // Sort addresses to show default first
+      addresses.sort((a, b) => {
+        if (a.isDefault) return -1;
+        if (b.isDefault) return 1;
+        return 0;
+      });
+
+      let html = '<div class="addresses-list">';
+      addresses.forEach(addr => {
+        html += renderAddressCard(addr);
+      });
+      html += '</div>';
+
+      container.innerHTML = html;
+    }
+
+    /**
+     * Open address modal for adding new address
+     */
+    function openAddAddressModal() {
+      // Reset form
+      document.getElementById('addressForm').reset();
+      document.getElementById('addressId').value = '';
+
+      // Update modal title
+      document.getElementById('addressModalTitle').textContent = t('addNewAddress');
+      document.getElementById('addressModalTitle').setAttribute('data-i18n', 'addNewAddress');
+      document.getElementById('saveAddressBtn').textContent = t('saveAddress');
+      document.getElementById('saveAddressBtn').setAttribute('data-i18n', 'saveAddress');
+
+      // Show modal
+      document.getElementById('addressModal').classList.add('show');
+    }
+
+    /**
+     * Open address modal for editing existing address
+     * @param {string} addressId - ID of address to edit
+     */
+    function editAddress(addressId) {
+      const addresses = getAddresses();
+      const address = addresses.find(addr => addr.id === addressId);
+
+      if (!address) return;
+
+      // Populate form
+      document.getElementById('addressId').value = address.id;
+      document.getElementById('addrFullName').value = address.fullName;
+      document.getElementById('addrMobile').value = address.mobile;
+      document.getElementById('addrStreet').value = address.street;
+      document.getElementById('addrCity').value = address.city;
+      document.getElementById('addrState').value = address.state;
+      document.getElementById('addrPincode').value = address.pincode;
+
+      // Update modal title
+      document.getElementById('addressModalTitle').textContent = t('editAddress');
+      document.getElementById('addressModalTitle').setAttribute('data-i18n', 'editAddress');
+      document.getElementById('saveAddressBtn').textContent = t('updateAddress');
+      document.getElementById('saveAddressBtn').setAttribute('data-i18n', 'updateAddress');
+
+      // Show modal
+      document.getElementById('addressModal').classList.add('show');
+    }
+
+    /**
+     * Close address modal
+     */
+    function closeAddressModal() {
+      document.getElementById('addressModal').classList.remove('show');
+    }
+
+    /**
+     * Handle address form submission
+     */
+    function handleAddressSave() {
+      const form = document.getElementById('addressForm');
+
+      // Get form values
+      const addressId = document.getElementById('addressId').value;
+      const fullName = document.getElementById('addrFullName').value.trim();
+      const mobile = document.getElementById('addrMobile').value.trim();
+      const street = document.getElementById('addrStreet').value.trim();
+      const city = document.getElementById('addrCity').value.trim();
+      const state = document.getElementById('addrState').value.trim();
+      const pincode = document.getElementById('addrPincode').value.trim();
+
+      // Validate
+      if (!fullName || !mobile || !street || !city || !state || !pincode) {
+        alert(t('fillAllFields'));
+        return;
+      }
+
+      if (!/^[0-9]{10}$/.test(mobile)) {
+        alert(t('validMobile'));
+        return;
+      }
+
+      if (!/^[0-9]{6}$/.test(pincode)) {
+        alert(t('validPincode'));
+        return;
+      }
+
+      const addressData = {
+        fullName,
+        mobile,
+        street,
+        city,
+        state,
+        pincode
+      };
+
+      if (addressId) {
+        // Update existing address
+        updateAddressData(addressId, addressData);
+        alert(t('addressUpdated'));
+      } else {
+        // Add new address
+        addAddress(addressData);
+        alert(t('addressSaved'));
+      }
+
+      closeAddressModal();
+    }
+
+    // Address Modal Event Listeners
+    document.getElementById('addAddressBtn').addEventListener('click', openAddAddressModal);
+    document.getElementById('closeAddressModal').addEventListener('click', closeAddressModal);
+    document.getElementById('cancelAddressBtn').addEventListener('click', closeAddressModal);
+    document.getElementById('saveAddressBtn').addEventListener('click', handleAddressSave);
+
+    // Close modal on overlay click
+    document.getElementById('addressModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeAddressModal();
+      }
+    });
+
+    // Close address modal on Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        const addressModal = document.getElementById('addressModal');
+        if (addressModal.classList.contains('show')) {
+          closeAddressModal();
+        }
+      }
+    });
+
+    // ========================================
+    // DARK MODE FUNCTIONS
+    // ========================================
+    function getCurrentTheme() {
+      return localStorage.getItem('themeMode') || 'light';
+    }
+
+    function setTheme(theme) {
+      localStorage.setItem('themeMode', theme);
+    }
+
+    function applyTheme(theme) {
+      if (theme === 'dark') {
+        document.body.classList.add('dark-mode');
+      } else {
+        document.body.classList.remove('dark-mode');
+      }
+    }
+
+    function toggleTheme() {
+      const currentTheme = getCurrentTheme();
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      setTheme(newTheme);
+      applyTheme(newTheme);
+    }
+
+    function initDarkMode() {
+      const savedTheme = getCurrentTheme();
+      applyTheme(savedTheme);
+
+      const themeToggle = document.getElementById('themeToggle');
+      if (themeToggle) {
+        themeToggle.addEventListener('click', toggleTheme);
+      }
+    }
+
     // Initialize
+    initDarkMode();
     if (checkAuth()) {
       loadUserProfile();
     }
     updateCartBadge();
     updateWishlistBadge();
-    renderOrderHistory(); // Render order history on page load
+    renderOrderHistory();
+    renderAddresses(); // Render addresses on page load
   </script>
 </body>
 </html>
