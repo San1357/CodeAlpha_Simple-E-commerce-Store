@@ -6,6 +6,57 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     /* ========================================
+       CSS VARIABLES FOR THEMING
+       ======================================== */
+    :root {
+      /* Light Theme (Default) */
+      --bg-primary: #f7f7f7;
+      --bg-secondary: #fff;
+      --bg-card: #fff;
+      --bg-input: #fff;
+      --bg-hover: #f0f7ff;
+      --text-primary: #333;
+      --text-secondary: #666;
+      --text-muted: #888;
+      --border-color: #ddd;
+      --border-light: #eee;
+      --shadow-color: rgba(0,0,0,0.06);
+      --shadow-hover: rgba(0,0,0,0.12);
+      --accent-color: #0074d9;
+      --accent-hover: #005fa3;
+      --accent-light: #e7f7ff;
+      --danger-color: #e74c3c;
+      --success-color: #27ae60;
+      --warning-color: #f39c12;
+      --gradient-start: #0074d9;
+      --gradient-end: #005fa3;
+
+      /* Transitions */
+      --theme-transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    /* Dark Theme */
+    body.dark-mode {
+      --bg-primary: #1a1a2e;
+      --bg-secondary: #16213e;
+      --bg-card: #1f2940;
+      --bg-input: #2a3a5a;
+      --bg-hover: #2a3a5a;
+      --text-primary: #e8e8e8;
+      --text-secondary: #b8b8b8;
+      --text-muted: #888;
+      --border-color: #3a4a6a;
+      --border-light: #2a3a5a;
+      --shadow-color: rgba(0,0,0,0.3);
+      --shadow-hover: rgba(0,0,0,0.4);
+      --accent-color: #4da6ff;
+      --accent-hover: #3d96ef;
+      --accent-light: #1a3a5a;
+      --gradient-start: #4da6ff;
+      --gradient-end: #1a3a5a;
+    }
+
+    /* ========================================
        BASIC RESET & BODY
        ======================================== */
     * {
@@ -16,17 +67,19 @@
 
     body {
       font-family: Arial, sans-serif;
-      background: #f7f7f7;
+      background: var(--bg-primary);
+      color: var(--text-primary);
       min-height: 100vh;
+      transition: var(--theme-transition);
     }
 
     /* ========================================
        HEADER STYLES
        ======================================== */
     .header {
-      background: #fff;
+      background: var(--bg-secondary);
       padding: 1rem 2rem;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      box-shadow: 0 2px 8px var(--shadow-color);
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -34,12 +87,13 @@
       position: sticky;
       top: 0;
       z-index: 100;
+      transition: var(--theme-transition);
     }
 
     .logo {
       font-size: 1.5rem;
       font-weight: 700;
-      color: #0074d9;
+      color: var(--accent-color);
       text-decoration: none;
     }
 
@@ -82,23 +136,23 @@
     }
 
     .btn-profile {
-      background: #e7f7ff;
-      color: #0074d9;
-      border: 2px solid #0074d9;
+      background: var(--accent-light);
+      color: var(--accent-color);
+      border: 2px solid var(--accent-color);
       display: flex;
       align-items: center;
       gap: 0.4rem;
     }
 
     .btn-profile:hover {
-      background: #0074d9;
+      background: var(--accent-color);
       color: #fff;
     }
 
     .user-avatar {
       width: 24px;
       height: 24px;
-      background: #0074d9;
+      background: var(--accent-color);
       color: #fff;
       border-radius: 50%;
       display: flex;
@@ -110,23 +164,62 @@
 
     .btn-profile:hover .user-avatar {
       background: #fff;
-      color: #0074d9;
+      color: var(--accent-color);
     }
 
     .btn-logout {
-      background: #fff;
-      color: #e74c3c;
-      border: 2px solid #e74c3c;
+      background: var(--bg-secondary);
+      color: var(--danger-color);
+      border: 2px solid var(--danger-color);
       padding: 0.5rem 1rem;
     }
 
     .btn-logout:hover {
-      background: #e74c3c;
+      background: var(--danger-color);
       color: #fff;
     }
 
     .hidden {
       display: none !important;
+    }
+
+    /* ========================================
+       DARK MODE TOGGLE
+       ======================================== */
+    .theme-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--bg-hover);
+      border: 2px solid var(--border-color);
+      cursor: pointer;
+      font-size: 1.2rem;
+      transition: var(--theme-transition);
+      margin-right: 0.5rem;
+    }
+
+    .theme-toggle:hover {
+      background: var(--accent-light);
+      border-color: var(--accent-color);
+    }
+
+    .theme-toggle .sun-icon {
+      display: none;
+    }
+
+    .theme-toggle .moon-icon {
+      display: block;
+    }
+
+    body.dark-mode .theme-toggle .sun-icon {
+      display: block;
+    }
+
+    body.dark-mode .theme-toggle .moon-icon {
+      display: none;
     }
 
     /* ========================================
@@ -138,7 +231,7 @@
       gap: 0.5rem;
       margin-right: 0.5rem;
       padding-right: 0.8rem;
-      border-right: 1px solid #ddd;
+      border-right: 1px solid var(--border-color);
     }
 
     .lang-icon {
@@ -148,18 +241,18 @@
     .lang-selector {
       padding: 0.4rem 0.6rem;
       font-size: 0.9rem;
-      border: 1.5px solid #0074d9;
+      border: 1.5px solid var(--accent-color);
       border-radius: 5px;
-      background: #fff;
-      color: #0074d9;
+      background: var(--bg-input);
+      color: var(--accent-color);
       cursor: pointer;
       outline: none;
       font-weight: 500;
-      transition: all 0.2s;
+      transition: var(--theme-transition);
     }
 
     .lang-selector:hover {
-      background: #e7f7ff;
+      background: var(--accent-light);
     }
 
     .lang-selector:focus {
@@ -175,15 +268,15 @@
       align-items: center;
       gap: 0.3rem;
       padding: 0.5rem 1rem;
-      color: #333;
+      color: var(--text-primary);
       text-decoration: none;
       border-radius: 4px;
-      transition: background 0.2s, color 0.2s;
+      transition: var(--theme-transition);
       margin-right: 0.5rem;
     }
 
     .cart-icon-wrapper:hover {
-      background: #0074d9;
+      background: var(--accent-color);
       color: #fff;
     }
 
@@ -220,15 +313,15 @@
       align-items: center;
       gap: 0.3rem;
       padding: 0.5rem 1rem;
-      color: #333;
+      color: var(--text-primary);
       text-decoration: none;
       border-radius: 4px;
-      transition: background 0.2s, color 0.2s;
+      transition: var(--theme-transition);
       margin-right: 0.5rem;
     }
 
     .wishlist-icon-wrapper:hover {
-      background: #e74c3c;
+      background: var(--danger-color);
       color: #fff;
     }
 
@@ -260,8 +353,9 @@
        SEARCH BAR (ENHANCED)
        ======================================== */
     .search-section {
-      background: linear-gradient(135deg, #0074d9 0%, #005fa3 100%);
+      background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
       padding: 1.5rem 2rem;
+      transition: var(--theme-transition);
     }
 
     .search-container {
@@ -272,10 +366,10 @@
 
     .search-input-wrapper {
       display: flex;
-      background: #fff;
+      background: var(--bg-input);
       border-radius: 50px;
       overflow: hidden;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      box-shadow: 0 4px 15px var(--shadow-color);
     }
 
     .search-input {
@@ -285,15 +379,16 @@
       border: none;
       outline: none;
       background: transparent;
+      color: var(--text-primary);
     }
 
     .search-input::placeholder {
-      color: #999;
+      color: var(--text-muted);
     }
 
     .search-btn {
       padding: 1rem 2rem;
-      background: #0074d9;
+      background: var(--accent-color);
       color: #fff;
       border: none;
       cursor: pointer;
@@ -303,7 +398,7 @@
     }
 
     .search-btn:hover {
-      background: #005fa3;
+      background: var(--accent-hover);
     }
 
     /* Search Suggestions Dropdown */
@@ -312,9 +407,9 @@
       top: 100%;
       left: 0;
       right: 0;
-      background: #fff;
+      background: var(--bg-card);
       border-radius: 10px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      box-shadow: 0 4px 20px var(--shadow-color);
       margin-top: 0.5rem;
       max-height: 300px;
       overflow-y: auto;
@@ -379,13 +474,14 @@
     .filter-sidebar {
       width: 280px;
       flex-shrink: 0;
-      background: #fff;
+      background: var(--bg-card);
       border-radius: 10px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      box-shadow: 0 2px 12px var(--shadow-color);
       padding: 1.5rem;
       height: fit-content;
       position: sticky;
       top: 90px;
+      transition: var(--theme-transition);
     }
 
     .filter-header {
@@ -394,13 +490,13 @@
       align-items: center;
       margin-bottom: 1.5rem;
       padding-bottom: 1rem;
-      border-bottom: 2px solid #eee;
+      border-bottom: 2px solid var(--border-light);
     }
 
     .filter-title {
       font-size: 1.2rem;
       font-weight: 700;
-      color: #333;
+      color: var(--text-primary);
       display: flex;
       align-items: center;
       gap: 0.5rem;
@@ -458,18 +554,18 @@
       padding: 0.6rem 0.8rem;
       border-radius: 6px;
       cursor: pointer;
-      transition: all 0.15s;
+      transition: var(--theme-transition);
       font-size: 0.95rem;
-      color: #444;
+      color: var(--text-secondary);
     }
 
     .category-item:hover {
-      background: #f0f7ff;
-      color: #0074d9;
+      background: var(--bg-hover);
+      color: var(--accent-color);
     }
 
     .category-item.active {
-      background: #0074d9;
+      background: var(--accent-color);
       color: #fff;
     }
 
@@ -508,7 +604,7 @@
 
     .price-input-label {
       font-size: 0.8rem;
-      color: #666;
+      color: var(--text-secondary);
       margin-bottom: 0.3rem;
       display: block;
     }
@@ -516,15 +612,17 @@
     .price-input {
       width: 100%;
       padding: 0.6rem 0.8rem;
-      border: 1.5px solid #ddd;
+      border: 1.5px solid var(--border-color);
       border-radius: 6px;
       font-size: 0.95rem;
       outline: none;
-      transition: border-color 0.2s;
+      transition: var(--theme-transition);
+      background: var(--bg-input);
+      color: var(--text-primary);
     }
 
     .price-input:focus {
-      border-color: #0074d9;
+      border-color: var(--accent-color);
     }
 
     /* Price Range Slider */
@@ -636,18 +734,19 @@
       align-items: center;
       margin-bottom: 1.5rem;
       padding: 1rem 1.5rem;
-      background: #fff;
+      background: var(--bg-card);
       border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      box-shadow: 0 2px 8px var(--shadow-color);
+      transition: var(--theme-transition);
     }
 
     .results-count {
       font-size: 0.95rem;
-      color: #666;
+      color: var(--text-secondary);
     }
 
     .results-count strong {
-      color: #0074d9;
+      color: var(--accent-color);
       font-weight: 700;
     }
 
@@ -725,22 +824,22 @@
 
     /* Product Card */
     .product-card {
-      background: #fff;
+      background: var(--bg-card);
       border-radius: 10px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      box-shadow: 0 2px 12px var(--shadow-color);
       overflow: hidden;
-      transition: transform 0.2s, box-shadow 0.2s;
+      transition: transform 0.2s, box-shadow 0.2s, var(--theme-transition);
       cursor: pointer;
     }
 
     .product-card:hover {
       transform: translateY(-5px);
-      box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+      box-shadow: 0 8px 25px var(--shadow-hover);
     }
 
     .product-image {
       height: 140px;
-      background: linear-gradient(135deg, #f0f7ff 0%, #e7f7ff 100%);
+      background: linear-gradient(135deg, var(--accent-light) 0%, var(--bg-hover) 100%);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -753,8 +852,8 @@
 
     .product-category-tag {
       font-size: 0.75rem;
-      color: #0074d9;
-      background: #e7f7ff;
+      color: var(--accent-color);
+      background: var(--accent-light);
       padding: 0.2rem 0.6rem;
       border-radius: 10px;
       display: inline-block;
@@ -765,13 +864,13 @@
     .product-title {
       font-size: 1.1rem;
       font-weight: 700;
-      color: #333;
+      color: var(--text-primary);
       margin-bottom: 0.4rem;
     }
 
     .product-desc {
       font-size: 0.9rem;
-      color: #666;
+      color: var(--text-secondary);
       margin-bottom: 0.8rem;
       line-height: 1.4;
     }
@@ -785,12 +884,12 @@
     .product-price {
       font-size: 1.15rem;
       font-weight: 700;
-      color: #0074d9;
+      color: var(--accent-color);
     }
 
     .product-action-btn {
       padding: 0.5rem 1rem;
-      background: #0074d9;
+      background: var(--accent-color);
       color: #fff;
       border: none;
       border-radius: 5px;
@@ -801,7 +900,7 @@
     }
 
     .product-action-btn:hover {
-      background: #005fa3;
+      background: var(--accent-hover);
     }
 
     /* Empty State */
@@ -994,6 +1093,11 @@
   <header class="header">
     <a href="index.html" class="logo" data-i18n="shopease">ShopEase</a>
     <nav class="auth-nav">
+      <!-- Dark Mode Toggle -->
+      <button class="theme-toggle" id="themeToggle" title="Toggle Dark Mode">
+        <span class="moon-icon">🌙</span>
+        <span class="sun-icon">☀️</span>
+      </button>
       <!-- Language Selector -->
       <div class="lang-selector-wrapper">
         <span class="lang-icon">🌐</span>
@@ -1831,9 +1935,68 @@
     });
 
     // ========================================
+    // DARK MODE FUNCTIONS
+    // ========================================
+
+    /**
+     * Get current theme from localStorage
+     * @returns {string} 'light' or 'dark'
+     */
+    function getCurrentTheme() {
+      return localStorage.getItem('themeMode') || 'light';
+    }
+
+    /**
+     * Set theme in localStorage
+     * @param {string} theme - 'light' or 'dark'
+     */
+    function setTheme(theme) {
+      localStorage.setItem('themeMode', theme);
+    }
+
+    /**
+     * Apply theme to body
+     * @param {string} theme - 'light' or 'dark'
+     */
+    function applyTheme(theme) {
+      if (theme === 'dark') {
+        document.body.classList.add('dark-mode');
+      } else {
+        document.body.classList.remove('dark-mode');
+      }
+    }
+
+    /**
+     * Toggle between light and dark themes
+     */
+    function toggleTheme() {
+      const currentTheme = getCurrentTheme();
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      setTheme(newTheme);
+      applyTheme(newTheme);
+    }
+
+    /**
+     * Initialize dark mode based on saved preference
+     */
+    function initDarkMode() {
+      const savedTheme = getCurrentTheme();
+      applyTheme(savedTheme);
+
+      // Add toggle listener
+      const themeToggle = document.getElementById('themeToggle');
+      if (themeToggle) {
+        themeToggle.addEventListener('click', toggleTheme);
+      }
+    }
+
+    // ========================================
     // INITIALIZATION
     // ========================================
     function init() {
+      // Initialize dark mode
+      initDarkMode();
+
       // Render category filters
       renderCategoryList();
       renderCategoryNavbar();
