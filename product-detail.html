@@ -232,6 +232,56 @@
     }
 
     /* ========================================
+       STOCK STATUS STYLES
+       ======================================== */
+    .stock-status {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .stock-status.in-stock {
+      background: #e8f5e9;
+      color: #2e7d32;
+    }
+
+    .stock-status.low-stock {
+      background: #fff3e0;
+      color: #ef6c00;
+    }
+
+    .stock-status.out-of-stock {
+      background: #ffebee;
+      color: #c62828;
+    }
+
+    .stock-icon {
+      font-size: 1.1rem;
+    }
+
+    /* Disabled button styles */
+    .action-btn:disabled,
+    .qty-btn:disabled {
+      background: #ccc !important;
+      border-color: #ccc !important;
+      color: #666 !important;
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+
+    .action-btn:disabled:hover,
+    .qty-btn:disabled:hover {
+      background: #ccc !important;
+      color: #666 !important;
+      transform: none;
+    }
+
+    /* ========================================
        RATING & REVIEW SECTION STYLES
        ======================================== */
 
@@ -724,6 +774,11 @@
       <div class="category"></div>
       <div class="description"></div>
       <div class="price"></div>
+      <!-- Stock Status -->
+      <div class="stock-status" id="stockStatus">
+        <span class="stock-icon">📦</span>
+        <span id="stockText">Loading...</span>
+      </div>
       <div class="quantity-selector">
         <button class="qty-btn" id="decrease-btn">-</button>
         <span class="qty-number" id="qty-number">1</span>
@@ -900,6 +955,177 @@
     document.querySelector('.category').textContent = `${t('category')}: ${product.category}`;
     document.querySelector('.description').textContent = product.description;
     document.querySelector('.price').textContent = `₹${product.price}`;
+  }
+
+  // ========================================
+  // STOCK MANAGEMENT FUNCTIONS
+  // ========================================
+
+  /**
+   * Default stock values for all products
+   * This initializes stock if not already in localStorage
+   */
+  const defaultStock = {
+    'Reynolds_Pen': 15,
+    'Cello_Pen': 8,
+    'Parker_Pen': 3,
+    'Linc_Pen': 20,
+    'Flair_Pen': 12,
+    'Pilot_Pen': 5,
+    'Nataraj_Pencil': 25,
+    'Apsara_Pencil': 18,
+    'Camlin_Pencil': 10,
+    'Classmate_Notebook': 7,
+    'Navneet_Notebook': 4,
+    'Doms_Notebook': 0,
+    'Apsara_Sharpener': 30,
+    'Nataraj_Sharpener': 15,
+    'Camlin_Sharpener': 2,
+    'Nataraj_Eraser': 22,
+    'Apsara_Eraser': 0,
+    'Camlin_Eraser': 6
+  };
+
+  /**
+   * Initialize stock data in localStorage if not exists
+   */
+  function initializeStock() {
+    const existingStock = localStorage.getItem('productStock');
+    if (!existingStock) {
+      localStorage.setItem('productStock', JSON.stringify(defaultStock));
+    }
+  }
+
+  /**
+   * Get all stock data from localStorage
+   * @returns {Object} Stock data object
+   */
+  function getAllStock() {
+    initializeStock();
+    return JSON.parse(localStorage.getItem('productStock')) || {};
+  }
+
+  /**
+   * Get stock for a specific product
+   * @param {string} productId - Product identifier (brand_category)
+   * @returns {number} Available stock quantity
+   */
+  function getProductStock(productId) {
+    const stock = getAllStock();
+    return stock[productId] !== undefined ? stock[productId] : 0;
+  }
+
+  /**
+   * Update stock for a specific product
+   * @param {string} productId - Product identifier
+   * @param {number} quantity - New stock quantity
+   */
+  function updateProductStock(productId, quantity) {
+    const stock = getAllStock();
+    stock[productId] = Math.max(0, quantity);
+    localStorage.setItem('productStock', JSON.stringify(stock));
+  }
+
+  /**
+   * Reduce stock after purchase
+   * @param {string} productId - Product identifier
+   * @param {number} quantity - Quantity to reduce
+   */
+  function reduceStock(productId, quantity) {
+    const currentStock = getProductStock(productId);
+    updateProductStock(productId, currentStock - quantity);
+  }
+
+  /**
+   * Get stock status text and class
+   * @param {number} stock - Current stock quantity
+   * @returns {Object} { text, className, icon }
+   */
+  function getStockStatus(stock) {
+    if (stock === 0) {
+      return {
+        text: t('outOfStock'),
+        className: 'out-of-stock',
+        icon: '❌'
+      };
+    } else if (stock <= 5) {
+      return {
+        text: t('lowStock').replace('{count}', stock),
+        className: 'low-stock',
+        icon: '⚠️'
+      };
+    } else {
+      return {
+        text: t('inStock'),
+        className: 'in-stock',
+        icon: '✅'
+      };
+    }
+  }
+
+  /**
+   * Render stock status UI
+   * @param {string} productId - Product identifier
+   */
+  function renderStockStatus(productId) {
+    const stock = getProductStock(productId);
+    const status = getStockStatus(stock);
+
+    const stockStatusEl = document.getElementById('stockStatus');
+    const stockTextEl = document.getElementById('stockText');
+
+    if (stockStatusEl && stockTextEl) {
+      // Remove all status classes
+      stockStatusEl.classList.remove('in-stock', 'low-stock', 'out-of-stock');
+      // Add current status class
+      stockStatusEl.classList.add(status.className);
+      // Update icon and text
+      stockStatusEl.querySelector('.stock-icon').textContent = status.icon;
+      stockTextEl.textContent = status.text;
+    }
+
+    // Update button states based on stock
+    updateButtonStates(stock);
+  }
+
+  /**
+   * Update Add to Cart and Buy Now button states
+   * @param {number} stock - Current stock quantity
+   */
+  function updateButtonStates(stock) {
+    const addCartBtn = document.getElementById('add-cart-btn');
+    const buyNowBtn = document.getElementById('buy-now-btn');
+    const increaseBtn = document.getElementById('increase-btn');
+    const decreaseBtn = document.getElementById('decrease-btn');
+
+    if (stock === 0) {
+      // Disable all buttons when out of stock
+      addCartBtn.disabled = true;
+      buyNowBtn.disabled = true;
+      increaseBtn.disabled = true;
+      decreaseBtn.disabled = true;
+    } else {
+      // Enable buttons
+      addCartBtn.disabled = false;
+      buyNowBtn.disabled = false;
+      decreaseBtn.disabled = quantity <= 1;
+      increaseBtn.disabled = quantity >= stock;
+    }
+  }
+
+  /**
+   * Validate quantity against stock
+   * @param {string} productId - Product identifier
+   * @param {number} requestedQty - Requested quantity
+   * @returns {boolean} True if valid
+   */
+  function validateQuantity(productId, requestedQty) {
+    const stock = getProductStock(productId);
+    if (requestedQty > stock) {
+      showToast(t('stockWarning').replace('{count}', stock), true);
+      return false;
+    }
+    return true;
   }
 
   // ========================================
@@ -1333,21 +1559,35 @@
   }
 
   // ========================================
-  // QUANTITY LOGIC
+  // QUANTITY LOGIC WITH STOCK VALIDATION
   // ========================================
   let quantity = 1;
+  let currentProductId = null; // Will be set during initialization
   const qtyNumber = document.getElementById('qty-number');
 
   document.getElementById('decrease-btn').addEventListener('click', () => {
     if (quantity > 1) {
       quantity--;
       qtyNumber.textContent = quantity;
+      // Update button states based on new quantity
+      const stock = getProductStock(currentProductId);
+      updateButtonStates(stock);
     }
   });
 
   document.getElementById('increase-btn').addEventListener('click', () => {
-    quantity++;
-    qtyNumber.textContent = quantity;
+    const stock = getProductStock(currentProductId);
+
+    // Check if we can increase quantity
+    if (quantity < stock) {
+      quantity++;
+      qtyNumber.textContent = quantity;
+      // Update button states based on new quantity
+      updateButtonStates(stock);
+    } else {
+      // Show warning if trying to exceed stock
+      showToast(t('stockWarning').replace('{count}', stock), true);
+    }
   });
 
   // ========================================
@@ -1359,8 +1599,17 @@
     const productId = getProductId(product);
     const wishlistProductId = product.brand + '_' + product.category;
 
+    // Set current product ID for stock validation
+    currentProductId = wishlistProductId;
+
+    // Initialize stock data
+    initializeStock();
+
     // Render product details
     renderProductDetail(product);
+
+    // Render stock status
+    renderStockStatus(currentProductId);
 
     // Initialize cart badge
     updateCartBadge();
@@ -1372,14 +1621,41 @@
     // Render reviews
     renderReviews(productId);
 
-    // Add to Cart button
+    // Add to Cart button with stock validation
     document.getElementById('add-cart-btn').onclick = () => {
+      const stock = getProductStock(currentProductId);
+
+      // Validate stock before adding
+      if (stock === 0) {
+        showToast(t('outOfStock'), true);
+        return;
+      }
+
+      if (quantity > stock) {
+        showToast(t('insufficientStock'), true);
+        return;
+      }
+
       addToCart(product, quantity);
     };
 
-    // Buy Now button
+    // Buy Now button with stock validation
     document.getElementById('buy-now-btn').onclick = () => {
+      const stock = getProductStock(currentProductId);
+
+      // Validate stock before buying
+      if (stock === 0) {
+        showToast(t('outOfStock'), true);
+        return;
+      }
+
+      if (quantity > stock) {
+        showToast(t('insufficientStock'), true);
+        return;
+      }
+
       localStorage.setItem('checkoutProduct', JSON.stringify({
+        id: currentProductId,
         name: product.brand + ' ' + product.category,
         price: Number(product.price),
         quantity: quantity
@@ -1403,6 +1679,7 @@
       renderProductDetail(product);
       renderReviews(productId);
       updateWishlistButtonState(wishlistProductId);
+      renderStockStatus(currentProductId);
     });
   };
   </script>
