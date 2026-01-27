@@ -582,6 +582,105 @@
     .review-card.new {
       animation: slideIn 0.3s ease;
     }
+
+    /* ========================================
+       WISHLIST BUTTON & ICON STYLES
+       ======================================== */
+
+    /* Wishlist Icon in Navbar */
+    .icon-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.5rem 1rem;
+      color: #333;
+      text-decoration: none;
+      border-radius: 4px;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .icon-wrapper:hover {
+      background: #0074d9;
+      color: #fff;
+    }
+
+    .nav-icon {
+      font-size: 1.3rem;
+    }
+
+    .badge {
+      position: absolute;
+      top: -2px;
+      right: 2px;
+      background: #e74c3c;
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 700;
+      min-width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 4px;
+    }
+
+    .badge.hidden {
+      display: none;
+    }
+
+    /* Add to Wishlist Button */
+    .add-wishlist {
+      background: #fff;
+      color: #e74c3c;
+      border: 2px solid #e74c3c;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .add-wishlist:hover {
+      background: #e74c3c;
+      color: #fff;
+    }
+
+    .add-wishlist.in-wishlist {
+      background: #e74c3c;
+      color: #fff;
+    }
+
+    .add-wishlist.in-wishlist:hover {
+      background: #c0392b;
+      border-color: #c0392b;
+    }
+
+    .wishlist-heart {
+      font-size: 1.2rem;
+      transition: transform 0.2s;
+    }
+
+    .add-wishlist:hover .wishlist-heart {
+      transform: scale(1.2);
+    }
+
+    /* Heart Beat Animation */
+    @keyframes heartBeat {
+      0% { transform: scale(1); }
+      25% { transform: scale(1.3); }
+      50% { transform: scale(1); }
+      75% { transform: scale(1.3); }
+      100% { transform: scale(1); }
+    }
+
+    .wishlist-heart.animate {
+      animation: heartBeat 0.6s ease;
+    }
+
+    /* Toast Error State */
+    .toast.error {
+      background: #e74c3c;
+    }
   </style>
 </head>
 <body>
@@ -598,9 +697,15 @@
         </select>
       </div>
       <a href="index.html" data-i18n="home">Home</a>
-      <a href="cart.html" class="cart-icon-wrapper">
-        <span class="cart-icon">🛒</span>
-        <span class="cart-badge hidden" id="cartBadge">0</span>
+      <!-- Wishlist Icon -->
+      <a href="wishlist.html" class="icon-wrapper" id="wishlistIconWrapper">
+        <span class="nav-icon">❤️</span>
+        <span class="badge hidden" id="wishlistBadge">0</span>
+      </a>
+      <!-- Cart Icon -->
+      <a href="cart.html" class="icon-wrapper">
+        <span class="nav-icon">🛒</span>
+        <span class="badge hidden" id="cartBadge">0</span>
       </a>
     </nav>
   </header>
@@ -627,6 +732,10 @@
       <div class="actions">
         <button class="action-btn add-cart" id="add-cart-btn" data-i18n="addToCart">Add to Cart</button>
         <button class="action-btn buy-now" id="buy-now-btn" data-i18n="buyNow">Buy Now</button>
+        <button class="action-btn add-wishlist" id="add-wishlist-btn">
+          <span class="wishlist-heart" id="wishlistHeart">🤍</span>
+          <span data-i18n="addToWishlist">Add to Wishlist</span>
+        </button>
       </div>
     </div>
 
@@ -842,12 +951,157 @@
     showToast(t('itemAddedToCart'));
   }
 
-  function showToast(message) {
+  function showToast(message, isError = false) {
     const toast = document.getElementById('toast');
     const toastMessage = document.getElementById('toastMessage');
+    const toastIcon = toast.querySelector('.toast-icon');
+
     toastMessage.textContent = message;
+    toastIcon.textContent = isError ? '✗' : '✓';
+
+    if (isError) {
+      toast.classList.add('error');
+    } else {
+      toast.classList.remove('error');
+    }
+
     toast.classList.add('show');
     setTimeout(() => { toast.classList.remove('show'); }, 2500);
+  }
+
+  // ========================================
+  // WISHLIST MANAGEMENT FUNCTIONS
+  // ========================================
+
+  /**
+   * Get wishlist from localStorage
+   * @returns {Array} Array of wishlist items
+   */
+  function getWishlist() {
+    return JSON.parse(localStorage.getItem('wishlistItems')) || [];
+  }
+
+  /**
+   * Save wishlist to localStorage
+   * @param {Array} wishlist - Array of wishlist items
+   */
+  function saveWishlist(wishlist) {
+    localStorage.setItem('wishlistItems', JSON.stringify(wishlist));
+    updateWishlistBadge();
+  }
+
+  /**
+   * Update wishlist badge count in navbar
+   */
+  function updateWishlistBadge() {
+    const wishlist = getWishlist();
+    const badge = document.getElementById('wishlistBadge');
+
+    if (badge) {
+      badge.textContent = wishlist.length;
+      if (wishlist.length > 0) {
+        badge.classList.remove('hidden');
+      } else {
+        badge.classList.add('hidden');
+      }
+    }
+  }
+
+  /**
+   * Check if product is already in wishlist
+   * @param {string} productId - Product identifier
+   * @returns {boolean}
+   */
+  function isInWishlist(productId) {
+    const wishlist = getWishlist();
+    return wishlist.some(item => item.id === productId);
+  }
+
+  /**
+   * Add product to wishlist
+   * @param {Object} product - Product object
+   */
+  function addToWishlist(product) {
+    const wishlist = getWishlist();
+    const productId = product.brand + '_' + product.category;
+
+    // Check if already in wishlist
+    if (isInWishlist(productId)) {
+      showToast(t('alreadyInWishlist'), true);
+      return false;
+    }
+
+    // Add to wishlist
+    wishlist.push({
+      id: productId,
+      name: product.brand + ' ' + product.category,
+      price: Number(product.price),
+      brand: product.brand,
+      category: product.category
+    });
+
+    saveWishlist(wishlist);
+
+    // Animate heart
+    const heart = document.getElementById('wishlistHeart');
+    if (heart) {
+      heart.classList.add('animate');
+      setTimeout(() => heart.classList.remove('animate'), 600);
+    }
+
+    // Update button state
+    updateWishlistButtonState(productId);
+
+    showToast(t('addedToWishlist'));
+    return true;
+  }
+
+  /**
+   * Remove product from wishlist
+   * @param {string} productId - Product identifier
+   */
+  function removeFromWishlist(productId) {
+    const wishlist = getWishlist();
+    const updatedWishlist = wishlist.filter(item => item.id !== productId);
+    saveWishlist(updatedWishlist);
+    updateWishlistButtonState(productId);
+    showToast(t('removedFromWishlist'));
+  }
+
+  /**
+   * Toggle wishlist state for a product
+   * @param {Object} product - Product object
+   */
+  function toggleWishlist(product) {
+    const productId = product.brand + '_' + product.category;
+
+    if (isInWishlist(productId)) {
+      removeFromWishlist(productId);
+    } else {
+      addToWishlist(product);
+    }
+  }
+
+  /**
+   * Update wishlist button appearance based on state
+   * @param {string} productId - Product identifier
+   */
+  function updateWishlistButtonState(productId) {
+    const btn = document.getElementById('add-wishlist-btn');
+    const heart = document.getElementById('wishlistHeart');
+    const btnText = btn.querySelector('span[data-i18n]');
+
+    if (isInWishlist(productId)) {
+      btn.classList.add('in-wishlist');
+      heart.textContent = '❤️';
+      btnText.textContent = t('removeFromWishlist');
+      btnText.setAttribute('data-i18n', 'removeFromWishlist');
+    } else {
+      btn.classList.remove('in-wishlist');
+      heart.textContent = '🤍';
+      btnText.textContent = t('addToWishlist');
+      btnText.setAttribute('data-i18n', 'addToWishlist');
+    }
   }
 
   // ========================================
@@ -1103,12 +1357,17 @@
     const brand = getBrandFromURL();
     const product = getProductByBrand(brand) || products[0];
     const productId = getProductId(product);
+    const wishlistProductId = product.brand + '_' + product.category;
 
     // Render product details
     renderProductDetail(product);
 
     // Initialize cart badge
     updateCartBadge();
+
+    // Initialize wishlist badge and button state
+    updateWishlistBadge();
+    updateWishlistButtonState(wishlistProductId);
 
     // Render reviews
     renderReviews(productId);
@@ -1129,6 +1388,11 @@
       window.location.href = 'checkout.html';
     };
 
+    // Add to Wishlist button
+    document.getElementById('add-wishlist-btn').onclick = () => {
+      toggleWishlist(product);
+    };
+
     // Submit Review button
     document.getElementById('submitReviewBtn').onclick = () => {
       handleReviewSubmit(productId);
@@ -1138,6 +1402,7 @@
     window.addEventListener('languageChanged', function() {
       renderProductDetail(product);
       renderReviews(productId);
+      updateWishlistButtonState(wishlistProductId);
     });
   };
   </script>
