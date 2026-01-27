@@ -5,6 +5,44 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>My Wishlist - ShopEase</title>
   <style>
+    /* CSS Variables for Theming */
+    :root {
+      --bg-primary: #f7f7f7;
+      --bg-secondary: #fff;
+      --bg-card: #fff;
+      --bg-input: #fff;
+      --bg-hover: #f5f5f5;
+      --text-primary: #333;
+      --text-secondary: #666;
+      --text-muted: #888;
+      --border-color: #ddd;
+      --border-light: #eee;
+      --shadow-color: rgba(0,0,0,0.06);
+      --accent-color: #0074d9;
+      --accent-hover: #005fa3;
+      --accent-light: #e7f7ff;
+      --danger-color: #e74c3c;
+      --success-color: #27ae60;
+      --theme-transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    }
+
+    body.dark-mode {
+      --bg-primary: #1a1a2e;
+      --bg-secondary: #16213e;
+      --bg-card: #1f2940;
+      --bg-input: #2a3a5a;
+      --bg-hover: #2a3a5a;
+      --text-primary: #e8e8e8;
+      --text-secondary: #b8b8b8;
+      --text-muted: #888;
+      --border-color: #3a4a6a;
+      --border-light: #2a3a5a;
+      --shadow-color: rgba(0,0,0,0.3);
+      --accent-color: #4da6ff;
+      --accent-hover: #3d96ef;
+      --accent-light: #1a3a5a;
+    }
+
     /* ========================================
        BASIC RESET & BODY
        ======================================== */
@@ -16,26 +54,29 @@
 
     body {
       font-family: Arial, sans-serif;
-      background: #f7f7f7;
+      background: var(--bg-primary);
       min-height: 100vh;
+      color: var(--text-primary);
+      transition: var(--theme-transition);
     }
 
     /* ========================================
        HEADER STYLES
        ======================================== */
     .header {
-      background: #fff;
+      background: var(--bg-secondary);
       padding: 1rem 2rem;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      box-shadow: 0 2px 8px var(--shadow-color);
       display: flex;
       justify-content: space-between;
       align-items: center;
+      transition: var(--theme-transition);
     }
 
     .logo {
       font-size: 1.5rem;
       font-weight: 700;
-      color: #0074d9;
+      color: var(--accent-color);
       text-decoration: none;
     }
 
@@ -46,17 +87,40 @@
     }
 
     .nav-links a {
-      color: #333;
+      color: var(--text-primary);
       text-decoration: none;
       padding: 0.5rem 1rem;
       border-radius: 4px;
-      transition: background 0.2s, color 0.2s;
+      transition: var(--theme-transition);
     }
 
     .nav-links a:hover {
-      background: #0074d9;
+      background: var(--accent-color);
       color: #fff;
     }
+
+    /* Dark Mode Toggle */
+    .theme-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--bg-hover);
+      border: 2px solid var(--border-color);
+      cursor: pointer;
+      font-size: 1.2rem;
+      transition: var(--theme-transition);
+    }
+    .theme-toggle:hover {
+      background: var(--accent-light);
+      border-color: var(--accent-color);
+    }
+    .theme-toggle .sun-icon { display: none; }
+    .theme-toggle .moon-icon { display: block; }
+    body.dark-mode .theme-toggle .sun-icon { display: block; }
+    body.dark-mode .theme-toggle .moon-icon { display: none; }
 
     /* Language Selector */
     .lang-selector-wrapper {
@@ -72,18 +136,18 @@
     .lang-selector {
       padding: 0.4rem 0.6rem;
       font-size: 0.9rem;
-      border: 1.5px solid #0074d9;
+      border: 1.5px solid var(--accent-color);
       border-radius: 5px;
-      background: #fff;
-      color: #0074d9;
+      background: var(--bg-secondary);
+      color: var(--accent-color);
       cursor: pointer;
       outline: none;
       font-weight: 500;
-      transition: all 0.2s;
+      transition: var(--theme-transition);
     }
 
     .lang-selector:hover {
-      background: #e7f7ff;
+      background: var(--accent-light);
     }
 
     .lang-selector:focus {
@@ -156,7 +220,7 @@
     /* Page Title */
     .page-title {
       font-size: 1.8rem;
-      color: #222;
+      color: var(--text-primary);
       margin-bottom: 1.5rem;
       display: flex;
       align-items: center;
@@ -165,12 +229,12 @@
 
     .page-title .icon {
       font-size: 1.6rem;
-      color: #e74c3c;
+      color: var(--danger-color);
     }
 
     .page-title .count {
       font-size: 1rem;
-      color: #666;
+      color: var(--text-secondary);
       font-weight: normal;
     }
 
@@ -187,17 +251,17 @@
        WISHLIST CARD
        ======================================== */
     .wishlist-card {
-      background: #fff;
+      background: var(--bg-card);
       border-radius: 12px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      box-shadow: 0 2px 12px var(--shadow-color);
       overflow: hidden;
-      transition: transform 0.2s, box-shadow 0.2s;
+      transition: transform 0.2s, box-shadow 0.2s, background 0.3s ease;
       position: relative;
     }
 
     .wishlist-card:hover {
       transform: translateY(-5px);
-      box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+      box-shadow: 0 8px 25px var(--shadow-color);
     }
 
     .wishlist-card.removing {
@@ -250,8 +314,8 @@
 
     .product-category {
       font-size: 0.75rem;
-      color: #0074d9;
-      background: #e7f7ff;
+      color: var(--accent-color);
+      background: var(--accent-light);
       padding: 0.2rem 0.6rem;
       border-radius: 10px;
       display: inline-block;
@@ -262,14 +326,14 @@
     .product-name {
       font-size: 1.15rem;
       font-weight: 700;
-      color: #222;
+      color: var(--text-primary);
       margin-bottom: 0.5rem;
     }
 
     .product-price {
       font-size: 1.2rem;
       font-weight: 700;
-      color: #0074d9;
+      color: var(--accent-color);
       margin-bottom: 1rem;
     }
 
@@ -320,9 +384,10 @@
     .empty-wishlist {
       text-align: center;
       padding: 4rem 2rem;
-      background: #fff;
+      background: var(--bg-card);
       border-radius: 12px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      box-shadow: 0 2px 12px var(--shadow-color);
+      transition: var(--theme-transition);
     }
 
     .empty-wishlist-icon {
@@ -333,12 +398,12 @@
 
     .empty-wishlist-title {
       font-size: 1.5rem;
-      color: #333;
+      color: var(--text-primary);
       margin-bottom: 0.5rem;
     }
 
     .empty-wishlist-text {
-      color: #666;
+      color: var(--text-secondary);
       margin-bottom: 1.5rem;
       font-size: 1rem;
     }
@@ -477,6 +542,10 @@
   <header class="header">
     <a href="index.html" class="logo" data-i18n="shopease">ShopEase</a>
     <nav class="nav-links">
+      <button class="theme-toggle" id="themeToggle" title="Toggle Dark Mode">
+        <span class="moon-icon">🌙</span>
+        <span class="sun-icon">☀️</span>
+      </button>
       <!-- Language Selector -->
       <div class="lang-selector-wrapper">
         <span class="lang-icon">🌐</span>
@@ -855,6 +924,38 @@
 
     // Initialize on page load
     initWishlist();
+
+    // ========================================
+    // DARK MODE SYSTEM
+    // ========================================
+    function getCurrentTheme() {
+      return localStorage.getItem('themeMode') || 'light';
+    }
+    function setTheme(theme) {
+      localStorage.setItem('themeMode', theme);
+    }
+    function applyTheme(theme) {
+      if (theme === 'dark') {
+        document.body.classList.add('dark-mode');
+      } else {
+        document.body.classList.remove('dark-mode');
+      }
+    }
+    function toggleTheme() {
+      const current = getCurrentTheme();
+      const newTheme = current === 'dark' ? 'light' : 'dark';
+      setTheme(newTheme);
+      applyTheme(newTheme);
+    }
+    function initDarkMode() {
+      const savedTheme = getCurrentTheme();
+      applyTheme(savedTheme);
+      const toggle = document.getElementById('themeToggle');
+      if (toggle) {
+        toggle.addEventListener('click', toggleTheme);
+      }
+    }
+    initDarkMode();
   </script>
 </body>
 </html>
