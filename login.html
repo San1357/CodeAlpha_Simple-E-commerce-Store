@@ -5,6 +5,38 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login - E-commerce Store</title>
   <style>
+    /* CSS Variables for Theming */
+    :root {
+      --bg-primary: #f7f7f7;
+      --bg-secondary: #fff;
+      --bg-card: #fff;
+      --bg-input: #fff;
+      --text-primary: #333;
+      --text-secondary: #666;
+      --text-muted: #888;
+      --border-color: #ccc;
+      --shadow-color: rgba(0,0,0,0.08);
+      --accent-color: #0074d9;
+      --accent-hover: #005fa3;
+      --accent-light: #e7f7ff;
+      --danger-color: #e74c3c;
+      --success-color: #27ae60;
+      --theme-transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    }
+    body.dark-mode {
+      --bg-primary: #1a1a2e;
+      --bg-secondary: #16213e;
+      --bg-card: #1f2940;
+      --bg-input: #2a3a5a;
+      --text-primary: #e8e8e8;
+      --text-secondary: #b8b8b8;
+      --text-muted: #888;
+      --border-color: #3a4a6a;
+      --shadow-color: rgba(0,0,0,0.3);
+      --accent-color: #4da6ff;
+      --accent-hover: #3d96ef;
+      --accent-light: #1a3a5a;
+    }
     * {
       box-sizing: border-box;
       margin: 0;
@@ -13,17 +45,20 @@
 
     body {
       font-family: Arial, sans-serif;
-      background: #f7f7f7;
+      background: var(--bg-primary);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      color: var(--text-primary);
+      transition: var(--theme-transition);
     }
 
     /* Header */
     .header {
-      background: #fff;
+      background: var(--bg-secondary);
       padding: 1rem 2rem;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      box-shadow: 0 2px 8px var(--shadow-color);
+      transition: var(--theme-transition);
     }
 
     .header-content {
@@ -37,27 +72,51 @@
     .logo {
       font-size: 1.5rem;
       font-weight: 700;
-      color: #0074d9;
+      color: var(--accent-color);
       text-decoration: none;
     }
 
     .nav-links {
       display: flex;
       gap: 1rem;
+      align-items: center;
     }
 
     .nav-links a {
-      color: #333;
+      color: var(--text-primary);
       text-decoration: none;
       padding: 0.5rem 1rem;
       border-radius: 4px;
-      transition: background 0.2s, color 0.2s;
+      transition: var(--theme-transition);
     }
 
     .nav-links a:hover {
-      background: #0074d9;
+      background: var(--accent-color);
       color: #fff;
     }
+
+    /* Dark Mode Toggle */
+    .theme-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--bg-input);
+      border: 2px solid var(--border-color);
+      cursor: pointer;
+      font-size: 1.2rem;
+      transition: var(--theme-transition);
+    }
+    .theme-toggle:hover {
+      background: var(--accent-light);
+      border-color: var(--accent-color);
+    }
+    .theme-toggle .sun-icon { display: none; }
+    .theme-toggle .moon-icon { display: block; }
+    body.dark-mode .theme-toggle .sun-icon { display: block; }
+    body.dark-mode .theme-toggle .moon-icon { display: none; }
 
     /* Language Selector */
     .lang-selector-wrapper {
@@ -73,18 +132,18 @@
     .lang-selector {
       padding: 0.4rem 0.6rem;
       font-size: 0.9rem;
-      border: 1.5px solid #0074d9;
+      border: 1.5px solid var(--accent-color);
       border-radius: 5px;
-      background: #fff;
-      color: #0074d9;
+      background: var(--bg-secondary);
+      color: var(--accent-color);
       cursor: pointer;
       outline: none;
       font-weight: 500;
-      transition: all 0.2s;
+      transition: var(--theme-transition);
     }
 
     .lang-selector:hover {
-      background: #e7f7ff;
+      background: var(--accent-light);
     }
 
     .lang-selector:focus {
@@ -135,23 +194,24 @@
     }
 
     .auth-card {
-      background: #fff;
+      background: var(--bg-card);
       padding: 2.5rem;
       border-radius: 10px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      box-shadow: 0 4px 24px var(--shadow-color);
       width: 100%;
       max-width: 420px;
+      transition: var(--theme-transition);
     }
 
     .auth-title {
       font-size: 1.8rem;
-      color: #222;
+      color: var(--text-primary);
       text-align: center;
       margin-bottom: 0.5rem;
     }
 
     .auth-subtitle {
-      color: #666;
+      color: var(--text-secondary);
       text-align: center;
       margin-bottom: 2rem;
       font-size: 0.95rem;
@@ -165,7 +225,7 @@
     .form-group label {
       display: block;
       font-size: 0.95rem;
-      color: #333;
+      color: var(--text-primary);
       margin-bottom: 0.4rem;
       font-weight: 500;
     }
@@ -174,19 +234,21 @@
       width: 100%;
       padding: 0.75rem;
       font-size: 1rem;
-      border: 1.5px solid #ccc;
+      border: 1.5px solid var(--border-color);
       border-radius: 6px;
-      transition: border 0.2s, box-shadow 0.2s;
+      transition: var(--theme-transition);
       outline: none;
+      background: var(--bg-input);
+      color: var(--text-primary);
     }
 
     .form-group input:focus {
-      border-color: #0074d9;
+      border-color: var(--accent-color);
       box-shadow: 0 0 0 3px rgba(0, 116, 217, 0.1);
     }
 
     .form-group input.error {
-      border-color: #e74c3c;
+      border-color: var(--danger-color);
     }
 
     /* Password toggle container */
@@ -223,12 +285,12 @@
       width: 18px;
       height: 18px;
       cursor: pointer;
-      accent-color: #0074d9;
+      accent-color: var(--accent-color);
     }
 
     .remember-group label {
       font-size: 0.95rem;
-      color: #555;
+      color: var(--text-secondary);
       cursor: pointer;
       user-select: none;
     }
@@ -274,16 +336,16 @@
       font-size: 1.1rem;
       font-weight: 600;
       color: #fff;
-      background: #0074d9;
+      background: var(--accent-color);
       border: none;
       border-radius: 6px;
       cursor: pointer;
-      transition: background 0.2s, transform 0.1s;
+      transition: var(--theme-transition);
       margin-top: 0.5rem;
     }
 
     .submit-btn:hover {
-      background: #005fa3;
+      background: var(--accent-hover);
     }
 
     .submit-btn:active {
@@ -316,12 +378,12 @@
     .auth-link {
       text-align: center;
       margin-top: 1.5rem;
-      color: #666;
+      color: var(--text-secondary);
       font-size: 0.95rem;
     }
 
     .auth-link a {
-      color: #0074d9;
+      color: var(--accent-color);
       text-decoration: none;
       font-weight: 500;
     }
@@ -402,6 +464,10 @@
     <div class="header-content">
       <a href="index.html" class="logo" data-i18n="shopease">ShopEase</a>
       <nav class="nav-links">
+        <button class="theme-toggle" id="themeToggle" title="Toggle Dark Mode">
+          <span class="moon-icon">🌙</span>
+          <span class="sun-icon">☀️</span>
+        </button>
         <div class="lang-selector-wrapper">
           <span class="lang-icon">🌐</span>
           <select id="language-selector" class="lang-selector">
@@ -695,6 +761,38 @@
     checkExistingSession();
     checkRegistrationRedirect();
     updateCartBadge();
+
+    // ========================================
+    // DARK MODE SYSTEM
+    // ========================================
+    function getCurrentTheme() {
+      return localStorage.getItem('themeMode') || 'light';
+    }
+    function setTheme(theme) {
+      localStorage.setItem('themeMode', theme);
+    }
+    function applyTheme(theme) {
+      if (theme === 'dark') {
+        document.body.classList.add('dark-mode');
+      } else {
+        document.body.classList.remove('dark-mode');
+      }
+    }
+    function toggleTheme() {
+      const current = getCurrentTheme();
+      const newTheme = current === 'dark' ? 'light' : 'dark';
+      setTheme(newTheme);
+      applyTheme(newTheme);
+    }
+    function initDarkMode() {
+      const savedTheme = getCurrentTheme();
+      applyTheme(savedTheme);
+      const toggle = document.getElementById('themeToggle');
+      if (toggle) {
+        toggle.addEventListener('click', toggleTheme);
+      }
+    }
+    initDarkMode();
   </script>
 </body>
 </html>
