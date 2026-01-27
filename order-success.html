@@ -288,6 +288,80 @@
     });
 
     // ========================================
+    // SAVE ORDER TO ORDER HISTORY
+    // ========================================
+    /**
+     * Save the current order to orderHistory in localStorage
+     * Only saves if the order hasn't been saved already (checks by orderId)
+     */
+    function saveOrderToHistory() {
+      // Check if order details exist
+      if (!orderDetails.product) {
+        console.log('No order details to save');
+        return;
+      }
+
+      // Get existing order history from localStorage
+      let orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
+
+      // Check if this order already exists in history (prevent duplicates)
+      const orderExists = orderHistory.some(order => order.orderId === orderNumber);
+      if (orderExists) {
+        console.log('Order already saved to history');
+        return;
+      }
+
+      // Prepare products array (supports both single product and cart items)
+      let products = [];
+      if (orderDetails.items && orderDetails.items.length > 0) {
+        // Multiple items from cart checkout
+        products = orderDetails.items.map(item => ({
+          name: item.name,
+          price: item.price,
+          quantity: item.quantity
+        }));
+      } else if (orderDetails.product) {
+        // Single product (Buy Now)
+        products = [{
+          name: orderDetails.product.name,
+          price: orderDetails.product.price,
+          quantity: orderDetails.product.quantity
+        }];
+      }
+
+      // Create new order object
+      const newOrder = {
+        orderId: orderNumber,
+        dateTime: new Date().toISOString(),
+        products: products,
+        totalAmount: orderDetails.finalTotal,
+        paymentMethod: paymentMethod,
+        deliveryType: deliveryType,
+        orderStatus: 'Placed', // Default status for new orders
+        deliveryCharge: orderDetails.deliveryCharge,
+        customerName: orderDetails.fullname || '',
+        address: {
+          street: orderDetails.street || '',
+          city: orderDetails.city || '',
+          state: orderDetails.state || '',
+          pincode: orderDetails.pincode || ''
+        },
+        mobile: orderDetails.mobile || '',
+        otp: otp
+      };
+
+      // Add new order to the beginning (latest first)
+      orderHistory.unshift(newOrder);
+
+      // Save updated history to localStorage
+      localStorage.setItem('orderHistory', JSON.stringify(orderHistory));
+      console.log('Order saved to history:', newOrder);
+    }
+
+    // Save order to history on page load
+    saveOrderToHistory();
+
+    // ========================================
     // CART BADGE
     // ========================================
     function getCart() {
