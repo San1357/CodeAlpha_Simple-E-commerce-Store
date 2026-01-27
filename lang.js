@@ -171,7 +171,32 @@ const translations = {
     cartUpdated: "Cart updated!",
     viewCart: "View Cart",
     items: "items",
-    item: "item"
+    item: "item",
+
+    // Order History
+    myOrders: "My Orders",
+    orderHistory: "Order History",
+    noOrdersFound: "No orders found yet",
+    noOrdersText: "Your order history will appear here once you place an order.",
+    viewDetails: "View Details",
+    hideDetails: "Hide Details",
+    downloadInvoice: "Download Invoice",
+    orderDate: "Order Date",
+    totalAmount: "Total Amount",
+    orderStatus: "Order Status",
+    statusPlaced: "Placed",
+    statusDelivered: "Delivered",
+    statusCancelled: "Cancelled",
+    productsOrdered: "Products Ordered",
+    orderInfo: "Order Information",
+    billingDetails: "Billing Details",
+    billSummary: "Bill Summary",
+    invoice: "Invoice",
+    thankYouOrder: "Thank you for your order!",
+    customerName: "Customer Name",
+    address: "Address",
+    mobile: "Mobile",
+    close: "Close"
   },
 
   // --------------------------
@@ -327,7 +352,32 @@ const translations = {
     cartUpdated: "कार्ट अपडेट हो गया!",
     viewCart: "कार्ट देखें",
     items: "आइटम",
-    item: "आइटम"
+    item: "आइटम",
+
+    // Order History
+    myOrders: "मेरे ऑर्डर",
+    orderHistory: "ऑर्डर इतिहास",
+    noOrdersFound: "अभी तक कोई ऑर्डर नहीं",
+    noOrdersText: "आपका ऑर्डर इतिहास यहां दिखेगा जब आप कोई ऑर्डर देंगे।",
+    viewDetails: "विवरण देखें",
+    hideDetails: "विवरण छुपाएं",
+    downloadInvoice: "इनवॉइस डाउनलोड करें",
+    orderDate: "ऑर्डर तारीख",
+    totalAmount: "कुल राशि",
+    orderStatus: "ऑर्डर स्थिति",
+    statusPlaced: "रखा गया",
+    statusDelivered: "डिलीवर हुआ",
+    statusCancelled: "रद्द",
+    productsOrdered: "ऑर्डर किए गए उत्पाद",
+    orderInfo: "ऑर्डर जानकारी",
+    billingDetails: "बिलिंग विवरण",
+    billSummary: "बिल सारांश",
+    invoice: "इनवॉइस",
+    thankYouOrder: "ऑर्डर के लिए धन्यवाद!",
+    customerName: "ग्राहक का नाम",
+    address: "पता",
+    mobile: "मोबाइल",
+    close: "बंद करें"
   },
 
   // --------------------------
@@ -483,7 +533,32 @@ const translations = {
     cartUpdated: "कार्ट अपडेट हो गइल!",
     viewCart: "कार्ट देखीं",
     items: "सामान",
-    item: "सामान"
+    item: "सामान",
+
+    // Order History
+    myOrders: "हमार ऑर्डर",
+    orderHistory: "ऑर्डर के इतिहास",
+    noOrdersFound: "अभी तक कवनो ऑर्डर नइखे",
+    noOrdersText: "रउआ के ऑर्डर इहां देखाई जब रउआ कवनो ऑर्डर देम।",
+    viewDetails: "जानकारी देखीं",
+    hideDetails: "जानकारी छुपाईं",
+    downloadInvoice: "बिल डाउनलोड करीं",
+    orderDate: "ऑर्डर के तारीख",
+    totalAmount: "कुल रकम",
+    orderStatus: "ऑर्डर के हालत",
+    statusPlaced: "रखल गइल",
+    statusDelivered: "पहुंच गइल",
+    statusCancelled: "रद्द भइल",
+    productsOrdered: "ऑर्डर कइल सामान",
+    orderInfo: "ऑर्डर के जानकारी",
+    billingDetails: "बिल के जानकारी",
+    billSummary: "बिल के जोड़",
+    invoice: "बिल",
+    thankYouOrder: "ऑर्डर खातिर धन्यवाद!",
+    customerName: "ग्राहक के नाम",
+    address: "पता",
+    mobile: "मोबाइल",
+    close: "बंद करीं"
   }
 };
 
