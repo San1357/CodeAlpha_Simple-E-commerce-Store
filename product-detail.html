@@ -123,12 +123,16 @@
       opacity: 1;
     }
     .toast-icon { font-size: 1.2rem; }
-    @media (max-width: 500px) {
-      .header { flex-direction: column; gap: 1rem; padding: 1rem; }
+
+    /* Main Container */
+    .main-container {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 0 1rem;
     }
-    .container {
-      max-width: 420px;
-      margin: 3rem auto;
+
+    /* Product Card */
+    .product-container {
       background: #fff;
       border-radius: 10px;
       box-shadow: 0 4px 24px rgba(0,0,0,0.08);
@@ -136,6 +140,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      margin-bottom: 2rem;
     }
     .brand-name {
       font-size: 2rem;
@@ -225,11 +230,357 @@
       background: #005fa3;
       border-color: #005fa3;
     }
+
+    /* ========================================
+       RATING & REVIEW SECTION STYLES
+       ======================================== */
+
+    .reviews-section {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      padding: 2rem;
+    }
+
+    .reviews-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid #eee;
+    }
+
+    .reviews-header-icon {
+      font-size: 1.5rem;
+    }
+
+    .reviews-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #333;
+    }
+
+    /* Average Rating Display */
+    .average-rating-container {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 1.5rem;
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      border-radius: 10px;
+      margin-bottom: 2rem;
+    }
+
+    .average-rating-big {
+      text-align: center;
+    }
+
+    .average-rating-number {
+      font-size: 3rem;
+      font-weight: 700;
+      color: #0074d9;
+      line-height: 1;
+    }
+
+    .average-rating-max {
+      font-size: 1rem;
+      color: #888;
+    }
+
+    .average-rating-details {
+      flex: 1;
+    }
+
+    .average-stars {
+      display: flex;
+      gap: 0.3rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .average-stars .star {
+      font-size: 1.5rem;
+      color: #ddd;
+    }
+
+    .average-stars .star.filled {
+      color: #ffc107;
+    }
+
+    .average-stars .star.half {
+      background: linear-gradient(90deg, #ffc107 50%, #ddd 50%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .reviews-count-text {
+      font-size: 0.95rem;
+      color: #666;
+    }
+
+    /* Write Review Form */
+    .write-review-container {
+      margin-bottom: 2rem;
+      padding: 1.5rem;
+      background: #f9f9f9;
+      border-radius: 10px;
+      border: 1px solid #eee;
+    }
+
+    .write-review-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Star Rating Input */
+    .rating-input-container {
+      margin-bottom: 1rem;
+    }
+
+    .rating-label {
+      font-size: 0.95rem;
+      color: #555;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    .star-rating-input {
+      display: flex;
+      gap: 0.3rem;
+      flex-direction: row-reverse;
+      justify-content: flex-end;
+    }
+
+    .star-rating-input input {
+      display: none;
+    }
+
+    .star-rating-input label {
+      font-size: 2rem;
+      color: #ddd;
+      cursor: pointer;
+      transition: color 0.15s, transform 0.15s;
+    }
+
+    .star-rating-input label:hover,
+    .star-rating-input label:hover ~ label,
+    .star-rating-input input:checked ~ label {
+      color: #ffc107;
+    }
+
+    .star-rating-input label:hover {
+      transform: scale(1.2);
+    }
+
+    /* Review Textarea */
+    .review-textarea {
+      width: 100%;
+      min-height: 100px;
+      padding: 1rem;
+      border: 1.5px solid #ddd;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-family: inherit;
+      resize: vertical;
+      outline: none;
+      transition: border-color 0.2s;
+      margin-bottom: 1rem;
+    }
+
+    .review-textarea:focus {
+      border-color: #0074d9;
+    }
+
+    .review-textarea::placeholder {
+      color: #999;
+    }
+
+    /* Submit Button */
+    .submit-review-btn {
+      padding: 0.8rem 2rem;
+      background: #0074d9;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .submit-review-btn:hover {
+      background: #005fa3;
+      transform: translateY(-2px);
+    }
+
+    .submit-review-btn:active {
+      transform: translateY(0);
+    }
+
+    /* Reviews List */
+    .reviews-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .reviews-list-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Individual Review Card */
+    .review-card {
+      padding: 1.2rem;
+      background: #fff;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      transition: box-shadow 0.2s;
+    }
+
+    .review-card:hover {
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .review-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.8rem;
+    }
+
+    .review-stars {
+      display: flex;
+      gap: 0.2rem;
+    }
+
+    .review-stars .star {
+      font-size: 1.1rem;
+      color: #ddd;
+    }
+
+    .review-stars .star.filled {
+      color: #ffc107;
+    }
+
+    .review-date {
+      font-size: 0.85rem;
+      color: #888;
+    }
+
+    .review-text {
+      font-size: 0.95rem;
+      color: #444;
+      line-height: 1.5;
+    }
+
+    /* Empty Reviews State */
+    .empty-reviews {
+      text-align: center;
+      padding: 3rem 2rem;
+      background: #f9f9f9;
+      border-radius: 10px;
+      border: 2px dashed #ddd;
+    }
+
+    .empty-reviews-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+
+    .empty-reviews-title {
+      font-size: 1.2rem;
+      color: #555;
+      margin-bottom: 0.5rem;
+    }
+
+    .empty-reviews-text {
+      color: #888;
+      font-size: 0.95rem;
+    }
+
+    /* Validation Error */
+    .validation-error {
+      color: #e74c3c;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+      display: none;
+    }
+
+    .validation-error.show {
+      display: block;
+    }
+
     /* Responsive */
-    @media (max-width: 500px) {
-      .container {
-        padding: 1rem 0.5rem;
+    @media (max-width: 600px) {
+      .header { flex-direction: column; gap: 1rem; padding: 1rem; }
+
+      .main-container {
+        padding: 0 0.5rem;
+        margin: 1rem auto;
       }
+
+      .product-container {
+        padding: 1.5rem 1rem;
+      }
+
+      .reviews-section {
+        padding: 1.5rem 1rem;
+      }
+
+      .average-rating-container {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+      }
+
+      .average-stars {
+        justify-content: center;
+      }
+
+      .reviews-count-text {
+        text-align: center;
+      }
+
+      .star-rating-input label {
+        font-size: 1.8rem;
+      }
+
+      .review-card-header {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+    }
+
+    /* Animation for new review */
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .review-card.new {
+      animation: slideIn 0.3s ease;
     }
   </style>
 </head>
@@ -260,157 +611,181 @@
     <span id="toastMessage">Added to cart!</span>
   </div>
 
-  <div class="container">
-    <div class="brand-name"></div>
-    <div class="category"></div>
-    <div class="description"></div>
-    <div class="price"></div>
-    <div class="quantity-selector">
-      <button class="qty-btn" id="decrease-btn">-</button>
-      <span class="qty-number" id="qty-number">1</span>
-      <button class="qty-btn" id="increase-btn">+</button>
+  <!-- Main Container -->
+  <div class="main-container">
+    <!-- Product Details Card -->
+    <div class="product-container">
+      <div class="brand-name"></div>
+      <div class="category"></div>
+      <div class="description"></div>
+      <div class="price"></div>
+      <div class="quantity-selector">
+        <button class="qty-btn" id="decrease-btn">-</button>
+        <span class="qty-number" id="qty-number">1</span>
+        <button class="qty-btn" id="increase-btn">+</button>
+      </div>
+      <div class="actions">
+        <button class="action-btn add-cart" id="add-cart-btn" data-i18n="addToCart">Add to Cart</button>
+        <button class="action-btn buy-now" id="buy-now-btn" data-i18n="buyNow">Buy Now</button>
+      </div>
     </div>
-    <div class="actions">
-      <button class="action-btn add-cart" id="add-cart-btn" data-i18n="addToCart">Add to Cart</button>
-      <button class="action-btn buy-now" id="buy-now-btn" data-i18n="buyNow">Buy Now</button>
+
+    <!-- ========================================
+         RATINGS & REVIEWS SECTION
+         ======================================== -->
+    <div class="reviews-section">
+      <!-- Section Header -->
+      <div class="reviews-header">
+        <span class="reviews-header-icon">⭐</span>
+        <h2 class="reviews-title" data-i18n="ratingsReviews">Ratings & Reviews</h2>
+      </div>
+
+      <!-- Average Rating Display -->
+      <div class="average-rating-container" id="averageRatingContainer">
+        <div class="average-rating-big">
+          <div class="average-rating-number" id="avgRatingNumber">0.0</div>
+          <div class="average-rating-max"><span data-i18n="outOf">out of</span> 5</div>
+        </div>
+        <div class="average-rating-details">
+          <div class="average-stars" id="avgStarsDisplay">
+            <span class="star">★</span>
+            <span class="star">★</span>
+            <span class="star">★</span>
+            <span class="star">★</span>
+            <span class="star">★</span>
+          </div>
+          <div class="reviews-count-text">
+            <span data-i18n="basedOn">Based on</span> <strong id="reviewsCountNum">0</strong> <span data-i18n="reviewsCount">reviews</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Write Review Form -->
+      <div class="write-review-container">
+        <h3 class="write-review-title">
+          <span>✍️</span>
+          <span data-i18n="writeReview">Write a Review</span>
+        </h3>
+
+        <!-- Star Rating Input -->
+        <div class="rating-input-container">
+          <label class="rating-label" data-i18n="yourRating">Your Rating</label>
+          <div class="star-rating-input" id="starRatingInput">
+            <input type="radio" name="rating" value="5" id="star5">
+            <label for="star5" title="5 stars">★</label>
+            <input type="radio" name="rating" value="4" id="star4">
+            <label for="star4" title="4 stars">★</label>
+            <input type="radio" name="rating" value="3" id="star3">
+            <label for="star3" title="3 stars">★</label>
+            <input type="radio" name="rating" value="2" id="star2">
+            <label for="star2" title="2 stars">★</label>
+            <input type="radio" name="rating" value="1" id="star1">
+            <label for="star1" title="1 star">★</label>
+          </div>
+          <div class="validation-error" id="ratingError" data-i18n="selectRating">Please select a rating</div>
+        </div>
+
+        <!-- Review Text -->
+        <label class="rating-label" data-i18n="yourReview">Your Review</label>
+        <textarea
+          class="review-textarea"
+          id="reviewTextarea"
+          data-i18n-placeholder="reviewPlaceholder"
+          placeholder="Share your experience with this product..."
+        ></textarea>
+        <div class="validation-error" id="reviewError" data-i18n="writeReviewText">Please write your review</div>
+
+        <!-- Submit Button -->
+        <button class="submit-review-btn" id="submitReviewBtn">
+          <span>📝</span>
+          <span data-i18n="submitReview">Submit Review</span>
+        </button>
+      </div>
+
+      <!-- Reviews List -->
+      <div class="reviews-list-container">
+        <h3 class="reviews-list-title">
+          <span>💬</span>
+          <span data-i18n="reviews">Reviews</span>
+          <span id="reviewsListCount">(0)</span>
+        </h3>
+        <div class="reviews-list" id="reviewsList">
+          <!-- Reviews will be injected here -->
+        </div>
+      </div>
     </div>
   </div>
 
   <!-- Language/i18n Script -->
   <script src="lang.js"></script>
   <script>
-  // Sample product data
+  // ========================================
+  // PRODUCT DATA
+  // ========================================
   const products = [
-    //Pens
-    {
-      brand: "Reynolds",
-      category: "Pen",
-      description: "Reynolds smooth writing ball pen with long-lasting blue ink, ideal for daily writing. Comfortable grip and lightweight design for effortless note-taking and exams.",
-      price: "10"
-    },
-    {
-        brand: "Cello",
-        category: "Pen",
-        description: "Fine tip gel pen, assorted colors.",
-        price: "15"
-    },
-    {
-        brand: "Parker",
-        category: "Pen",
-        description: "Premium rollerball pen, black ink.",
-        price: "120"
-    },
-    {
-
-        brand: "Linc",
-        category: "Pen",
-        description: "Affordable ball pen, blue ink.",
-        price: "8"
-    },
-    {
-        brand: "Flair",
-        category: "Pen",
-        description: "Stylish gel pen, quick dry.",
-        price: "12"
-      },
-    {
-        brand: "Pilot",
-        category: "Pen",
-        description: "Pilot premium gel pen with ultra-smooth ink flow, perfect for professionals and students.",
-        price: "50"
-    },
-
-    //Pencils
-    {
-      brand: "Nataraj",
-      category: "Pencil",
-      description: "Nataraj HB wooden pencil, smooth writing.",
-      price: "5"
-    },
-    {
-      brand: "Apsara",
-      category: "Pencil",
-      description: "Apsara premium graphite pencil, dark lead.",
-      price: "7"
-    },
-    {
-      brand: "Camlin",
-      category: "Pencil",
-      description: "Camlin colored pencils, vibrant colors.",
-      price: "20"
-    },
-    //Notebooks
-    {
-      brand: "Classmate",
-      category: "Notebook",
-      description: "Classmate ruled notebook, 200 pages.",
-      price: "40"
-    },
-    {
-      brand: "Navneet",
-      category: "Notebook",
-      description: "Navneet spiral notebook, 150 pages.",
-      price: "35"
-    },
-    {
-      brand: "Doms",
-      category: "Notebook",
-      description: "Doms hardcover notebook, 250 pages.",
-      price: "60"
-    },
-    //Sharpeners
-    {
-      brand: "Apsara",
-      category: "Sharpener",
-      description: "Apsara plastic sharpener, single hole.",
-      price: "10"
-    },
-    {
-      brand: "Nataraj",
-      category: "Sharpener",
-      description: "Nataraj metal sharpener, double hole.",
-      price: "15"
-    },
-    {
-      brand: "Camlin",
-      category: "Sharpener",
-      description: "Camlin electric sharpener, battery operated.",
-      price: "150"
-    },
-    //Erasers
-    {
-        brand: "Nataraj",
-        category: "Eraser",
-        description: "Nataraj soft eraser, ideal for pencil marks.",
-        price: "8"
-    },
-    {
-        brand: "Apsara",
-        category: "Eraser",
-        description: "Apsara plastic eraser, non-smudging.",
-        price: "10"
-    },
-    {
-        brand: "Camlin",
-        category: "Eraser",
-        description: "Camlin dust-free eraser, easy to use.",
-        price: "9"
-    }
-    // Add more products here...
+    // Pens
+    { brand: "Reynolds", category: "Pen", description: "Reynolds smooth writing ball pen with long-lasting blue ink, ideal for daily writing. Comfortable grip and lightweight design for effortless note-taking and exams.", price: "10" },
+    { brand: "Cello", category: "Pen", description: "Fine tip gel pen, assorted colors.", price: "15" },
+    { brand: "Parker", category: "Pen", description: "Premium rollerball pen, black ink.", price: "120" },
+    { brand: "Linc", category: "Pen", description: "Affordable ball pen, blue ink.", price: "8" },
+    { brand: "Flair", category: "Pen", description: "Stylish gel pen, quick dry.", price: "12" },
+    { brand: "Pilot", category: "Pen", description: "Pilot premium gel pen with ultra-smooth ink flow, perfect for professionals and students.", price: "50" },
+    // Pencils
+    { brand: "Nataraj", category: "Pencil", description: "Nataraj HB wooden pencil, smooth writing.", price: "5" },
+    { brand: "Apsara", category: "Pencil", description: "Apsara premium graphite pencil, dark lead.", price: "7" },
+    { brand: "Camlin", category: "Pencil", description: "Camlin colored pencils, vibrant colors.", price: "20" },
+    // Notebooks
+    { brand: "Classmate", category: "Notebook", description: "Classmate ruled notebook, 200 pages.", price: "40" },
+    { brand: "Navneet", category: "Notebook", description: "Navneet spiral notebook, 150 pages.", price: "35" },
+    { brand: "Doms", category: "Notebook", description: "Doms hardcover notebook, 250 pages.", price: "60" },
+    // Sharpeners
+    { brand: "Apsara", category: "Sharpener", description: "Apsara plastic sharpener, single hole.", price: "10" },
+    { brand: "Nataraj", category: "Sharpener", description: "Nataraj metal sharpener, double hole.", price: "15" },
+    { brand: "Camlin", category: "Sharpener", description: "Camlin electric sharpener, battery operated.", price: "150" },
+    // Erasers
+    { brand: "Nataraj", category: "Eraser", description: "Nataraj soft eraser, ideal for pencil marks.", price: "8" },
+    { brand: "Apsara", category: "Eraser", description: "Apsara plastic eraser, non-smudging.", price: "10" },
+    { brand: "Camlin", category: "Eraser", description: "Camlin dust-free eraser, easy to use.", price: "9" }
   ];
 
-  // Get brand from URL
+  // ========================================
+  // UTILITY FUNCTIONS
+  // ========================================
+
+  /**
+   * Get brand from URL query parameter
+   */
   function getBrandFromURL() {
     const params = new URLSearchParams(window.location.search);
     return params.get('brand');
   }
 
-  // Find product by brand
+  /**
+   * Find product by brand name
+   */
   function getProductByBrand(brand) {
     return products.find(p => p.brand.toLowerCase() === brand.toLowerCase());
   }
 
-  // Render product details (with i18n support)
+  /**
+   * Generate unique product ID for reviews storage
+   */
+  function getProductId(product) {
+    return `${product.brand}_${product.category}`.toLowerCase().replace(/\s+/g, '_');
+  }
+
+  /**
+   * Format date for display
+   */
+  function formatDate(timestamp) {
+    const date = new Date(timestamp);
+    const options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+    return date.toLocaleDateString('en-IN', options);
+  }
+
+  /**
+   * Render product details
+   */
   function renderProductDetail(product) {
     document.querySelector('.brand-name').textContent = product.brand;
     document.querySelector('.category').textContent = `${t('category')}: ${product.category}`;
@@ -422,18 +797,15 @@
   // CART MANAGEMENT FUNCTIONS
   // ========================================
 
-  // Get cart from localStorage
   function getCart() {
     return JSON.parse(localStorage.getItem('cartItems')) || [];
   }
 
-  // Save cart to localStorage
   function saveCart(cart) {
     localStorage.setItem('cartItems', JSON.stringify(cart));
     updateCartBadge();
   }
 
-  // Update cart badge count
   function updateCartBadge() {
     const cart = getCart();
     const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
@@ -448,19 +820,14 @@
     }
   }
 
-  // Add item to cart
   function addToCart(product, qty) {
     const cart = getCart();
     const productId = product.brand + '_' + product.category;
-
-    // Check if product already exists in cart
     const existingIndex = cart.findIndex(item => item.id === productId);
 
     if (existingIndex !== -1) {
-      // Increase quantity if already in cart
       cart[existingIndex].quantity += qty;
     } else {
-      // Add new item to cart
       cart.push({
         id: productId,
         name: product.brand + ' ' + product.category,
@@ -475,38 +842,276 @@
     showToast(t('itemAddedToCart'));
   }
 
-  // Show toast notification
   function showToast(message) {
     const toast = document.getElementById('toast');
     const toastMessage = document.getElementById('toastMessage');
     toastMessage.textContent = message;
     toast.classList.add('show');
-
-    setTimeout(() => {
-      toast.classList.remove('show');
-    }, 2500);
+    setTimeout(() => { toast.classList.remove('show'); }, 2500);
   }
 
-  // Quantity logic
+  // ========================================
+  // REVIEW STORAGE FUNCTIONS
+  // ========================================
+
+  /**
+   * Get all reviews from localStorage
+   * Returns object with productId as keys
+   */
+  function getAllReviews() {
+    return JSON.parse(localStorage.getItem('productReviews')) || {};
+  }
+
+  /**
+   * Save all reviews to localStorage
+   */
+  function saveAllReviews(reviews) {
+    localStorage.setItem('productReviews', JSON.stringify(reviews));
+  }
+
+  /**
+   * Get reviews for a specific product
+   * @param {string} productId - Product identifier
+   * @returns {array} Array of review objects
+   */
+  function getProductReviews(productId) {
+    const allReviews = getAllReviews();
+    return allReviews[productId] || [];
+  }
+
+  /**
+   * Add a new review for a product
+   * @param {string} productId - Product identifier
+   * @param {number} rating - Star rating (1-5)
+   * @param {string} comment - Review text
+   */
+  function addReview(productId, rating, comment) {
+    const allReviews = getAllReviews();
+
+    // Initialize array if product has no reviews
+    if (!allReviews[productId]) {
+      allReviews[productId] = [];
+    }
+
+    // Create new review object
+    const newReview = {
+      rating: rating,
+      comment: comment,
+      date: Date.now()
+    };
+
+    // Add to beginning of array (newest first)
+    allReviews[productId].unshift(newReview);
+
+    // Save to localStorage
+    saveAllReviews(allReviews);
+
+    return newReview;
+  }
+
+  // ========================================
+  // AVERAGE RATING CALCULATION
+  // ========================================
+
+  /**
+   * Calculate average rating for a product
+   * @param {array} reviews - Array of review objects
+   * @returns {object} { average, count }
+   */
+  function calculateAverageRating(reviews) {
+    if (!reviews || reviews.length === 0) {
+      return { average: 0, count: 0 };
+    }
+
+    const sum = reviews.reduce((total, review) => total + review.rating, 0);
+    const average = sum / reviews.length;
+
+    return {
+      average: Math.round(average * 10) / 10, // Round to 1 decimal
+      count: reviews.length
+    };
+  }
+
+  // ========================================
+  // RENDER FUNCTIONS
+  // ========================================
+
+  /**
+   * Render average rating display
+   */
+  function renderAverageRating(reviews) {
+    const { average, count } = calculateAverageRating(reviews);
+
+    // Update number display
+    document.getElementById('avgRatingNumber').textContent = average.toFixed(1);
+    document.getElementById('reviewsCountNum').textContent = count;
+
+    // Update star display
+    const starsContainer = document.getElementById('avgStarsDisplay');
+    let starsHtml = '';
+    for (let i = 1; i <= 5; i++) {
+      if (i <= Math.floor(average)) {
+        starsHtml += '<span class="star filled">★</span>';
+      } else if (i - 0.5 <= average) {
+        starsHtml += '<span class="star filled">★</span>'; // Simplified: show filled for half
+      } else {
+        starsHtml += '<span class="star">★</span>';
+      }
+    }
+    starsContainer.innerHTML = starsHtml;
+  }
+
+  /**
+   * Render single review card
+   */
+  function renderReviewCard(review, isNew = false) {
+    const starsHtml = Array(5).fill(0).map((_, i) =>
+      `<span class="star ${i < review.rating ? 'filled' : ''}">★</span>`
+    ).join('');
+
+    return `
+      <div class="review-card ${isNew ? 'new' : ''}">
+        <div class="review-card-header">
+          <div class="review-stars">${starsHtml}</div>
+          <div class="review-date">${formatDate(review.date)}</div>
+        </div>
+        <div class="review-text">${review.comment}</div>
+      </div>
+    `;
+  }
+
+  /**
+   * Render empty reviews state
+   */
+  function renderEmptyReviews() {
+    return `
+      <div class="empty-reviews">
+        <div class="empty-reviews-icon">📝</div>
+        <div class="empty-reviews-title" data-i18n="noReviews">${t('noReviews')}</div>
+        <div class="empty-reviews-text" data-i18n="beFirstReview">${t('beFirstReview')}</div>
+      </div>
+    `;
+  }
+
+  /**
+   * Render all reviews for current product
+   */
+  function renderReviews(productId) {
+    const reviews = getProductReviews(productId);
+    const reviewsList = document.getElementById('reviewsList');
+    const reviewsListCount = document.getElementById('reviewsListCount');
+
+    // Update count in title
+    reviewsListCount.textContent = `(${reviews.length})`;
+
+    // Render reviews or empty state
+    if (reviews.length === 0) {
+      reviewsList.innerHTML = renderEmptyReviews();
+    } else {
+      reviewsList.innerHTML = reviews.map(review => renderReviewCard(review)).join('');
+    }
+
+    // Update average rating
+    renderAverageRating(reviews);
+  }
+
+  // ========================================
+  // FORM VALIDATION & SUBMISSION
+  // ========================================
+
+  /**
+   * Get selected rating value
+   */
+  function getSelectedRating() {
+    const selected = document.querySelector('input[name="rating"]:checked');
+    return selected ? parseInt(selected.value) : 0;
+  }
+
+  /**
+   * Clear rating selection
+   */
+  function clearRatingSelection() {
+    const radios = document.querySelectorAll('input[name="rating"]');
+    radios.forEach(radio => radio.checked = false);
+  }
+
+  /**
+   * Validate and submit review
+   */
+  function handleReviewSubmit(productId) {
+    const rating = getSelectedRating();
+    const comment = document.getElementById('reviewTextarea').value.trim();
+    const ratingError = document.getElementById('ratingError');
+    const reviewError = document.getElementById('reviewError');
+
+    // Reset errors
+    ratingError.classList.remove('show');
+    reviewError.classList.remove('show');
+
+    let isValid = true;
+
+    // Validate rating
+    if (rating === 0) {
+      ratingError.classList.add('show');
+      isValid = false;
+    }
+
+    // Validate comment
+    if (!comment) {
+      reviewError.classList.add('show');
+      isValid = false;
+    }
+
+    if (!isValid) return;
+
+    // Add review
+    addReview(productId, rating, comment);
+
+    // Clear form
+    clearRatingSelection();
+    document.getElementById('reviewTextarea').value = '';
+
+    // Re-render reviews
+    renderReviews(productId);
+
+    // Show success toast
+    showToast(t('reviewSubmitted'));
+  }
+
+  // ========================================
+  // QUANTITY LOGIC
+  // ========================================
   let quantity = 1;
   const qtyNumber = document.getElementById('qty-number');
+
   document.getElementById('decrease-btn').addEventListener('click', () => {
     if (quantity > 1) {
       quantity--;
       qtyNumber.textContent = quantity;
     }
   });
+
   document.getElementById('increase-btn').addEventListener('click', () => {
     quantity++;
     qtyNumber.textContent = quantity;
   });
 
-  // On page load
+  // ========================================
+  // INITIALIZATION
+  // ========================================
   window.onload = function() {
     const brand = getBrandFromURL();
-    const product = getProductByBrand(brand) || products[0]; // fallback to first product
+    const product = getProductByBrand(brand) || products[0];
+    const productId = getProductId(product);
+
+    // Render product details
     renderProductDetail(product);
-    updateCartBadge(); // Initialize cart badge
+
+    // Initialize cart badge
+    updateCartBadge();
+
+    // Render reviews
+    renderReviews(productId);
 
     // Add to Cart button
     document.getElementById('add-cart-btn').onclick = () => {
@@ -515,22 +1120,26 @@
 
     // Buy Now button
     document.getElementById('buy-now-btn').onclick = () => {
-      // Save product info to localStorage for direct checkout
       localStorage.setItem('checkoutProduct', JSON.stringify({
         name: product.brand + ' ' + product.category,
         price: Number(product.price),
         quantity: quantity
       }));
-      localStorage.removeItem('checkoutFromCart'); // Clear cart checkout flag
-      // Redirect to checkout page
+      localStorage.removeItem('checkoutFromCart');
       window.location.href = 'checkout.html';
+    };
+
+    // Submit Review button
+    document.getElementById('submitReviewBtn').onclick = () => {
+      handleReviewSubmit(productId);
     };
 
     // Re-render on language change
     window.addEventListener('languageChanged', function() {
       renderProductDetail(product);
+      renderReviews(productId);
     });
   };
-</script>
+  </script>
 </body>
 </html>
