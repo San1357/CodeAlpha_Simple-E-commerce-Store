@@ -956,7 +956,7 @@
   // ========================================
   // PRODUCT DATA
   // ========================================
-  const products = [
+  const defaultProducts = [
     // Pens
     { brand: "Reynolds", category: "Pen", description: "Reynolds smooth writing ball pen with long-lasting blue ink, ideal for daily writing. Comfortable grip and lightweight design for effortless note-taking and exams.", price: "10" },
     { brand: "Cello", category: "Pen", description: "Fine tip gel pen, assorted colors.", price: "15" },
@@ -981,6 +981,35 @@
     { brand: "Apsara", category: "Eraser", description: "Apsara plastic eraser, non-smudging.", price: "10" },
     { brand: "Camlin", category: "Eraser", description: "Camlin dust-free eraser, easy to use.", price: "9" }
   ];
+
+  // ========================================
+  // ADMIN PRODUCT SYNC FUNCTIONS
+  // ========================================
+  /**
+   * Get admin-added products from localStorage
+   * Converts admin format to product-detail format
+   */
+  function getAdminProducts() {
+    const adminProducts = JSON.parse(localStorage.getItem('adminProducts')) || [];
+    // Convert admin product format to product-detail format
+    return adminProducts.map(p => ({
+      brand: p.name,
+      category: p.category,
+      description: p.description,
+      price: String(p.price)
+    }));
+  }
+
+  /**
+   * Get all products including admin-added ones
+   */
+  function getAllProducts() {
+    const adminProducts = getAdminProducts();
+    return [...defaultProducts, ...adminProducts];
+  }
+
+  // Dynamic products array that syncs with admin panel
+  let products = getAllProducts();
 
   // ========================================
   // UTILITY FUNCTIONS
@@ -1784,6 +1813,24 @@
     }
   }
   initDarkMode();
+
+  // ========================================
+  // ADMIN SYNC - LISTEN FOR PRODUCT CHANGES
+  // ========================================
+  /**
+   * Listen for localStorage changes from admin panel
+   * Updates product data and stock in real-time
+   */
+  window.addEventListener('storage', function(e) {
+    if (e.key === 'adminProducts' || e.key === 'productStock') {
+      // Refresh products from localStorage
+      products = getAllProducts();
+      // Re-render stock status if applicable
+      if (currentProductId) {
+        renderStockStatus(currentProductId);
+      }
+    }
+  });
   </script>
 </body>
 </html>

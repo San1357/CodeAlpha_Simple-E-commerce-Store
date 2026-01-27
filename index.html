@@ -1267,7 +1267,7 @@
     // UNIFIED PRODUCT DATA
     // ========================================
     /**
-     * All products in a single array with:
+     * Default products array with:
      * - id: unique identifier
      * - name: product brand/name
      * - category: product category
@@ -1275,7 +1275,7 @@
      * - description: product description
      * - icon: emoji icon for display
      */
-    const allProducts = [
+    const defaultProducts = [
       // Pen Products
       { id: 1, name: "Reynolds", category: "Pen", price: 10, description: "Smooth writing ball pen, blue ink.", icon: "🖊️" },
       { id: 2, name: "Cello", category: "Pen", price: 15, description: "Fine tip gel pen, assorted colors.", icon: "🖊️" },
@@ -1304,6 +1304,54 @@
       { id: 17, name: "Apsara", category: "Eraser", price: 10, description: "Plastic eraser, non-smudging.", icon: "🧽" },
       { id: 18, name: "Camlin", category: "Eraser", price: 9, description: "Dust-free eraser, easy to use.", icon: "🧽" }
     ];
+
+    // ========================================
+    // ADMIN PRODUCT SYNC FUNCTIONS
+    // ========================================
+    /**
+     * Get admin-added products from localStorage
+     * @returns {array} Admin products array
+     */
+    function getAdminProducts() {
+      return JSON.parse(localStorage.getItem('adminProducts')) || [];
+    }
+
+    /**
+     * Get deleted product IDs from localStorage
+     * @returns {array} Array of deleted product IDs
+     */
+    function getDeletedProductIds() {
+      return JSON.parse(localStorage.getItem('deletedProducts')) || [];
+    }
+
+    /**
+     * Get product modifications from localStorage
+     * @returns {object} Object with product modifications
+     */
+    function getProductModifications() {
+      return JSON.parse(localStorage.getItem('productModifications')) || {};
+    }
+
+    /**
+     * Get all products (default + admin-added, excluding deleted, with modifications applied)
+     * @returns {array} Merged products array
+     */
+    function getAllProducts() {
+      const adminProducts = getAdminProducts();
+      const deletedIds = getDeletedProductIds();
+      const modifications = getProductModifications();
+
+      // Filter out deleted products and apply modifications to defaults
+      const activeDefaultProducts = defaultProducts
+        .filter(p => !deletedIds.includes(p.id))
+        .map(p => ({ ...p, ...modifications[p.id] }));
+
+      // Merge with admin products
+      return [...activeDefaultProducts, ...adminProducts];
+    }
+
+    // Use dynamic allProducts that syncs with admin panel
+    let allProducts = getAllProducts();
 
     // Category definitions with icons
     const categories = [
@@ -1357,6 +1405,13 @@
     // ========================================
     // UTILITY FUNCTIONS
     // ========================================
+
+    /**
+     * Refresh products from localStorage (syncs with admin panel)
+     */
+    function refreshProducts() {
+      allProducts = getAllProducts();
+    }
 
     /**
      * Get count of products in each category
@@ -2019,6 +2074,25 @@
 
     // Run initialization
     init();
+
+    // ========================================
+    // ADMIN SYNC - LISTEN FOR PRODUCT CHANGES
+    // ========================================
+    /**
+     * Listen for localStorage changes from admin panel
+     * Updates product list in real-time when admin makes changes
+     */
+    window.addEventListener('storage', function(e) {
+      if (e.key === 'adminProducts' || e.key === 'deletedProducts' || e.key === 'productModifications') {
+        // Refresh products from localStorage
+        refreshProducts();
+        // Re-render category filters with new counts
+        renderCategoryList();
+        renderCategoryNavbar();
+        // Re-apply filters to show updated products
+        applyFilters();
+      }
+    });
   </script>
 </body>
 </html>
