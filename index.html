@@ -5,7 +5,9 @@
   <title>Simple E-commerce Store</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    /* Basic Reset */
+    /* ========================================
+       BASIC RESET & BODY
+       ======================================== */
     * {
       margin: 0;
       padding: 0;
@@ -18,7 +20,9 @@
       min-height: 100vh;
     }
 
-    /* Header Styles */
+    /* ========================================
+       HEADER STYLES
+       ======================================== */
     .header {
       background: #fff;
       padding: 1rem 2rem;
@@ -27,6 +31,9 @@
       justify-content: space-between;
       align-items: center;
       max-width: 100%;
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
 
     .logo {
@@ -118,12 +125,13 @@
       color: #fff;
     }
 
-    /* Hide elements by default */
     .hidden {
       display: none !important;
     }
 
-    /* Language Selector Styles */
+    /* ========================================
+       LANGUAGE SELECTOR
+       ======================================== */
     .lang-selector-wrapper {
       display: flex;
       align-items: center;
@@ -158,7 +166,9 @@
       box-shadow: 0 0 0 3px rgba(0, 116, 217, 0.15);
     }
 
-    /* Cart Icon Styles */
+    /* ========================================
+       CART ICON
+       ======================================== */
     .cart-icon-wrapper {
       position: relative;
       display: flex;
@@ -201,132 +211,656 @@
       display: none;
     }
 
-    /* Search Bar Styles */
-    .search-bar-container {
+    /* ========================================
+       SEARCH BAR (ENHANCED)
+       ======================================== */
+    .search-section {
+      background: linear-gradient(135deg, #0074d9 0%, #005fa3 100%);
+      padding: 1.5rem 2rem;
+    }
+
+    .search-container {
+      max-width: 800px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .search-input-wrapper {
       display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-top: 1.5rem;
-      margin-bottom: 0.5rem;
-      gap: 0.5rem;
+      background: #fff;
+      border-radius: 50px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     }
 
-    .search-bar-container input[type="text"] {
-      padding: 0.5rem 1rem;
+    .search-input {
+      flex: 1;
+      padding: 1rem 1.5rem;
       font-size: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      width: 260px;
+      border: none;
       outline: none;
-      transition: border 0.2s;
+      background: transparent;
     }
 
-    .search-bar-container input[type="text"]:focus {
-      border: 1.5px solid #0074d9;
+    .search-input::placeholder {
+      color: #999;
     }
 
-    .search-bar-container button {
-      padding: 0.5rem 1.2rem;
-      font-size: 1rem;
+    .search-btn {
+      padding: 1rem 2rem;
       background: #0074d9;
       color: #fff;
       border: none;
-      border-radius: 4px;
       cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
       transition: background 0.2s;
     }
 
-    .search-bar-container button:hover {
+    .search-btn:hover {
       background: #005fa3;
     }
 
-    /* Navbar Styles */
-    .navbar {
-      background: #222;
-      color: #fff;
-      padding: 0.5rem 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    /* Search Suggestions Dropdown */
+    .search-suggestions {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      margin-top: 0.5rem;
+      max-height: 300px;
+      overflow-y: auto;
+      display: none;
+      z-index: 50;
     }
 
-    .navbar-list {
-      list-style: none;
-      display: flex;
-      gap: 2rem;
+    .search-suggestions.show {
+      display: block;
     }
 
-    .navbar-item {
+    .suggestion-item {
+      padding: 0.8rem 1.5rem;
       cursor: pointer;
-      padding: 0.5rem 1.2rem;
-      border-radius: 4px;
-      transition: background 0.2s;
-      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      transition: background 0.15s;
     }
 
-    .navbar-item:hover, .navbar-item.active {
+    .suggestion-item:hover {
+      background: #f5f5f5;
+    }
+
+    .suggestion-item .product-icon {
+      font-size: 1.2rem;
+    }
+
+    .suggestion-item .product-info {
+      flex: 1;
+    }
+
+    .suggestion-item .product-name {
+      font-weight: 500;
+      color: #333;
+    }
+
+    .suggestion-item .product-category {
+      font-size: 0.8rem;
+      color: #888;
+    }
+
+    .suggestion-item .product-price {
+      font-weight: 600;
+      color: #0074d9;
+    }
+
+    /* ========================================
+       MAIN LAYOUT (SIDEBAR + CONTENT)
+       ======================================== */
+    .main-wrapper {
+      display: flex;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1.5rem;
+      gap: 1.5rem;
+    }
+
+    /* ========================================
+       FILTER SIDEBAR
+       ======================================== */
+    .filter-sidebar {
+      width: 280px;
+      flex-shrink: 0;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      padding: 1.5rem;
+      height: fit-content;
+      position: sticky;
+      top: 90px;
+    }
+
+    .filter-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid #eee;
+    }
+
+    .filter-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #333;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .filter-title-icon {
+      font-size: 1.3rem;
+    }
+
+    .clear-all-btn {
+      font-size: 0.85rem;
+      color: #e74c3c;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .clear-all-btn:hover {
+      color: #c0392b;
+      text-decoration: underline;
+    }
+
+    /* Filter Section */
+    .filter-section {
+      margin-bottom: 1.5rem;
+    }
+
+    .filter-section-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .filter-section-icon {
+      font-size: 1rem;
+    }
+
+    /* Category Filter */
+    .category-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .category-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.6rem 0.8rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s;
+      font-size: 0.95rem;
+      color: #444;
+    }
+
+    .category-item:hover {
+      background: #f0f7ff;
+      color: #0074d9;
+    }
+
+    .category-item.active {
       background: #0074d9;
       color: #fff;
     }
 
-    /* Main Content Styles */
-    .main-content {
-      max-width: 900px;
-      margin: 2rem auto;
-      padding: 2rem;
-      background: #fff;
-      border-radius: 8px;
-      min-height: 300px;
-      box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+    .category-item input[type="radio"] {
+      display: none;
     }
 
-    /* Product Card Grid */
-    .product-grid {
+    .category-icon {
+      font-size: 1.1rem;
+    }
+
+    .category-count {
+      margin-left: auto;
+      font-size: 0.8rem;
+      background: #eee;
+      padding: 0.2rem 0.5rem;
+      border-radius: 10px;
+      color: #666;
+    }
+
+    .category-item.active .category-count {
+      background: rgba(255,255,255,0.3);
+      color: #fff;
+    }
+
+    /* Price Filter */
+    .price-inputs {
       display: flex;
-      flex-wrap: wrap;
-      gap: 1.5rem;
-      justify-content: center;
+      gap: 0.8rem;
+      margin-bottom: 1rem;
     }
 
-    .product-card {
-      background: #f1f1f1;
+    .price-input-group {
+      flex: 1;
+    }
+
+    .price-input-label {
+      font-size: 0.8rem;
+      color: #666;
+      margin-bottom: 0.3rem;
+      display: block;
+    }
+
+    .price-input {
+      width: 100%;
+      padding: 0.6rem 0.8rem;
+      border: 1.5px solid #ddd;
       border-radius: 6px;
-      box-shadow: 0 1px 6px rgba(0,0,0,0.06);
-      padding: 1.2rem;
-      width: 220px;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .price-input:focus {
+      border-color: #0074d9;
+    }
+
+    /* Price Range Slider */
+    .price-slider-container {
+      margin-top: 0.5rem;
+    }
+
+    .price-range-display {
       display: flex;
-      flex-direction: column;
-      align-items: flex-start;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      color: #666;
+      margin-bottom: 0.5rem;
+    }
+
+    .price-slider {
+      width: 100%;
+      height: 6px;
+      -webkit-appearance: none;
+      appearance: none;
+      background: #ddd;
+      border-radius: 3px;
+      outline: none;
+    }
+
+    .price-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      background: #0074d9;
+      border-radius: 50%;
+      cursor: pointer;
       transition: transform 0.15s;
     }
 
+    .price-slider::-webkit-slider-thumb:hover {
+      transform: scale(1.2);
+    }
+
+    /* Sort Filter */
+    .sort-select {
+      width: 100%;
+      padding: 0.7rem 1rem;
+      border: 1.5px solid #ddd;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      background: #fff;
+      cursor: pointer;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .sort-select:focus {
+      border-color: #0074d9;
+    }
+
+    /* Filter Action Buttons */
+    .filter-actions {
+      display: flex;
+      gap: 0.8rem;
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 2px solid #eee;
+    }
+
+    .filter-btn {
+      flex: 1;
+      padding: 0.7rem 1rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-apply {
+      background: #0074d9;
+      color: #fff;
+      border: none;
+    }
+
+    .btn-apply:hover {
+      background: #005fa3;
+    }
+
+    .btn-reset {
+      background: #fff;
+      color: #666;
+      border: 1.5px solid #ddd;
+    }
+
+    .btn-reset:hover {
+      background: #f5f5f5;
+      border-color: #ccc;
+    }
+
+    /* ========================================
+       PRODUCTS CONTENT AREA
+       ======================================== */
+    .products-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    /* Results Header */
+    .results-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding: 1rem 1.5rem;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    .results-count {
+      font-size: 0.95rem;
+      color: #666;
+    }
+
+    .results-count strong {
+      color: #0074d9;
+      font-weight: 700;
+    }
+
+    /* Active Filters Tags */
+    .active-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .filter-tag {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.4rem 0.8rem;
+      background: #e7f7ff;
+      color: #0074d9;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    .filter-tag-remove {
+      cursor: pointer;
+      font-size: 1rem;
+      opacity: 0.7;
+      transition: opacity 0.15s;
+    }
+
+    .filter-tag-remove:hover {
+      opacity: 1;
+    }
+
+    /* Category Navbar (Quick Filter) */
+    .category-navbar {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+      padding: 1rem;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      overflow-x: auto;
+    }
+
+    .category-nav-btn {
+      padding: 0.6rem 1.2rem;
+      background: #f5f5f5;
+      border: none;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #555;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .category-nav-btn:hover {
+      background: #e7f7ff;
+      color: #0074d9;
+    }
+
+    .category-nav-btn.active {
+      background: #0074d9;
+      color: #fff;
+    }
+
+    /* Product Grid */
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1.5rem;
+    }
+
+    /* Product Card */
+    .product-card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+    }
+
     .product-card:hover {
-      transform: translateY(-4px) scale(1.03);
-      box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+    }
+
+    .product-image {
+      height: 140px;
+      background: linear-gradient(135deg, #f0f7ff 0%, #e7f7ff 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+    }
+
+    .product-info {
+      padding: 1rem;
+    }
+
+    .product-category-tag {
+      font-size: 0.75rem;
+      color: #0074d9;
+      background: #e7f7ff;
+      padding: 0.2rem 0.6rem;
+      border-radius: 10px;
+      display: inline-block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
     }
 
     .product-title {
-      font-size: 1.15rem;
-      font-weight: bold;
-      margin-bottom: 0.5rem;
-      color: #222;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 0.4rem;
     }
 
     .product-desc {
-      font-size: 0.98rem;
-      margin-bottom: 0.7rem;
-      color: #444;
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 0.8rem;
+      line-height: 1.4;
+    }
+
+    .product-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
     .product-price {
-      font-size: 1.05rem;
-      font-weight: bold;
+      font-size: 1.15rem;
+      font-weight: 700;
       color: #0074d9;
-      margin-top: auto;
     }
 
-    /* Responsive Header */
+    .product-action-btn {
+      padding: 0.5rem 1rem;
+      background: #0074d9;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .product-action-btn:hover {
+      background: #005fa3;
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    .empty-state-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+
+    .empty-state-title {
+      font-size: 1.3rem;
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+
+    .empty-state-text {
+      color: #888;
+      font-size: 0.95rem;
+    }
+
+    /* ========================================
+       MOBILE FILTER TOGGLE
+       ======================================== */
+    .mobile-filter-toggle {
+      display: none;
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      padding: 1rem 1.5rem;
+      background: #0074d9;
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0,116,217,0.4);
+      z-index: 80;
+      transition: transform 0.2s;
+    }
+
+    .mobile-filter-toggle:hover {
+      transform: scale(1.05);
+    }
+
+    .filter-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 90;
+    }
+
+    .filter-overlay.show {
+      display: block;
+    }
+
+    /* ========================================
+       RESPONSIVE STYLES
+       ======================================== */
+    @media (max-width: 900px) {
+      .main-wrapper {
+        padding: 1rem;
+      }
+
+      .filter-sidebar {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: 300px;
+        height: 100vh;
+        z-index: 100;
+        border-radius: 0;
+        overflow-y: auto;
+        transition: left 0.3s ease;
+      }
+
+      .filter-sidebar.show {
+        left: 0;
+      }
+
+      .mobile-filter-toggle {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .product-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 1rem;
+      }
+    }
+
     @media (max-width: 600px) {
       .header {
         flex-direction: column;
@@ -337,17 +871,81 @@
       .auth-nav {
         width: 100%;
         justify-content: center;
+        flex-wrap: wrap;
       }
 
       .auth-btn {
         padding: 0.4rem 0.8rem;
         font-size: 0.85rem;
       }
+
+      .search-section {
+        padding: 1rem;
+      }
+
+      .search-input {
+        padding: 0.8rem 1rem;
+      }
+
+      .search-btn {
+        padding: 0.8rem 1.2rem;
+      }
+
+      .category-navbar {
+        padding: 0.8rem;
+        gap: 0.4rem;
+      }
+
+      .category-nav-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+      }
+
+      .results-header {
+        flex-direction: column;
+        gap: 0.8rem;
+        align-items: flex-start;
+      }
+
+      .product-image {
+        height: 100px;
+        font-size: 2rem;
+      }
+
+      .product-info {
+        padding: 0.8rem;
+      }
+
+      .product-title {
+        font-size: 1rem;
+      }
+
+      .product-desc {
+        font-size: 0.85rem;
+      }
+    }
+
+    /* Animation for product cards */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .product-card {
+      animation: fadeInUp 0.3s ease forwards;
     }
   </style>
 </head>
 <body>
-  <!-- Header with Auth Navigation -->
+  <!-- ========================================
+       HEADER
+       ======================================== -->
   <header class="header">
     <a href="index.html" class="logo" data-i18n="shopease">ShopEase</a>
     <nav class="auth-nav">
@@ -377,325 +975,712 @@
     </nav>
   </header>
 
-  <!-- Search Bar -->
-  <div class="search-bar-container">
-    <input type="text" id="search-input" data-i18n-placeholder="searchPlaceholder" placeholder="Search for a product (Pen, Pencil, Notebook, Sharpener, Eraser)...">
-    <button id="search-btn" data-i18n="searchBtn">Search</button>
-  </div>
-  <!-- Navbar -->
-  <nav class="navbar">
-    <ul class="navbar-list">
-      <li class="navbar-item active" data-product="Pen" data-i18n="pen">Pen</li>
-      <li class="navbar-item" data-product="Pencil" data-i18n="pencil">Pencil</li>
-      <li class="navbar-item" data-product="Notebook" data-i18n="notebook">Notebook</li>
-      <li class="navbar-item" data-product="Sharpener" data-i18n="sharpener">Sharpener</li>
-      <li class="navbar-item" data-product="Eraser" data-i18n="eraser">Eraser</li>
-    </ul>
-  </nav>
+  <!-- ========================================
+       SEARCH SECTION
+       ======================================== -->
+  <section class="search-section">
+    <div class="search-container">
+      <div class="search-input-wrapper">
+        <input
+          type="text"
+          class="search-input"
+          id="searchInput"
+          data-i18n-placeholder="searchPlaceholder"
+          placeholder="Search for a product (Pen, Pencil, Notebook, Sharpener, Eraser)..."
+          autocomplete="off"
+        >
+        <button class="search-btn" id="searchBtn" data-i18n="searchBtn">Search</button>
+      </div>
+      <!-- Live Search Suggestions -->
+      <div class="search-suggestions" id="searchSuggestions">
+        <!-- Suggestions will be injected here -->
+      </div>
+    </div>
+  </section>
 
-  <!-- Main Content Area -->
-  <div class="main-content" id="main-content">
-    <!-- Content will be injected here -->
+  <!-- ========================================
+       MAIN WRAPPER (SIDEBAR + CONTENT)
+       ======================================== -->
+  <div class="main-wrapper">
+    <!-- Filter Overlay for Mobile -->
+    <div class="filter-overlay" id="filterOverlay"></div>
+
+    <!-- ========================================
+         FILTER SIDEBAR
+         ======================================== -->
+    <aside class="filter-sidebar" id="filterSidebar">
+      <div class="filter-header">
+        <h2 class="filter-title">
+          <span class="filter-title-icon">🔍</span>
+          <span data-i18n="filters">Filters</span>
+        </h2>
+        <button class="clear-all-btn" id="clearAllBtn" data-i18n="clearAll">Clear All</button>
+      </div>
+
+      <!-- Category Filter -->
+      <div class="filter-section">
+        <h3 class="filter-section-title">
+          <span class="filter-section-icon">📁</span>
+          <span data-i18n="filterByCategory">Category</span>
+        </h3>
+        <div class="category-list" id="categoryList">
+          <!-- Categories will be injected here -->
+        </div>
+      </div>
+
+      <!-- Price Filter -->
+      <div class="filter-section">
+        <h3 class="filter-section-title">
+          <span class="filter-section-icon">💰</span>
+          <span data-i18n="filterByPrice">Price Range</span>
+        </h3>
+        <div class="price-inputs">
+          <div class="price-input-group">
+            <label class="price-input-label" data-i18n="minPrice">Min</label>
+            <input type="number" class="price-input" id="minPriceInput" placeholder="₹0" min="0">
+          </div>
+          <div class="price-input-group">
+            <label class="price-input-label" data-i18n="maxPrice">Max</label>
+            <input type="number" class="price-input" id="maxPriceInput" placeholder="₹500" min="0">
+          </div>
+        </div>
+        <div class="price-slider-container">
+          <div class="price-range-display">
+            <span id="priceMinDisplay">₹0</span>
+            <span id="priceMaxDisplay">₹150</span>
+          </div>
+          <input type="range" class="price-slider" id="priceSlider" min="0" max="150" value="150">
+        </div>
+      </div>
+
+      <!-- Sort Filter -->
+      <div class="filter-section">
+        <h3 class="filter-section-title">
+          <span class="filter-section-icon">↕️</span>
+          <span data-i18n="sortBy">Sort By</span>
+        </h3>
+        <select class="sort-select" id="sortSelect">
+          <option value="default" data-i18n="sortDefault">Default</option>
+          <option value="price-low-high" data-i18n="sortPriceLowHigh">Price: Low to High</option>
+          <option value="price-high-low" data-i18n="sortPriceHighLow">Price: High to Low</option>
+        </select>
+      </div>
+
+      <!-- Filter Action Buttons -->
+      <div class="filter-actions">
+        <button class="filter-btn btn-apply" id="applyFiltersBtn" data-i18n="applyFilters">Apply</button>
+        <button class="filter-btn btn-reset" id="resetFiltersBtn" data-i18n="resetFilters">Reset</button>
+      </div>
+    </aside>
+
+    <!-- ========================================
+         PRODUCTS CONTENT
+         ======================================== -->
+    <main class="products-content">
+      <!-- Category Quick Nav -->
+      <div class="category-navbar" id="categoryNavbar">
+        <!-- Category buttons will be injected here -->
+      </div>
+
+      <!-- Results Header -->
+      <div class="results-header">
+        <div class="results-count" id="resultsCount">
+          <span data-i18n="showingResults">Showing</span> <strong id="productCount">0</strong> <span data-i18n="productsFound">products</span>
+        </div>
+        <div class="active-filters" id="activeFilters">
+          <!-- Active filter tags will be shown here -->
+        </div>
+      </div>
+
+      <!-- Product Grid -->
+      <div class="product-grid" id="productGrid">
+        <!-- Products will be injected here -->
+      </div>
+    </main>
   </div>
+
+  <!-- Mobile Filter Toggle Button -->
+  <button class="mobile-filter-toggle" id="mobileFilterToggle">
+    <span>🔍</span>
+    <span data-i18n="filters">Filters</span>
+  </button>
 
   <!-- Language/i18n Script -->
   <script src="lang.js"></script>
+
   <script>
-    // Product data for "Pen"
-    const penProducts = [
-      {
-        brand: "Reynolds",
-        desc: "Smooth writing ball pen, blue ink.",
-        price: "₹10"
-      },
-      {
-        brand: "Cello",
-        desc: "Fine tip gel pen, assorted colors.",
-        price: "₹15"
-      },
-      {
-        brand: "Parker",
-        desc: "Premium rollerball pen, black ink.",
-        price: "₹120"
-      },
-      {
-        brand: "Linc",
-        desc: "Affordable ball pen, blue ink.",
-        price: "₹8"
-      },
-      {
-        brand: "Flair",
-        desc: "Stylish gel pen, quick dry.",
-        price: "₹12"
-      },
-      {
-        brand: "Pilot",
-        desc: "Japanese precision, smooth flow.",
-        price: "₹50"
-      }
+    // ========================================
+    // UNIFIED PRODUCT DATA
+    // ========================================
+    /**
+     * All products in a single array with:
+     * - id: unique identifier
+     * - name: product brand/name
+     * - category: product category
+     * - price: numeric price value
+     * - description: product description
+     * - icon: emoji icon for display
+     */
+    const allProducts = [
+      // Pen Products
+      { id: 1, name: "Reynolds", category: "Pen", price: 10, description: "Smooth writing ball pen, blue ink.", icon: "🖊️" },
+      { id: 2, name: "Cello", category: "Pen", price: 15, description: "Fine tip gel pen, assorted colors.", icon: "🖊️" },
+      { id: 3, name: "Parker", category: "Pen", price: 120, description: "Premium rollerball pen, black ink.", icon: "🖊️" },
+      { id: 4, name: "Linc", category: "Pen", price: 8, description: "Affordable ball pen, blue ink.", icon: "🖊️" },
+      { id: 5, name: "Flair", category: "Pen", price: 12, description: "Stylish gel pen, quick dry.", icon: "🖊️" },
+      { id: 6, name: "Pilot", category: "Pen", price: 50, description: "Japanese precision, smooth flow.", icon: "🖊️" },
 
+      // Pencil Products
+      { id: 7, name: "Nataraj", category: "Pencil", price: 5, description: "HB wooden pencil, smooth writing.", icon: "✏️" },
+      { id: 8, name: "Apsara", category: "Pencil", price: 7, description: "2B graphite pencil, dark lines.", icon: "✏️" },
+      { id: 9, name: "Camlin", category: "Pencil", price: 50, description: "Mechanical pencil, refillable.", icon: "✏️" },
 
+      // Notebook Products
+      { id: 10, name: "Classmate", category: "Notebook", price: 40, description: "200 pages ruled notebook.", icon: "📓" },
+      { id: 11, name: "Navneet", category: "Notebook", price: 50, description: "Spiral bound notebook, 150 pages.", icon: "📓" },
+      { id: 12, name: "Doms", category: "Notebook", price: 60, description: "Hardcover notebook, 100 pages.", icon: "📓" },
+
+      // Sharpener Products
+      { id: 13, name: "Nataraj", category: "Sharpener", price: 10, description: "Plastic sharpener with shavings tray.", icon: "🔪" },
+      { id: 14, name: "Apsara", category: "Sharpener", price: 15, description: "Metal sharpener, double hole.", icon: "🔪" },
+      { id: 15, name: "Camlin", category: "Sharpener", price: 12, description: "Eco-friendly sharpener, biodegradable.", icon: "🔪" },
+
+      // Eraser Products
+      { id: 16, name: "Nataraj", category: "Eraser", price: 8, description: "Soft eraser for pencil marks.", icon: "🧽" },
+      { id: 17, name: "Apsara", category: "Eraser", price: 10, description: "Plastic eraser, non-smudging.", icon: "🧽" },
+      { id: 18, name: "Camlin", category: "Eraser", price: 9, description: "Dust-free eraser, easy to use.", icon: "🧽" }
     ];
 
-    // Product data for "Pencil"
-
-    const pencilProducts = [
-      {
-        brand: "Nataraj",
-        desc: "HB wooden pencil, smooth writing.",
-        price: "₹5"
-      },
-      {
-        brand: "Apsara",
-        desc: "2B graphite pencil, dark lines.",
-        price: "₹7"
-      },
-      {
-        brand: "Camlin",
-        desc: "Mechanical pencil, refillable.",
-        price: "₹50"
-      }
+    // Category definitions with icons
+    const categories = [
+      { name: "All", icon: "📦", key: "allCategories" },
+      { name: "Pen", icon: "🖊️", key: "pen" },
+      { name: "Pencil", icon: "✏️", key: "pencil" },
+      { name: "Notebook", icon: "📓", key: "notebook" },
+      { name: "Sharpener", icon: "🔪", key: "sharpener" },
+      { name: "Eraser", icon: "🧽", key: "eraser" }
     ];
 
-    // Product data for "Notebook"
-    const notebookProducts = [
-      {
-        brand: "Classmate",
-        desc: "200 pages ruled notebook.",
-        price: "₹40"
-      },
-      {
-        brand: "Navneet",
-        desc: "Spiral bound notebook, 150 pages.",    
-        price: "₹50"
-      },                            
-      {
-        brand: "Doms",
-        desc: "Hardcover notebook, 100 pages.",
-        price: "₹60"                    
-      }
-    ];
-    // Product data for "Sharpener"
-    const sharpenerProducts = [
-      {
-        brand: "Nataraj",
-        desc: "Plastic sharpener with shavings tray.",
-        price: "₹10"
-      },
-      {
-        brand: "Apsara",
-        desc: "Metal sharpener, double hole.",
-        price: "₹15"
-      },
-      {
-        brand: "Camlin",
-        desc: "Eco-friendly sharpener, biodegradable.",
-        price: "₹12"
-      }
-    ];
-    // Product data for "Eraser"
-    const eraserProducts = [
-      {
-        brand: "Nataraj",
-        desc: "Soft eraser for pencil marks.",
-        price: "₹8"
-      },
-      {
-        brand: "Apsara",
-        desc: "Plastic eraser, non-smudging.",
-        price: "₹10"
-      },
-      {
-        brand: "Camlin",
-        desc: "Dust-free eraser, easy to use.",
-        price: "₹9"
-      }
-    ];
+    // ========================================
+    // FILTER STATE
+    // ========================================
+    /**
+     * Current filter state object
+     * Tracks all active filters
+     */
+    let filterState = {
+      searchQuery: '',      // Current search text
+      category: 'All',      // Selected category
+      minPrice: 0,          // Minimum price filter
+      maxPrice: 150,        // Maximum price filter
+      sortBy: 'default'     // Sort order
+    };
 
-    // Reference to main content area
-    const mainContent = document.getElementById('main-content');
+    // ========================================
+    // DOM ELEMENTS
+    // ========================================
+    const searchInput = document.getElementById('searchInput');
+    const searchBtn = document.getElementById('searchBtn');
+    const searchSuggestions = document.getElementById('searchSuggestions');
+    const categoryList = document.getElementById('categoryList');
+    const categoryNavbar = document.getElementById('categoryNavbar');
+    const minPriceInput = document.getElementById('minPriceInput');
+    const maxPriceInput = document.getElementById('maxPriceInput');
+    const priceSlider = document.getElementById('priceSlider');
+    const priceMinDisplay = document.getElementById('priceMinDisplay');
+    const priceMaxDisplay = document.getElementById('priceMaxDisplay');
+    const sortSelect = document.getElementById('sortSelect');
+    const productGrid = document.getElementById('productGrid');
+    const productCount = document.getElementById('productCount');
+    const activeFilters = document.getElementById('activeFilters');
+    const clearAllBtn = document.getElementById('clearAllBtn');
+    const applyFiltersBtn = document.getElementById('applyFiltersBtn');
+    const resetFiltersBtn = document.getElementById('resetFiltersBtn');
+    const filterSidebar = document.getElementById('filterSidebar');
+    const filterOverlay = document.getElementById('filterOverlay');
+    const mobileFilterToggle = document.getElementById('mobileFilterToggle');
 
-    // Function to render welcome text (with i18n support)
-    function renderWelcome() {
-      mainContent.innerHTML = `
-        <h2 data-i18n="welcome">${t('welcome')}</h2>
-        <p data-i18n="selectProduct">${t('selectProduct')}</p>
+    // ========================================
+    // UTILITY FUNCTIONS
+    // ========================================
+
+    /**
+     * Get count of products in each category
+     * @returns {object} Category counts
+     */
+    function getCategoryCounts() {
+      const counts = { All: allProducts.length };
+      allProducts.forEach(product => {
+        counts[product.category] = (counts[product.category] || 0) + 1;
+      });
+      return counts;
+    }
+
+    /**
+     * Parse price from string (remove ₹ symbol)
+     * @param {string|number} price - Price value
+     * @returns {number} Numeric price
+     */
+    function parsePrice(price) {
+      if (typeof price === 'number') return price;
+      return parseInt(price.replace(/[₹,]/g, '')) || 0;
+    }
+
+    // ========================================
+    // RENDER FUNCTIONS
+    // ========================================
+
+    /**
+     * Render category filter list in sidebar
+     */
+    function renderCategoryList() {
+      const counts = getCategoryCounts();
+      let html = '';
+
+      categories.forEach(cat => {
+        const isActive = filterState.category === cat.name;
+        html += `
+          <div class="category-item ${isActive ? 'active' : ''}" data-category="${cat.name}">
+            <input type="radio" name="category" ${isActive ? 'checked' : ''}>
+            <span class="category-icon">${cat.icon}</span>
+            <span data-i18n="${cat.key}">${t(cat.key)}</span>
+            <span class="category-count">${counts[cat.name] || 0}</span>
+          </div>
+        `;
+      });
+
+      categoryList.innerHTML = html;
+
+      // Add click listeners
+      document.querySelectorAll('.category-item').forEach(item => {
+        item.addEventListener('click', () => {
+          filterState.category = item.dataset.category;
+          renderCategoryList();
+          renderCategoryNavbar();
+          applyFilters();
+        });
+      });
+    }
+
+    /**
+     * Render category quick nav buttons
+     */
+    function renderCategoryNavbar() {
+      let html = '';
+
+      categories.forEach(cat => {
+        const isActive = filterState.category === cat.name;
+        html += `
+          <button class="category-nav-btn ${isActive ? 'active' : ''}" data-category="${cat.name}">
+            ${cat.icon} <span data-i18n="${cat.key}">${t(cat.key)}</span>
+          </button>
+        `;
+      });
+
+      categoryNavbar.innerHTML = html;
+
+      // Add click listeners
+      document.querySelectorAll('.category-nav-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          filterState.category = btn.dataset.category;
+          renderCategoryList();
+          renderCategoryNavbar();
+          applyFilters();
+        });
+      });
+    }
+
+    /**
+     * Render active filter tags
+     */
+    function renderActiveFilters() {
+      let html = '';
+
+      // Category filter tag
+      if (filterState.category !== 'All') {
+        html += `
+          <span class="filter-tag">
+            ${filterState.category}
+            <span class="filter-tag-remove" data-filter="category">×</span>
+          </span>
+        `;
+      }
+
+      // Price filter tag
+      if (filterState.minPrice > 0 || filterState.maxPrice < 150) {
+        html += `
+          <span class="filter-tag">
+            ₹${filterState.minPrice} - ₹${filterState.maxPrice}
+            <span class="filter-tag-remove" data-filter="price">×</span>
+          </span>
+        `;
+      }
+
+      // Search filter tag
+      if (filterState.searchQuery) {
+        html += `
+          <span class="filter-tag">
+            "${filterState.searchQuery}"
+            <span class="filter-tag-remove" data-filter="search">×</span>
+          </span>
+        `;
+      }
+
+      activeFilters.innerHTML = html;
+
+      // Add remove listeners
+      document.querySelectorAll('.filter-tag-remove').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const filter = e.target.dataset.filter;
+          if (filter === 'category') {
+            filterState.category = 'All';
+            renderCategoryList();
+            renderCategoryNavbar();
+          } else if (filter === 'price') {
+            filterState.minPrice = 0;
+            filterState.maxPrice = 150;
+            minPriceInput.value = '';
+            maxPriceInput.value = '';
+            priceSlider.value = 150;
+            updatePriceDisplay();
+          } else if (filter === 'search') {
+            filterState.searchQuery = '';
+            searchInput.value = '';
+          }
+          applyFilters();
+        });
+      });
+    }
+
+    /**
+     * Render a single product card
+     * @param {object} product - Product object
+     * @returns {string} HTML string
+     */
+    function renderProductCard(product) {
+      return `
+        <div class="product-card" onclick="window.location.href='product-detail.html?brand=${encodeURIComponent(product.name)}'">
+          <div class="product-image">${product.icon}</div>
+          <div class="product-info">
+            <span class="product-category-tag" data-i18n="${product.category.toLowerCase()}">${t(product.category.toLowerCase())}</span>
+            <h3 class="product-title">${product.name}</h3>
+            <p class="product-desc">${product.description}</p>
+            <div class="product-footer">
+              <span class="product-price">₹${product.price}</span>
+              <button class="product-action-btn" data-i18n="buyNow">${t('buyNow')}</button>
+            </div>
+          </div>
+        </div>
       `;
     }
 
-    // Function to render pen products
-    function renderPenProducts() {
-      let html = `<h2>Pen Brands</h2>
-        <div class="product-grid">`;
-      penProducts.forEach(product => {
-        if (product.brand === "Pilot" || product.brand === "Flair" || product.brand === "Cello" || product.brand === "Linc" || product.brand === "Parker" || product.brand === "Reynolds") {
-          html += `
-            <div class="product-card" style="cursor:pointer" onclick="window.location.href='product-detail.html?brand=${encodeURIComponent(product.brand)}';">
-              <div class="product-title">${product.brand}</div>
-              <div class="product-desc">${product.desc}</div>
-              <div class="product-price">${product.price}</div>
-            </div>
-          `;
-        } else {
-          html += `
-            <div class="product-card">
-              <div class="product-title">${product.brand}</div>
-              <div class="product-desc">${product.desc}</div>
-              <div class="product-price">${product.price}</div>
-            </div>
-          `;
-        }
-      });
-      html += `</div>`;
-      mainContent.innerHTML = html;
+    /**
+     * Render empty state when no products found
+     */
+    function renderEmptyState() {
+      return `
+        <div class="empty-state">
+          <div class="empty-state-icon">🔍</div>
+          <h3 class="empty-state-title" data-i18n="noProductsFound">${t('noProductsFound')}</h3>
+          <p class="empty-state-text" data-i18n="tryDifferentFilters">${t('tryDifferentFilters')}</p>
+        </div>
+      `;
     }
 
-    // Function to render Pencil products
-    function renderPencilProducts() {
-      let html = `<h2>Pencil Brands</h2>
-        <div class="product-grid">`;
-      pencilProducts.forEach(product => {
-        html += `
-          <div class="product-card" style="cursor:pointer" onclick="window.location.href='product-detail.html?brand=${encodeURIComponent(product.brand)}'">
-            <div class="product-title">${product.brand}</div>
-            <div class="product-desc">${product.desc}</div>
-            <div class="product-price">${product.price}</div>
-          </div>
-        `;
-      });
-      html += `</div>`;
-      mainContent.innerHTML = html;
-    }
-
-    // Function to render Notebook products
-    function renderNotebookProducts() {
-      let html = `<h2>Notebook Brands</h2>
-        <div class="product-grid">`;
-      notebookProducts.forEach(product => {
-        html += `
-          <div class="product-card" style="cursor:pointer" onclick="window.location.href='product-detail.html?brand=${encodeURIComponent(product.brand)}'">
-            <div class="product-title">${product.brand}</div>
-            <div class="product-desc">${product.desc}</div>
-            <div class="product-price">${product.price}</div>
-          </div>
-        `;
-      });
-      html += `</div>`;
-      mainContent.innerHTML = html;
-    }
-
-    // Function to render Sharpener products
-    function renderSharpenerProducts() {
-      let html = `<h2>Sharpener Brands</h2>
-        <div class="product-grid">`;
-      sharpenerProducts.forEach(product => {
-        html += `
-          <div class="product-card" style="cursor:pointer" onclick="window.location.href='product-detail.html?brand=${encodeURIComponent(product.brand)}'">
-            <div class="product-title">${product.brand}</div>
-            <div class="product-desc">${product.desc}</div>
-            <div class="product-price">${product.price}</div>
-          </div>
-        `;
-      });
-      html += `</div>`;
-      mainContent.innerHTML = html;
-    }
-
-    // Function to render Eraser products
-    function renderEraserProducts() {
-      let html = `<h2>Eraser Brands</h2>
-        <div class="product-grid">`;
-      eraserProducts.forEach(product => {
-        html += `
-          <div class="product-card" style="cursor:pointer" onclick="window.location.href='product-detail.html?brand=${encodeURIComponent(product.brand)}'">
-            <div class="product-title">${product.brand}</div>
-            <div class="product-desc">${product.desc}</div>
-            <div class="product-price">${product.price}</div>
-          </div>
-        `;
-      });
-      html += `</div>`;
-      mainContent.innerHTML = html;
-    }
-
-
-
-    // // Function to render placeholder for other products
-    // function renderPlaceholder(productName) {
-    //   mainContent.innerHTML = `
-    //     <h2>${productName}</h2>
-    //     <p>Product details coming soon</p>
-    //   `;
-    // }
-
-    // Handle navbar clicks
-    function handleNavbarClick(e) {
-      if (!e.target.classList.contains('navbar-item')) return;
-
-      // Remove 'active' from all, add to clicked
-      document.querySelectorAll('.navbar-item').forEach(item => {
-        item.classList.remove('active');
-      });
-      e.target.classList.add('active');
-
-      const product = e.target.getAttribute('data-product');
-      if (product === "Pen") {
-        renderPenProducts();
-      } if (product === "Pencil") {
-        renderPencilProducts();
-      } if (product === "Notebook") {
-        renderNotebookProducts();
-      } if (product === "Sharpener") {
-        renderSharpenerProducts();
-      } if (product === "Eraser") {
-        renderEraserProducts();
+    /**
+     * Render products to the grid
+     * @param {array} products - Array of products to render
+     */
+    function renderProducts(products) {
+      if (products.length === 0) {
+        productGrid.innerHTML = renderEmptyState();
       } else {
-        renderPlaceholder(product);
+        let html = '';
+        products.forEach((product, index) => {
+          html += renderProductCard(product);
+        });
+        productGrid.innerHTML = html;
+      }
+
+      // Update product count
+      productCount.textContent = products.length;
+
+      // Render active filter tags
+      renderActiveFilters();
+    }
+
+    // ========================================
+    // FILTER & SORT FUNCTIONS
+    // ========================================
+
+    /**
+     * Filter products by search query
+     * Case-insensitive name matching
+     * @param {array} products - Products to filter
+     * @returns {array} Filtered products
+     */
+    function filterBySearch(products) {
+      if (!filterState.searchQuery) return products;
+
+      const query = filterState.searchQuery.toLowerCase();
+      return products.filter(product =>
+        product.name.toLowerCase().includes(query) ||
+        product.description.toLowerCase().includes(query) ||
+        product.category.toLowerCase().includes(query)
+      );
+    }
+
+    /**
+     * Filter products by category
+     * @param {array} products - Products to filter
+     * @returns {array} Filtered products
+     */
+    function filterByCategory(products) {
+      if (filterState.category === 'All') return products;
+      return products.filter(product => product.category === filterState.category);
+    }
+
+    /**
+     * Filter products by price range
+     * @param {array} products - Products to filter
+     * @returns {array} Filtered products
+     */
+    function filterByPrice(products) {
+      return products.filter(product =>
+        product.price >= filterState.minPrice &&
+        product.price <= filterState.maxPrice
+      );
+    }
+
+    /**
+     * Sort products based on selected sort order
+     * @param {array} products - Products to sort
+     * @returns {array} Sorted products
+     */
+    function sortProducts(products) {
+      const sorted = [...products];
+
+      switch (filterState.sortBy) {
+        case 'price-low-high':
+          return sorted.sort((a, b) => a.price - b.price);
+        case 'price-high-low':
+          return sorted.sort((a, b) => b.price - a.price);
+        default:
+          return sorted; // Default order (by ID)
       }
     }
 
-    // Search functionality
+    /**
+     * Apply all filters and render results
+     * Main filtering function that chains all filters
+     */
+    function applyFilters() {
+      // Start with all products
+      let filteredProducts = [...allProducts];
+
+      // Apply filters in sequence
+      filteredProducts = filterBySearch(filteredProducts);
+      filteredProducts = filterByCategory(filteredProducts);
+      filteredProducts = filterByPrice(filteredProducts);
+
+      // Apply sorting
+      filteredProducts = sortProducts(filteredProducts);
+
+      // Render the filtered products
+      renderProducts(filteredProducts);
+    }
+
+    /**
+     * Reset all filters to default values
+     */
+    function resetFilters() {
+      // Reset filter state
+      filterState = {
+        searchQuery: '',
+        category: 'All',
+        minPrice: 0,
+        maxPrice: 150,
+        sortBy: 'default'
+      };
+
+      // Reset UI inputs
+      searchInput.value = '';
+      minPriceInput.value = '';
+      maxPriceInput.value = '';
+      priceSlider.value = 150;
+      sortSelect.value = 'default';
+
+      // Update displays
+      updatePriceDisplay();
+      renderCategoryList();
+      renderCategoryNavbar();
+
+      // Apply filters (show all products)
+      applyFilters();
+
+      // Close mobile filter if open
+      closeMobileFilter();
+    }
+
+    // ========================================
+    // LIVE SEARCH FUNCTIONALITY
+    // ========================================
+
+    /**
+     * Show live search suggestions as user types
+     * @param {string} query - Search query
+     */
+    function showSearchSuggestions(query) {
+      if (!query) {
+        searchSuggestions.classList.remove('show');
+        return;
+      }
+
+      const lowerQuery = query.toLowerCase();
+      const matches = allProducts.filter(product =>
+        product.name.toLowerCase().includes(lowerQuery) ||
+        product.description.toLowerCase().includes(lowerQuery) ||
+        product.category.toLowerCase().includes(lowerQuery)
+      ).slice(0, 6); // Limit to 6 suggestions
+
+      if (matches.length === 0) {
+        searchSuggestions.classList.remove('show');
+        return;
+      }
+
+      let html = '';
+      matches.forEach(product => {
+        html += `
+          <div class="suggestion-item" data-id="${product.id}" data-name="${product.name}">
+            <span class="product-icon">${product.icon}</span>
+            <div class="product-info">
+              <div class="product-name">${product.name}</div>
+              <div class="product-category">${product.category}</div>
+            </div>
+            <span class="product-price">₹${product.price}</span>
+          </div>
+        `;
+      });
+
+      searchSuggestions.innerHTML = html;
+      searchSuggestions.classList.add('show');
+
+      // Add click listeners to suggestions
+      document.querySelectorAll('.suggestion-item').forEach(item => {
+        item.addEventListener('click', () => {
+          const productName = item.dataset.name;
+          searchInput.value = productName;
+          filterState.searchQuery = productName;
+          searchSuggestions.classList.remove('show');
+          applyFilters();
+        });
+      });
+    }
+
+    /**
+     * Handle search input
+     */
     function handleSearch() {
-      const value = document.getElementById('search-input').value.trim().toLowerCase();
-      // Remove 'active' from all navbar items
-      document.querySelectorAll('.navbar-item').forEach(item => item.classList.remove('active'));
-      if (value === 'pen') {
-        renderPenProducts();
-        document.querySelector('.navbar-item[data-product="Pen"]').classList.add('active');
-      } else if (value === 'pencil') {
-        renderPencilProducts();
-        document.querySelector('.navbar-item[data-product="Pencil"]').classList.add('active');
-      } else if (value === 'notebook') {
-        renderNotebookProducts();
-        document.querySelector('.navbar-item[data-product="Notebook"]').classList.add('active');
-      } else if (value === 'sharpener') {
-        renderSharpenerProducts();
-        document.querySelector('.navbar-item[data-product="Sharpener"]').classList.add('active');
-      } else if (value === 'eraser') {
-        renderEraserProducts();
-        document.querySelector('.navbar-item[data-product="Eraser"]').classList.add('active');
-      } else if (value === '') {
-        renderWelcome();
-      } else {
-        mainContent.innerHTML = `<h2 data-i18n="productNotFound">${t('productNotFound')}</h2><p data-i18n="searchSuggestion">${t('searchSuggestion')}</p>`;
-      }
+      filterState.searchQuery = searchInput.value.trim();
+      searchSuggestions.classList.remove('show');
+      applyFilters();
     }
 
-    // Search button click
-    document.getElementById('search-btn').addEventListener('click', handleSearch);
-    // Enter key in input
-    document.getElementById('search-input').addEventListener('keydown', function(e) {
-      if (e.key === 'Enter') handleSearch();
+    // ========================================
+    // PRICE SLIDER FUNCTIONS
+    // ========================================
+
+    /**
+     * Update price display text
+     */
+    function updatePriceDisplay() {
+      priceMinDisplay.textContent = `₹${filterState.minPrice}`;
+      priceMaxDisplay.textContent = `₹${filterState.maxPrice}`;
+    }
+
+    // ========================================
+    // MOBILE FILTER FUNCTIONS
+    // ========================================
+
+    function openMobileFilter() {
+      filterSidebar.classList.add('show');
+      filterOverlay.classList.add('show');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeMobileFilter() {
+      filterSidebar.classList.remove('show');
+      filterOverlay.classList.remove('show');
+      document.body.style.overflow = '';
+    }
+
+    // ========================================
+    // EVENT LISTENERS
+    // ========================================
+
+    // Live search as user types
+    searchInput.addEventListener('input', (e) => {
+      showSearchSuggestions(e.target.value);
     });
 
-    // Attach event listener to navbar
-    document.querySelector('.navbar-list').addEventListener('click', handleNavbarClick);
+    // Search on button click
+    searchBtn.addEventListener('click', handleSearch);
 
-    // On page load, show welcome text
-    renderWelcome();
+    // Search on Enter key
+    searchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        handleSearch();
+      }
+    });
 
-    // Optionally, you can make "Pen" selected by default and show its products:
-    // renderPenProducts();
+    // Hide suggestions when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!searchInput.contains(e.target) && !searchSuggestions.contains(e.target)) {
+        searchSuggestions.classList.remove('show');
+      }
+    });
+
+    // Price input changes
+    minPriceInput.addEventListener('input', (e) => {
+      filterState.minPrice = parseInt(e.target.value) || 0;
+      updatePriceDisplay();
+    });
+
+    maxPriceInput.addEventListener('input', (e) => {
+      filterState.maxPrice = parseInt(e.target.value) || 150;
+      updatePriceDisplay();
+    });
+
+    // Price slider change
+    priceSlider.addEventListener('input', (e) => {
+      filterState.maxPrice = parseInt(e.target.value);
+      maxPriceInput.value = e.target.value;
+      updatePriceDisplay();
+    });
+
+    // Sort select change - Apply immediately
+    sortSelect.addEventListener('change', (e) => {
+      filterState.sortBy = e.target.value;
+      applyFilters();
+    });
+
+    // Apply filters button
+    applyFiltersBtn.addEventListener('click', () => {
+      applyFilters();
+      closeMobileFilter();
+    });
+
+    // Reset filters button
+    resetFiltersBtn.addEventListener('click', resetFilters);
+
+    // Clear all button
+    clearAllBtn.addEventListener('click', resetFilters);
+
+    // Mobile filter toggle
+    mobileFilterToggle.addEventListener('click', openMobileFilter);
+
+    // Filter overlay click to close
+    filterOverlay.addEventListener('click', closeMobileFilter);
 
     // ========================================
     // CART BADGE MANAGEMENT
@@ -718,9 +1703,6 @@
       }
     }
 
-    // Initialize cart badge on page load
-    updateCartBadge();
-
     // ========================================
     // AUTH STATE MANAGEMENT
     // ========================================
@@ -731,7 +1713,6 @@
     const userAvatar = document.getElementById('userAvatar');
     const userName = document.getElementById('userName');
 
-    // Get user initials for avatar
     function getInitials(name) {
       if (!name) return 'U';
       const parts = name.trim().split(' ');
@@ -741,23 +1722,18 @@
       return parts[0][0].toUpperCase();
     }
 
-    // Update UI based on auth state
     function updateAuthUI() {
       const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
       const activeUser = JSON.parse(localStorage.getItem('activeUser'));
 
       if (isLoggedIn && activeUser) {
-        // User is logged in - show profile, hide login/signup
         loginBtn.classList.add('hidden');
         signupBtn.classList.add('hidden');
         profileBtn.classList.remove('hidden');
         logoutBtn.classList.remove('hidden');
-
-        // Update user info display
         userAvatar.textContent = getInitials(activeUser.name);
-        userName.textContent = activeUser.name.split(' ')[0]; // First name only
+        userName.textContent = activeUser.name.split(' ')[0];
       } else {
-        // User is not logged in - show login/signup, hide profile
         loginBtn.classList.remove('hidden');
         signupBtn.classList.remove('hidden');
         profileBtn.classList.add('hidden');
@@ -765,7 +1741,6 @@
       }
     }
 
-    // Handle logout
     function handleLogout() {
       localStorage.removeItem('isLoggedIn');
       localStorage.removeItem('activeUser');
@@ -773,30 +1748,41 @@
       updateAuthUI();
     }
 
-    // Event listener for logout button
     logoutBtn.addEventListener('click', handleLogout);
-
-    // Initialize auth UI on page load
-    updateAuthUI();
 
     // ========================================
     // LANGUAGE CHANGE LISTENER
     // ========================================
-    // Re-render welcome text when language changes
     window.addEventListener('languageChanged', function() {
-      // Check which view is currently active and re-render
-      const activeItem = document.querySelector('.navbar-item.active');
-      if (activeItem) {
-        const product = activeItem.getAttribute('data-product');
-        if (product === "Pen") renderPenProducts();
-        else if (product === "Pencil") renderPencilProducts();
-        else if (product === "Notebook") renderNotebookProducts();
-        else if (product === "Sharpener") renderSharpenerProducts();
-        else if (product === "Eraser") renderEraserProducts();
-      } else {
-        renderWelcome();
-      }
+      // Re-render all components with new translations
+      renderCategoryList();
+      renderCategoryNavbar();
+      applyFilters();
     });
+
+    // ========================================
+    // INITIALIZATION
+    // ========================================
+    function init() {
+      // Render category filters
+      renderCategoryList();
+      renderCategoryNavbar();
+
+      // Update price display
+      updatePriceDisplay();
+
+      // Initial product render (show all)
+      applyFilters();
+
+      // Update cart badge
+      updateCartBadge();
+
+      // Update auth UI
+      updateAuthUI();
+    }
+
+    // Run initialization
+    init();
   </script>
 </body>
 </html>
