@@ -245,6 +245,253 @@
         padding: 0.7rem 0.5rem;
       }
     }
+
+    /* ========================================
+       ORDER TRACKING PROGRESS BAR STYLES
+       ======================================== */
+    .tracking-section {
+      width: 100%;
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px dashed var(--border-color);
+    }
+
+    .tracking-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--accent-color);
+      margin-bottom: 1.5rem;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    /* Progress Bar Container */
+    .progress-tracker {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+      margin: 0 auto;
+      max-width: 100%;
+      padding: 0 10px;
+    }
+
+    /* Progress Line (Background) */
+    .progress-tracker::before {
+      content: '';
+      position: absolute;
+      top: 20px;
+      left: 30px;
+      right: 30px;
+      height: 4px;
+      background: var(--border-color);
+      border-radius: 2px;
+      z-index: 1;
+    }
+
+    /* Progress Line (Filled) */
+    .progress-line {
+      position: absolute;
+      top: 20px;
+      left: 30px;
+      height: 4px;
+      background: linear-gradient(90deg, #2ecc40, #27ae60);
+      border-radius: 2px;
+      z-index: 2;
+      transition: width 0.5s ease;
+      width: 0%;
+    }
+
+    /* Individual Step */
+    .progress-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      z-index: 3;
+      flex: 1;
+    }
+
+    /* Step Circle */
+    .step-circle {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--bg-secondary);
+      border: 3px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .step-circle .step-icon {
+      display: block;
+    }
+
+    .step-circle .check-icon {
+      display: none;
+      color: #fff;
+      font-size: 1.1rem;
+    }
+
+    /* Step Label */
+    .step-label {
+      margin-top: 0.6rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-align: center;
+      font-weight: 500;
+      max-width: 70px;
+      line-height: 1.2;
+      transition: color 0.3s ease;
+    }
+
+    /* Step Time */
+    .step-time {
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      margin-top: 0.2rem;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    /* Completed Step */
+    .progress-step.completed .step-circle {
+      background: linear-gradient(135deg, #2ecc40, #27ae60);
+      border-color: #27ae60;
+      animation: stepComplete 0.4s ease;
+    }
+
+    .progress-step.completed .step-circle .step-icon {
+      display: none;
+    }
+
+    .progress-step.completed .step-circle .check-icon {
+      display: block;
+    }
+
+    .progress-step.completed .step-label {
+      color: #27ae60;
+      font-weight: 600;
+    }
+
+    .progress-step.completed .step-time {
+      opacity: 1;
+    }
+
+    /* Current/Active Step */
+    .progress-step.active .step-circle {
+      background: var(--accent-color);
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 4px rgba(0, 116, 217, 0.2);
+      animation: pulse-step 2s infinite;
+    }
+
+    .progress-step.active .step-circle .step-icon {
+      filter: brightness(0) invert(1);
+    }
+
+    .progress-step.active .step-label {
+      color: var(--accent-color);
+      font-weight: 700;
+    }
+
+    .progress-step.active .step-time {
+      opacity: 1;
+      color: var(--accent-color);
+    }
+
+    /* Animations */
+    @keyframes stepComplete {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes pulse-step {
+      0%, 100% { box-shadow: 0 0 0 4px rgba(0, 116, 217, 0.2); }
+      50% { box-shadow: 0 0 0 8px rgba(0, 116, 217, 0.1); }
+    }
+
+    /* Status Message */
+    .status-message {
+      text-align: center;
+      margin-top: 1.5rem;
+      padding: 0.8rem 1rem;
+      background: var(--accent-light);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      color: var(--accent-color);
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .status-message.delivered {
+      background: rgba(46, 204, 64, 0.1);
+      color: #27ae60;
+    }
+
+    .status-message .loading-spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid currentColor;
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Estimated Delivery */
+    .estimated-delivery {
+      text-align: center;
+      margin-top: 1rem;
+      padding: 0.6rem 1rem;
+      background: var(--bg-input);
+      border-radius: 6px;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    .estimated-delivery strong {
+      color: var(--text-primary);
+    }
+
+    /* Responsive */
+    @media (max-width: 500px) {
+      .progress-tracker::before {
+        left: 20px;
+        right: 20px;
+      }
+      .progress-line {
+        left: 20px;
+      }
+      .step-circle {
+        width: 36px;
+        height: 36px;
+        font-size: 1rem;
+      }
+      .step-label {
+        font-size: 0.65rem;
+        max-width: 55px;
+      }
+      .step-time {
+        font-size: 0.55rem;
+      }
+      .tracking-title {
+        font-size: 1rem;
+      }
+    }
   </style>
 </head>
 <body>
@@ -281,6 +528,71 @@
     <button class="download-btn" onclick="window.print()" data-i18n="downloadBill">Download Bill</button>
     <div class="otp-section" id="otp-section">
       <!-- OTP will be shown here -->
+    </div>
+
+    <!-- Order Tracking Progress Bar -->
+    <div class="tracking-section" id="trackingSection">
+      <div class="tracking-title">
+        <span>📦</span>
+        <span data-i18n="trackYourOrder">Track Your Order</span>
+      </div>
+
+      <!-- Progress Bar -->
+      <div class="progress-tracker">
+        <div class="progress-line" id="progressLine"></div>
+
+        <!-- Step 1: Order Placed -->
+        <div class="progress-step" id="step-placed" data-step="placed">
+          <div class="step-circle">
+            <span class="step-icon">📝</span>
+            <span class="check-icon">✓</span>
+          </div>
+          <span class="step-label" data-i18n="orderPlaced">Order Placed</span>
+          <span class="step-time" id="time-placed">--</span>
+        </div>
+
+        <!-- Step 2: Packed -->
+        <div class="progress-step" id="step-packed" data-step="packed">
+          <div class="step-circle">
+            <span class="step-icon">📦</span>
+            <span class="check-icon">✓</span>
+          </div>
+          <span class="step-label" data-i18n="packed">Packed</span>
+          <span class="step-time" id="time-packed">--</span>
+        </div>
+
+        <!-- Step 3: Out for Delivery -->
+        <div class="progress-step" id="step-out_for_delivery" data-step="out_for_delivery">
+          <div class="step-circle">
+            <span class="step-icon">🚚</span>
+            <span class="check-icon">✓</span>
+          </div>
+          <span class="step-label" data-i18n="outForDelivery">Out for Delivery</span>
+          <span class="step-time" id="time-out_for_delivery">--</span>
+        </div>
+
+        <!-- Step 4: Delivered -->
+        <div class="progress-step" id="step-delivered" data-step="delivered">
+          <div class="step-circle">
+            <span class="step-icon">✅</span>
+            <span class="check-icon">✓</span>
+          </div>
+          <span class="step-label" data-i18n="delivered">Delivered</span>
+          <span class="step-time" id="time-delivered">--</span>
+        </div>
+      </div>
+
+      <!-- Status Message -->
+      <div class="status-message" id="statusMessage">
+        <span class="loading-spinner"></span>
+        <span id="statusText" data-i18n="orderBeingProcessed">Your order is being processed...</span>
+      </div>
+
+      <!-- Estimated Delivery -->
+      <div class="estimated-delivery" id="estimatedDelivery">
+        <span data-i18n="estimatedDelivery">Estimated Delivery:</span>
+        <strong id="deliveryDate">--</strong>
+      </div>
     </div>
   </div>
 
@@ -571,6 +883,435 @@
       }
     }
     initDarkMode();
+
+    // ========================================
+    // ORDER TRACKING SYSTEM
+    // ========================================
+
+    /**
+     * Order status stages in order
+     * Each stage has: key, label, icon, and message
+     */
+    const ORDER_STAGES = [
+      { key: 'placed', label: 'Order Placed', icon: '📝', message: 'Your order has been placed successfully!' },
+      { key: 'packed', label: 'Packed', icon: '📦', message: 'Your order is being packed...' },
+      { key: 'out_for_delivery', label: 'Out for Delivery', icon: '🚚', message: 'Your order is out for delivery!' },
+      { key: 'delivered', label: 'Delivered', icon: '✅', message: 'Your order has been delivered!' }
+    ];
+
+    /**
+     * Auto-simulation intervals (in milliseconds)
+     * Demo mode: fast transitions for demonstration
+     */
+    const SIMULATION_INTERVALS = {
+      placed_to_packed: 10000,        // 10 seconds
+      packed_to_out_for_delivery: 10000, // 10 seconds (20 total)
+      out_for_delivery_to_delivered: 10000 // 10 seconds (30 total)
+    };
+
+    /**
+     * Get order tracking data from localStorage
+     * @returns {object} Order tracking data
+     */
+    function getOrderTracking() {
+      return JSON.parse(localStorage.getItem('orderTracking')) || {};
+    }
+
+    /**
+     * Save order tracking data to localStorage
+     * @param {object} trackingData - Tracking data object
+     */
+    function saveOrderTracking(trackingData) {
+      localStorage.setItem('orderTracking', JSON.stringify(trackingData));
+    }
+
+    /**
+     * Get tracking info for specific order
+     * @param {string} orderId - Order ID
+     * @returns {object|null} Order tracking info
+     */
+    function getOrderTrackingInfo(orderId) {
+      const tracking = getOrderTracking();
+      return tracking[orderId] || null;
+    }
+
+    /**
+     * Initialize order tracking for new order
+     * @param {string} orderId - Order ID
+     */
+    function initializeOrderTracking(orderId) {
+      const tracking = getOrderTracking();
+
+      // Only initialize if not already tracked
+      if (!tracking[orderId]) {
+        tracking[orderId] = {
+          status: 'placed',
+          lastUpdated: new Date().toISOString(),
+          statusHistory: [
+            {
+              status: 'placed',
+              timestamp: new Date().toISOString()
+            }
+          ],
+          simulationStarted: false
+        };
+        saveOrderTracking(tracking);
+        console.log('Order tracking initialized for:', orderId);
+      }
+
+      return tracking[orderId];
+    }
+
+    /**
+     * Update order status
+     * @param {string} orderId - Order ID
+     * @param {string} newStatus - New status key
+     */
+    function updateOrderStatus(orderId, newStatus) {
+      const tracking = getOrderTracking();
+
+      if (!tracking[orderId]) {
+        console.warn('Order not found in tracking:', orderId);
+        return;
+      }
+
+      // Don't update if already at or past this status
+      const currentStageIndex = ORDER_STAGES.findIndex(s => s.key === tracking[orderId].status);
+      const newStageIndex = ORDER_STAGES.findIndex(s => s.key === newStatus);
+
+      if (newStageIndex <= currentStageIndex) {
+        return;
+      }
+
+      tracking[orderId].status = newStatus;
+      tracking[orderId].lastUpdated = new Date().toISOString();
+      tracking[orderId].statusHistory.push({
+        status: newStatus,
+        timestamp: new Date().toISOString()
+      });
+
+      saveOrderTracking(tracking);
+
+      // Also update order history
+      updateOrderHistoryStatus(orderId, newStatus);
+
+      // Update UI
+      updateTrackingUI(orderId);
+
+      console.log('Order status updated:', orderId, '->', newStatus);
+    }
+
+    /**
+     * Update order status in order history
+     * @param {string} orderId - Order ID
+     * @param {string} newStatus - New status
+     */
+    function updateOrderHistoryStatus(orderId, newStatus) {
+      const orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
+      const orderIndex = orderHistory.findIndex(o => o.orderId === orderId);
+
+      if (orderIndex !== -1) {
+        // Map status to display text
+        const statusMap = {
+          'placed': 'Placed',
+          'packed': 'Packed',
+          'out_for_delivery': 'Out for Delivery',
+          'delivered': 'Delivered'
+        };
+        orderHistory[orderIndex].orderStatus = statusMap[newStatus] || newStatus;
+        localStorage.setItem('orderHistory', JSON.stringify(orderHistory));
+      }
+    }
+
+    /**
+     * Get stage index by status key
+     * @param {string} status - Status key
+     * @returns {number} Stage index
+     */
+    function getStageIndex(status) {
+      return ORDER_STAGES.findIndex(s => s.key === status);
+    }
+
+    /**
+     * Calculate progress line width based on current stage
+     * @param {number} stageIndex - Current stage index
+     * @returns {string} CSS width value
+     */
+    function calculateProgressWidth(stageIndex) {
+      if (stageIndex <= 0) return '0%';
+      if (stageIndex >= ORDER_STAGES.length - 1) return '100%';
+      // Calculate percentage based on completed steps
+      const percentage = (stageIndex / (ORDER_STAGES.length - 1)) * 100;
+      return `${percentage}%`;
+    }
+
+    /**
+     * Format timestamp to time string
+     * @param {string} timestamp - ISO timestamp
+     * @returns {string} Formatted time
+     */
+    function formatTrackingTime(timestamp) {
+      if (!timestamp) return '--';
+      const date = new Date(timestamp);
+      return date.toLocaleTimeString('en-US', {
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+
+    /**
+     * Update tracking UI based on order status
+     * @param {string} orderId - Order ID
+     */
+    function updateTrackingUI(orderId) {
+      const trackingInfo = getOrderTrackingInfo(orderId);
+      if (!trackingInfo) return;
+
+      const currentStageIndex = getStageIndex(trackingInfo.status);
+      const progressLine = document.getElementById('progressLine');
+      const statusMessage = document.getElementById('statusMessage');
+      const statusText = document.getElementById('statusText');
+
+      // Update progress line width
+      progressLine.style.width = calculateProgressWidth(currentStageIndex);
+
+      // Update each step
+      ORDER_STAGES.forEach((stage, index) => {
+        const stepElement = document.getElementById(`step-${stage.key}`);
+        const timeElement = document.getElementById(`time-${stage.key}`);
+
+        if (!stepElement) return;
+
+        // Remove all state classes
+        stepElement.classList.remove('completed', 'active');
+
+        // Find timestamp for this stage
+        const historyEntry = trackingInfo.statusHistory.find(h => h.status === stage.key);
+
+        if (index < currentStageIndex) {
+          // Completed step
+          stepElement.classList.add('completed');
+          if (historyEntry && timeElement) {
+            timeElement.textContent = formatTrackingTime(historyEntry.timestamp);
+          }
+        } else if (index === currentStageIndex) {
+          // Current/Active step
+          stepElement.classList.add('active');
+          if (historyEntry && timeElement) {
+            timeElement.textContent = formatTrackingTime(historyEntry.timestamp);
+          }
+        }
+      });
+
+      // Update status message
+      const currentStage = ORDER_STAGES[currentStageIndex];
+      if (currentStage) {
+        statusText.textContent = currentStage.message;
+
+        // Update message style for delivered status
+        if (currentStage.key === 'delivered') {
+          statusMessage.classList.add('delivered');
+          statusMessage.innerHTML = `<span>🎉</span><span id="statusText">${currentStage.message}</span>`;
+        } else {
+          statusMessage.classList.remove('delivered');
+        }
+      }
+
+      // Update estimated delivery
+      updateEstimatedDelivery(trackingInfo.status);
+    }
+
+    /**
+     * Update estimated delivery display
+     * @param {string} currentStatus - Current order status
+     */
+    function updateEstimatedDelivery(currentStatus) {
+      const deliveryDateEl = document.getElementById('deliveryDate');
+      const estimatedEl = document.getElementById('estimatedDelivery');
+
+      if (currentStatus === 'delivered') {
+        estimatedEl.innerHTML = '<span style="color: #27ae60;">✅ Order Delivered Successfully!</span>';
+      } else {
+        // Calculate estimated delivery (demo: today or tomorrow)
+        const now = new Date();
+        const delivery = new Date(now);
+        delivery.setHours(delivery.getHours() + 2); // Add 2 hours for demo
+
+        const options = { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+        deliveryDateEl.textContent = delivery.toLocaleDateString('en-US', options);
+      }
+    }
+
+    /**
+     * Start auto-simulation of order status updates
+     * @param {string} orderId - Order ID
+     */
+    function startStatusSimulation(orderId) {
+      const tracking = getOrderTracking();
+
+      if (!tracking[orderId]) {
+        console.warn('Cannot start simulation - order not found:', orderId);
+        return;
+      }
+
+      // Check if simulation already started
+      if (tracking[orderId].simulationStarted) {
+        console.log('Simulation already started for order:', orderId);
+        return;
+      }
+
+      // Mark simulation as started
+      tracking[orderId].simulationStarted = true;
+      saveOrderTracking(tracking);
+
+      console.log('Starting status simulation for order:', orderId);
+
+      // Get current status
+      const currentStatus = tracking[orderId].status;
+      const currentIndex = getStageIndex(currentStatus);
+
+      // Schedule remaining transitions
+      let delay = 0;
+
+      // Transition to Packed
+      if (currentIndex < 1) {
+        delay = SIMULATION_INTERVALS.placed_to_packed;
+        setTimeout(() => {
+          updateOrderStatus(orderId, 'packed');
+        }, delay);
+      }
+
+      // Transition to Out for Delivery
+      if (currentIndex < 2) {
+        delay = currentIndex < 1
+          ? SIMULATION_INTERVALS.placed_to_packed + SIMULATION_INTERVALS.packed_to_out_for_delivery
+          : SIMULATION_INTERVALS.packed_to_out_for_delivery;
+        setTimeout(() => {
+          updateOrderStatus(orderId, 'out_for_delivery');
+        }, delay);
+      }
+
+      // Transition to Delivered
+      if (currentIndex < 3) {
+        delay = currentIndex < 1
+          ? SIMULATION_INTERVALS.placed_to_packed + SIMULATION_INTERVALS.packed_to_out_for_delivery + SIMULATION_INTERVALS.out_for_delivery_to_delivered
+          : currentIndex < 2
+            ? SIMULATION_INTERVALS.packed_to_out_for_delivery + SIMULATION_INTERVALS.out_for_delivery_to_delivered
+            : SIMULATION_INTERVALS.out_for_delivery_to_delivered;
+        setTimeout(() => {
+          updateOrderStatus(orderId, 'delivered');
+        }, delay);
+      }
+    }
+
+    /**
+     * Resume simulation based on elapsed time
+     * Handles page reload - calculates what status should be based on time elapsed
+     * @param {string} orderId - Order ID
+     */
+    function resumeSimulation(orderId) {
+      const trackingInfo = getOrderTrackingInfo(orderId);
+      if (!trackingInfo || !trackingInfo.simulationStarted) return;
+
+      // Get time since order was placed
+      const placedEntry = trackingInfo.statusHistory.find(h => h.status === 'placed');
+      if (!placedEntry) return;
+
+      const placedTime = new Date(placedEntry.timestamp).getTime();
+      const now = Date.now();
+      const elapsed = now - placedTime;
+
+      // Calculate what status should be based on elapsed time
+      let expectedStatus = 'placed';
+      let totalTime = 0;
+
+      totalTime += SIMULATION_INTERVALS.placed_to_packed;
+      if (elapsed >= totalTime) expectedStatus = 'packed';
+
+      totalTime += SIMULATION_INTERVALS.packed_to_out_for_delivery;
+      if (elapsed >= totalTime) expectedStatus = 'out_for_delivery';
+
+      totalTime += SIMULATION_INTERVALS.out_for_delivery_to_delivered;
+      if (elapsed >= totalTime) expectedStatus = 'delivered';
+
+      // Update to expected status if different
+      const currentIndex = getStageIndex(trackingInfo.status);
+      const expectedIndex = getStageIndex(expectedStatus);
+
+      if (expectedIndex > currentIndex) {
+        // Fast-forward through missed statuses
+        for (let i = currentIndex + 1; i <= expectedIndex; i++) {
+          updateOrderStatus(orderId, ORDER_STAGES[i].key);
+        }
+      }
+
+      // Schedule remaining transitions
+      if (expectedStatus !== 'delivered') {
+        const currentStageIndex = getStageIndex(expectedStatus);
+        let remainingDelay = 0;
+
+        if (currentStageIndex === 0) {
+          // Still at placed - schedule all
+          remainingDelay = SIMULATION_INTERVALS.placed_to_packed - (elapsed % SIMULATION_INTERVALS.placed_to_packed);
+          setTimeout(() => updateOrderStatus(orderId, 'packed'), remainingDelay);
+
+          remainingDelay = SIMULATION_INTERVALS.placed_to_packed + SIMULATION_INTERVALS.packed_to_out_for_delivery - elapsed;
+          if (remainingDelay > 0) setTimeout(() => updateOrderStatus(orderId, 'out_for_delivery'), remainingDelay);
+
+          remainingDelay = SIMULATION_INTERVALS.placed_to_packed + SIMULATION_INTERVALS.packed_to_out_for_delivery + SIMULATION_INTERVALS.out_for_delivery_to_delivered - elapsed;
+          if (remainingDelay > 0) setTimeout(() => updateOrderStatus(orderId, 'delivered'), remainingDelay);
+        } else if (currentStageIndex === 1) {
+          // At packed - schedule remaining
+          const packedTime = SIMULATION_INTERVALS.placed_to_packed;
+          remainingDelay = packedTime + SIMULATION_INTERVALS.packed_to_out_for_delivery - elapsed;
+          if (remainingDelay > 0) setTimeout(() => updateOrderStatus(orderId, 'out_for_delivery'), remainingDelay);
+
+          remainingDelay = packedTime + SIMULATION_INTERVALS.packed_to_out_for_delivery + SIMULATION_INTERVALS.out_for_delivery_to_delivered - elapsed;
+          if (remainingDelay > 0) setTimeout(() => updateOrderStatus(orderId, 'delivered'), remainingDelay);
+        } else if (currentStageIndex === 2) {
+          // At out_for_delivery - schedule delivered
+          const outTime = SIMULATION_INTERVALS.placed_to_packed + SIMULATION_INTERVALS.packed_to_out_for_delivery;
+          remainingDelay = outTime + SIMULATION_INTERVALS.out_for_delivery_to_delivered - elapsed;
+          if (remainingDelay > 0) setTimeout(() => updateOrderStatus(orderId, 'delivered'), remainingDelay);
+        }
+      }
+    }
+
+    /**
+     * Initialize order tracking on page load
+     */
+    function initOrderTracking() {
+      // Check if we have order details
+      if (!orderDetails.product && (!orderDetails.items || orderDetails.items.length === 0)) {
+        // Hide tracking section if no order
+        const trackingSection = document.getElementById('trackingSection');
+        if (trackingSection) {
+          trackingSection.style.display = 'none';
+        }
+        return;
+      }
+
+      // Initialize tracking for this order
+      const trackingInfo = initializeOrderTracking(orderNumber);
+
+      // Update UI with current status
+      updateTrackingUI(orderNumber);
+
+      // Start or resume simulation
+      if (!trackingInfo.simulationStarted) {
+        startStatusSimulation(orderNumber);
+      } else {
+        resumeSimulation(orderNumber);
+      }
+    }
+
+    // Initialize order tracking
+    initOrderTracking();
+
+    // Re-render on language change
+    window.addEventListener('languageChanged', function() {
+      updateTrackingUI(orderNumber);
+    });
   </script>
 </body>
 </html>

@@ -1331,6 +1331,338 @@
         grid-template-columns: 1fr;
       }
     }
+
+    /* ========================================
+       ORDER TRACKING MODAL STYLES
+       ======================================== */
+    .tracking-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1003;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+    }
+
+    .tracking-modal.show {
+      display: flex;
+    }
+
+    .tracking-modal-content {
+      background: var(--bg-card);
+      border-radius: 12px;
+      max-width: 550px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      animation: modalSlide 0.3s ease;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+
+    .tracking-modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+      background: linear-gradient(135deg, #0074d9 0%, #005fa3 100%);
+      color: #fff;
+      border-radius: 12px 12px 0 0;
+    }
+
+    .tracking-modal-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .tracking-modal-close {
+      background: rgba(255,255,255,0.2);
+      border: none;
+      font-size: 1.3rem;
+      color: #fff;
+      cursor: pointer;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+
+    .tracking-modal-close:hover {
+      background: rgba(255,255,255,0.3);
+    }
+
+    .tracking-modal-body {
+      padding: 1.5rem;
+    }
+
+    .tracking-order-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px dashed var(--border-color);
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .tracking-order-id {
+      font-weight: 700;
+      color: var(--accent-color);
+      font-size: 1.1rem;
+    }
+
+    .tracking-order-date {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    /* Progress Bar in Modal */
+    .modal-progress-tracker {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+      margin: 1.5rem 0;
+      padding: 0 5px;
+    }
+
+    .modal-progress-tracker::before {
+      content: '';
+      position: absolute;
+      top: 22px;
+      left: 25px;
+      right: 25px;
+      height: 4px;
+      background: var(--border-color);
+      border-radius: 2px;
+      z-index: 1;
+    }
+
+    .modal-progress-line {
+      position: absolute;
+      top: 22px;
+      left: 25px;
+      height: 4px;
+      background: linear-gradient(90deg, #2ecc40, #27ae60);
+      border-radius: 2px;
+      z-index: 2;
+      transition: width 0.5s ease;
+      width: 0%;
+    }
+
+    .modal-progress-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      z-index: 3;
+      flex: 1;
+    }
+
+    .modal-step-circle {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--bg-secondary);
+      border: 3px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      transition: all 0.3s ease;
+    }
+
+    .modal-step-circle .step-icon {
+      display: block;
+    }
+
+    .modal-step-circle .check-icon {
+      display: none;
+      color: #fff;
+      font-size: 1.2rem;
+    }
+
+    .modal-step-label {
+      margin-top: 0.6rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-align: center;
+      font-weight: 500;
+      max-width: 75px;
+      line-height: 1.3;
+    }
+
+    .modal-step-time {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      margin-top: 0.3rem;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    /* Completed Step */
+    .modal-progress-step.completed .modal-step-circle {
+      background: linear-gradient(135deg, #2ecc40, #27ae60);
+      border-color: #27ae60;
+    }
+
+    .modal-progress-step.completed .modal-step-circle .step-icon {
+      display: none;
+    }
+
+    .modal-progress-step.completed .modal-step-circle .check-icon {
+      display: block;
+    }
+
+    .modal-progress-step.completed .modal-step-label {
+      color: #27ae60;
+      font-weight: 600;
+    }
+
+    .modal-progress-step.completed .modal-step-time {
+      opacity: 1;
+      color: #27ae60;
+    }
+
+    /* Active Step */
+    .modal-progress-step.active .modal-step-circle {
+      background: var(--accent-color);
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 4px rgba(0, 116, 217, 0.2);
+      animation: modal-pulse 2s infinite;
+    }
+
+    .modal-progress-step.active .modal-step-circle .step-icon {
+      filter: brightness(0) invert(1);
+    }
+
+    .modal-progress-step.active .modal-step-label {
+      color: var(--accent-color);
+      font-weight: 700;
+    }
+
+    .modal-progress-step.active .modal-step-time {
+      opacity: 1;
+      color: var(--accent-color);
+    }
+
+    @keyframes modal-pulse {
+      0%, 100% { box-shadow: 0 0 0 4px rgba(0, 116, 217, 0.2); }
+      50% { box-shadow: 0 0 0 8px rgba(0, 116, 217, 0.1); }
+    }
+
+    /* Status Details in Modal */
+    .tracking-status-details {
+      background: var(--bg-hover);
+      padding: 1rem 1.2rem;
+      border-radius: 8px;
+      margin-top: 1.5rem;
+    }
+
+    .tracking-current-status {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .status-icon-large {
+      font-size: 2rem;
+    }
+
+    .status-info h4 {
+      font-size: 1.1rem;
+      color: var(--text-primary);
+      margin-bottom: 0.2rem;
+    }
+
+    .status-info p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    .tracking-timeline {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .timeline-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 0.8rem;
+    }
+
+    .timeline-item {
+      display: flex;
+      gap: 0.8rem;
+      padding: 0.5rem 0;
+      font-size: 0.85rem;
+    }
+
+    .timeline-time {
+      color: var(--text-muted);
+      min-width: 70px;
+    }
+
+    .timeline-event {
+      color: var(--text-primary);
+    }
+
+    .timeline-event.current {
+      color: var(--accent-color);
+      font-weight: 600;
+    }
+
+    /* Track Order Button */
+    .btn-track-order {
+      background: linear-gradient(135deg, #0074d9 0%, #005fa3 100%);
+      color: #fff;
+      border: none;
+    }
+
+    .btn-track-order:hover {
+      background: linear-gradient(135deg, #005fa3 0%, #004080 100%);
+      transform: translateY(-1px);
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .modal-progress-tracker::before {
+        left: 15px;
+        right: 15px;
+      }
+      .modal-progress-line {
+        left: 15px;
+      }
+      .modal-step-circle {
+        width: 40px;
+        height: 40px;
+        font-size: 1.1rem;
+      }
+      .modal-step-label {
+        font-size: 0.7rem;
+        max-width: 60px;
+      }
+      .modal-step-time {
+        font-size: 0.6rem;
+      }
+      .tracking-modal-body {
+        padding: 1rem;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1478,6 +1810,90 @@
   <div class="invoice-modal" id="invoiceModal">
     <div class="invoice-content" id="invoiceContent">
       <!-- Invoice content will be injected here -->
+    </div>
+  </div>
+
+  <!-- Order Tracking Modal -->
+  <div class="tracking-modal" id="trackingModal">
+    <div class="tracking-modal-content">
+      <div class="tracking-modal-header">
+        <h3 class="tracking-modal-title">
+          <span>📦</span>
+          <span data-i18n="trackOrder">Track Order</span>
+        </h3>
+        <button class="tracking-modal-close" id="closeTrackingModal">&times;</button>
+      </div>
+      <div class="tracking-modal-body">
+        <!-- Order Info -->
+        <div class="tracking-order-info">
+          <span class="tracking-order-id" id="trackingOrderId">OD123456</span>
+          <span class="tracking-order-date" id="trackingOrderDate">Jan 15, 2024</span>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="modal-progress-tracker">
+          <div class="modal-progress-line" id="modalProgressLine"></div>
+
+          <!-- Step 1: Order Placed -->
+          <div class="modal-progress-step" id="modal-step-placed">
+            <div class="modal-step-circle">
+              <span class="step-icon">📝</span>
+              <span class="check-icon">✓</span>
+            </div>
+            <span class="modal-step-label" data-i18n="orderPlaced">Order Placed</span>
+            <span class="modal-step-time" id="modal-time-placed">--</span>
+          </div>
+
+          <!-- Step 2: Packed -->
+          <div class="modal-progress-step" id="modal-step-packed">
+            <div class="modal-step-circle">
+              <span class="step-icon">📦</span>
+              <span class="check-icon">✓</span>
+            </div>
+            <span class="modal-step-label" data-i18n="packed">Packed</span>
+            <span class="modal-step-time" id="modal-time-packed">--</span>
+          </div>
+
+          <!-- Step 3: Out for Delivery -->
+          <div class="modal-progress-step" id="modal-step-out_for_delivery">
+            <div class="modal-step-circle">
+              <span class="step-icon">🚚</span>
+              <span class="check-icon">✓</span>
+            </div>
+            <span class="modal-step-label" data-i18n="outForDelivery">Out for Delivery</span>
+            <span class="modal-step-time" id="modal-time-out_for_delivery">--</span>
+          </div>
+
+          <!-- Step 4: Delivered -->
+          <div class="modal-progress-step" id="modal-step-delivered">
+            <div class="modal-step-circle">
+              <span class="step-icon">✅</span>
+              <span class="check-icon">✓</span>
+            </div>
+            <span class="modal-step-label" data-i18n="delivered">Delivered</span>
+            <span class="modal-step-time" id="modal-time-delivered">--</span>
+          </div>
+        </div>
+
+        <!-- Status Details -->
+        <div class="tracking-status-details">
+          <div class="tracking-current-status">
+            <span class="status-icon-large" id="trackingStatusIcon">📦</span>
+            <div class="status-info">
+              <h4 id="trackingStatusTitle">Processing</h4>
+              <p id="trackingStatusMessage">Your order is being processed</p>
+            </div>
+          </div>
+
+          <!-- Timeline -->
+          <div class="tracking-timeline">
+            <div class="timeline-title" data-i18n="statusHistory">Status History</div>
+            <div id="trackingTimeline">
+              <!-- Timeline items will be injected here -->
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -1840,6 +2256,10 @@
 
             <!-- Actions -->
             <div class="order-actions">
+              <button class="order-btn btn-track-order" onclick="showOrderTracking('${order.orderId}')">
+                <span>📍</span>
+                <span data-i18n="trackOrder">${t('trackOrder')}</span>
+              </button>
               <button class="order-btn btn-view-details" onclick="toggleOrderDetails(${index})">
                 <span>📋</span>
                 <span data-i18n="viewDetails">${t('viewDetails')}</span>
@@ -2433,6 +2853,283 @@
         themeToggle.addEventListener('click', toggleTheme);
       }
     }
+
+    // ========================================
+    // ORDER TRACKING FUNCTIONS
+    // ========================================
+
+    /**
+     * Order status stages
+     */
+    const ORDER_STAGES = [
+      { key: 'placed', label: 'Order Placed', icon: '📝', message: 'Your order has been placed successfully!' },
+      { key: 'packed', label: 'Packed', icon: '📦', message: 'Your order has been packed and is ready for shipping.' },
+      { key: 'out_for_delivery', label: 'Out for Delivery', icon: '🚚', message: 'Your order is out for delivery!' },
+      { key: 'delivered', label: 'Delivered', icon: '✅', message: 'Your order has been delivered successfully!' }
+    ];
+
+    /**
+     * Get order tracking data from localStorage
+     * @returns {object} Order tracking data
+     */
+    function getOrderTracking() {
+      return JSON.parse(localStorage.getItem('orderTracking')) || {};
+    }
+
+    /**
+     * Get tracking info for specific order
+     * @param {string} orderId - Order ID
+     * @returns {object|null} Order tracking info
+     */
+    function getOrderTrackingInfo(orderId) {
+      const tracking = getOrderTracking();
+      return tracking[orderId] || null;
+    }
+
+    /**
+     * Get stage index by status key
+     * @param {string} status - Status key
+     * @returns {number} Stage index
+     */
+    function getTrackingStageIndex(status) {
+      return ORDER_STAGES.findIndex(s => s.key === status);
+    }
+
+    /**
+     * Calculate progress line width
+     * @param {number} stageIndex - Current stage index
+     * @returns {string} CSS width value
+     */
+    function calculateProgressWidth(stageIndex) {
+      if (stageIndex <= 0) return '0%';
+      if (stageIndex >= ORDER_STAGES.length - 1) return '100%';
+      const percentage = (stageIndex / (ORDER_STAGES.length - 1)) * 100;
+      return `${percentage}%`;
+    }
+
+    /**
+     * Format timestamp for tracking display
+     * @param {string} timestamp - ISO timestamp
+     * @returns {string} Formatted time
+     */
+    function formatTrackingTime(timestamp) {
+      if (!timestamp) return '--';
+      const date = new Date(timestamp);
+      return date.toLocaleTimeString('en-US', {
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+
+    /**
+     * Format timestamp for timeline
+     * @param {string} timestamp - ISO timestamp
+     * @returns {string} Formatted date and time
+     */
+    function formatTimelineDateTime(timestamp) {
+      if (!timestamp) return '--';
+      const date = new Date(timestamp);
+      return date.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+
+    /**
+     * Get status label text
+     * @param {string} statusKey - Status key
+     * @returns {string} Status label
+     */
+    function getStatusLabel(statusKey) {
+      const stage = ORDER_STAGES.find(s => s.key === statusKey);
+      return stage ? stage.label : statusKey;
+    }
+
+    /**
+     * Show order tracking modal
+     * @param {string} orderId - Order ID
+     */
+    function showOrderTracking(orderId) {
+      const orders = getOrderHistory();
+      const order = orders.find(o => o.orderId === orderId);
+
+      if (!order) {
+        alert('Order not found');
+        return;
+      }
+
+      // Get tracking info
+      let trackingInfo = getOrderTrackingInfo(orderId);
+
+      // If no tracking info, create default based on order status
+      if (!trackingInfo) {
+        // Map order status to tracking status
+        const statusMap = {
+          'Placed': 'placed',
+          'Packed': 'packed',
+          'Out for Delivery': 'out_for_delivery',
+          'Delivered': 'delivered'
+        };
+
+        const currentStatus = statusMap[order.orderStatus] || 'placed';
+
+        trackingInfo = {
+          status: currentStatus,
+          lastUpdated: order.dateTime,
+          statusHistory: [
+            {
+              status: 'placed',
+              timestamp: order.dateTime
+            }
+          ]
+        };
+
+        // Add more history entries based on current status
+        const currentIndex = getTrackingStageIndex(currentStatus);
+        for (let i = 1; i <= currentIndex; i++) {
+          const stageTime = new Date(order.dateTime);
+          stageTime.setMinutes(stageTime.getMinutes() + (i * 10));
+          trackingInfo.statusHistory.push({
+            status: ORDER_STAGES[i].key,
+            timestamp: stageTime.toISOString()
+          });
+        }
+      }
+
+      // Update modal with order info
+      document.getElementById('trackingOrderId').textContent = orderId;
+      document.getElementById('trackingOrderDate').textContent = formatOrderDateTime(order.dateTime);
+
+      // Update progress bar
+      updateModalProgressBar(trackingInfo);
+
+      // Update status details
+      updateStatusDetails(trackingInfo);
+
+      // Update timeline
+      updateTimeline(trackingInfo);
+
+      // Show modal
+      document.getElementById('trackingModal').classList.add('show');
+    }
+
+    /**
+     * Update modal progress bar UI
+     * @param {object} trackingInfo - Tracking info object
+     */
+    function updateModalProgressBar(trackingInfo) {
+      const currentStageIndex = getTrackingStageIndex(trackingInfo.status);
+      const progressLine = document.getElementById('modalProgressLine');
+
+      // Update progress line width
+      progressLine.style.width = calculateProgressWidth(currentStageIndex);
+
+      // Update each step
+      ORDER_STAGES.forEach((stage, index) => {
+        const stepElement = document.getElementById(`modal-step-${stage.key}`);
+        const timeElement = document.getElementById(`modal-time-${stage.key}`);
+
+        if (!stepElement) return;
+
+        // Remove all state classes
+        stepElement.classList.remove('completed', 'active');
+
+        // Find timestamp for this stage
+        const historyEntry = trackingInfo.statusHistory.find(h => h.status === stage.key);
+
+        if (index < currentStageIndex) {
+          // Completed step
+          stepElement.classList.add('completed');
+          if (historyEntry && timeElement) {
+            timeElement.textContent = formatTrackingTime(historyEntry.timestamp);
+          }
+        } else if (index === currentStageIndex) {
+          // Current/Active step
+          stepElement.classList.add('active');
+          if (historyEntry && timeElement) {
+            timeElement.textContent = formatTrackingTime(historyEntry.timestamp);
+          }
+        } else {
+          // Pending step
+          if (timeElement) {
+            timeElement.textContent = '--';
+          }
+        }
+      });
+    }
+
+    /**
+     * Update status details section
+     * @param {object} trackingInfo - Tracking info object
+     */
+    function updateStatusDetails(trackingInfo) {
+      const currentStage = ORDER_STAGES.find(s => s.key === trackingInfo.status);
+
+      if (currentStage) {
+        document.getElementById('trackingStatusIcon').textContent = currentStage.icon;
+        document.getElementById('trackingStatusTitle').textContent = currentStage.label;
+        document.getElementById('trackingStatusMessage').textContent = currentStage.message;
+      }
+    }
+
+    /**
+     * Update timeline section
+     * @param {object} trackingInfo - Tracking info object
+     */
+    function updateTimeline(trackingInfo) {
+      const timelineContainer = document.getElementById('trackingTimeline');
+      const currentStageIndex = getTrackingStageIndex(trackingInfo.status);
+
+      let html = '';
+
+      // Show history in reverse order (newest first)
+      const sortedHistory = [...trackingInfo.statusHistory].reverse();
+
+      sortedHistory.forEach((entry, index) => {
+        const isCurrent = index === 0;
+        const stage = ORDER_STAGES.find(s => s.key === entry.status);
+
+        html += `
+          <div class="timeline-item">
+            <span class="timeline-time">${formatTimelineDateTime(entry.timestamp)}</span>
+            <span class="timeline-event ${isCurrent ? 'current' : ''}">
+              ${stage ? stage.icon : '📦'} ${getStatusLabel(entry.status)}
+            </span>
+          </div>
+        `;
+      });
+
+      timelineContainer.innerHTML = html;
+    }
+
+    /**
+     * Close tracking modal
+     */
+    function closeTrackingModal() {
+      document.getElementById('trackingModal').classList.remove('show');
+    }
+
+    // Tracking Modal Event Listeners
+    document.getElementById('closeTrackingModal').addEventListener('click', closeTrackingModal);
+
+    // Close tracking modal on overlay click
+    document.getElementById('trackingModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeTrackingModal();
+      }
+    });
+
+    // Close tracking modal on Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        const trackingModal = document.getElementById('trackingModal');
+        if (trackingModal.classList.contains('show')) {
+          closeTrackingModal();
+        }
+      }
+    });
 
     // Initialize
     initDarkMode();
