@@ -17,10 +17,11 @@ app.use(express.json());
 
 // Routes
 app.use("/api/auth", require("./routes/authRoutes"));
+app.use("/api/products", require("./routes/productRoutes"));
 
 // Health check
 app.get("/", (req, res) => {
-  res.json({ message: "E-Commerce Auth API is running" });
+  res.json({ message: "E-Commerce API is running" });
 });
 
 // 404 handler
