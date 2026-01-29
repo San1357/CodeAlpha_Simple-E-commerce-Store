@@ -6,47 +6,65 @@ const Product = require("../models/Product");
 // @access  Public
 const getProducts = async (req, res) => {
   try {
-    const { search, category, sort, page = 1, limit = 10 } = req.query;
+    const { search, category, min, max, sort, page = 1, limit = 10 } = req.query;
+
+    // Validate pagination params
+    const pageNum = Math.max(1, parseInt(page, 10) || 1);
+    const limitNum = Math.min(50, Math.max(1, parseInt(limit, 10) || 10));
+    const skip = (pageNum - 1) * limitNum;
 
     // Build query object
     const query = {};
 
-    // Search by product name (case-insensitive)
-    if (search) {
-      query.name = { $regex: search, $options: "i" };
+    // Search by product name (case-insensitive regex)
+    if (search && search.trim()) {
+      query.name = { $regex: search.trim(), $options: "i" };
     }
 
-    // Filter by category
-    if (category) {
-      query.category = { $regex: `^${category}$`, $options: "i" };
+    // Filter by exact category (case-insensitive)
+    if (category && category.trim()) {
+      query.category = { $regex: `^${category.trim()}$`, $options: "i" };
     }
 
-    // Sort options
+    // Price range filter
+    const minPrice = parseFloat(min);
+    const maxPrice = parseFloat(max);
+
+    if (!isNaN(minPrice) || !isNaN(maxPrice)) {
+      query.price = {};
+      if (!isNaN(minPrice) && minPrice >= 0) query.price.$gte = minPrice;
+      if (!isNaN(maxPrice) && maxPrice >= 0) query.price.$lte = maxPrice;
+
+      // Remove empty price filter
+      if (Object.keys(query.price).length === 0) delete query.price;
+    }
+
+    // Sort options: ?sort=price (asc), ?sort=-price (desc), ?sort=createdAt
     let sortOption = { createdAt: -1 }; // Default: newest first
-    if (sort === "price_low") sortOption = { price: 1 };
-    if (sort === "price_high") sortOption = { price: -1 };
-    if (sort === "rating") sortOption = { rating: -1 };
-    if (sort === "name") sortOption = { name: 1 };
 
-    // Pagination
-    const pageNum = parseInt(page, 10);
-    const limitNum = parseInt(limit, 10);
-    const skip = (pageNum - 1) * limitNum;
+    if (sort && sort.trim()) {
+      const sortField = sort.trim();
 
-    // Execute query
-    const products = await Product.find(query)
-      .sort(sortOption)
-      .skip(skip)
-      .limit(limitNum);
+      if (sortField.startsWith("-")) {
+        sortOption = { [sortField.substring(1)]: -1 };
+      } else {
+        sortOption = { [sortField]: 1 };
+      }
+    }
 
-    const total = await Product.countDocuments(query);
+    // Execute query with count in parallel
+    const [products, totalProducts] = await Promise.all([
+      Product.find(query).sort(sortOption).skip(skip).limit(limitNum),
+      Product.countDocuments(query),
+    ]);
+
+    const totalPages = Math.ceil(totalProducts / limitNum);
 
     res.status(200).json({
       success: true,
-      count: products.length,
-      total,
-      page: pageNum,
-      totalPages: Math.ceil(total / limitNum),
+      totalProducts,
+      currentPage: pageNum,
+      totalPages,
       products,
     });
   } catch (error) {
