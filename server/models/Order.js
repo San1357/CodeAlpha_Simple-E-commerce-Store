@@ -102,6 +102,10 @@ const orderSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  statusUpdatedAt: {
+    type: Date,
+    default: Date.now,
+  },
   createdAt: {
     type: Date,
     default: Date.now,
