@@ -224,13 +224,94 @@ const getAllOrders = async (req, res) => {
   }
 };
 
+// Allowed status flow (forward only)
+const STATUS_FLOW = ["Placed", "Packed", "Out for Delivery", "Delivered"];
+
 // @desc    Update order status (Admin only)
-// @route   PUT /api/orders/:id/status
+// @route   PUT /api/orders/status/:id
 // @access  Private/Admin
 const updateOrderStatus = async (req, res) => {
   try {
-    const { orderStatus, paymentStatus } = req.body;
+    const { status, paymentStatus } = req.body;
 
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid order ID",
+      });
+    }
+
+    if (!status) {
+      return res.status(400).json({
+        success: false,
+        message: "Status is required",
+      });
+    }
+
+    // Validate status value
+    if (!STATUS_FLOW.includes(status)) {
+      return res.status(400).json({
+        success: false,
+        message: `Invalid status. Allowed values: ${STATUS_FLOW.join(", ")}`,
+      });
+    }
+
+    const order = await Order.findById(req.params.id);
+
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        message: "Order not found",
+      });
+    }
+
+    // Prevent backward status transition
+    const currentIndex = STATUS_FLOW.indexOf(order.orderStatus);
+    const newIndex = STATUS_FLOW.indexOf(status);
+
+    if (newIndex <= currentIndex) {
+      return res.status(400).json({
+        success: false,
+        message: `Cannot change status from "${order.orderStatus}" to "${status}". Only forward transitions allowed: ${STATUS_FLOW.join(" → ")}`,
+      });
+    }
+
+    order.orderStatus = status;
+    order.statusUpdatedAt = Date.now();
+
+    if (paymentStatus) order.paymentStatus = paymentStatus;
+
+    // Auto-mark as Paid when Delivered
+    if (status === "Delivered") {
+      order.paymentStatus = "Paid";
+    }
+
+    await order.save();
+
+    res.status(200).json({
+      success: true,
+      message: `Order status updated to "${status}"`,
+      order: {
+        orderId: order._id,
+        orderStatus: order.orderStatus,
+        paymentStatus: order.paymentStatus,
+        statusUpdatedAt: order.statusUpdatedAt,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+      error: error.message,
+    });
+  }
+};
+
+// @desc    Get order status (User - own order only)
+// @route   GET /api/orders/:id/status
+// @access  Private
+const getOrderStatus = async (req, res) => {
+  try {
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
       return res.status(400).json({
         success: false,
@@ -247,15 +328,35 @@ const updateOrderStatus = async (req, res) => {
       });
     }
 
-    if (orderStatus) order.orderStatus = orderStatus;
-    if (paymentStatus) order.paymentStatus = paymentStatus;
+    // Only owner or admin can view status
+    if (
+      order.userId.toString() !== req.user._id.toString() &&
+      req.user.role !== "admin"
+    ) {
+      return res.status(403).json({
+        success: false,
+        message: "Not authorized to view this order",
+      });
+    }
 
-    await order.save();
+    // Build progress steps for frontend
+    const steps = STATUS_FLOW.map((step, index) => {
+      const currentIndex = STATUS_FLOW.indexOf(order.orderStatus);
+      return {
+        step: index + 1,
+        label: step,
+        completed: index <= currentIndex,
+        active: index === currentIndex,
+      };
+    });
 
     res.status(200).json({
       success: true,
-      message: "Order status updated",
-      order,
+      orderId: order._id,
+      orderStatus: order.orderStatus,
+      paymentStatus: order.paymentStatus,
+      statusUpdatedAt: order.statusUpdatedAt,
+      progress: steps,
     });
   } catch (error) {
     res.status(500).json({
@@ -272,4 +373,5 @@ module.exports = {
   getOrderById,
   getAllOrders,
   updateOrderStatus,
+  getOrderStatus,
 };
