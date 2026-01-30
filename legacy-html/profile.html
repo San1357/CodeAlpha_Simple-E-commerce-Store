@@ -1,0 +1,3145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile - E-commerce Store</title>
+  <style>
+    /* ========================================
+       CSS VARIABLES FOR THEMING
+       ======================================== */
+    :root {
+      --bg-primary: #f7f7f7;
+      --bg-secondary: #fff;
+      --bg-card: #fff;
+      --bg-input: #fff;
+      --bg-hover: #f0f7ff;
+      --text-primary: #333;
+      --text-secondary: #666;
+      --text-muted: #888;
+      --border-color: #ddd;
+      --border-light: #eee;
+      --shadow-color: rgba(0,0,0,0.08);
+      --accent-color: #0074d9;
+      --accent-hover: #005fa3;
+      --accent-light: #e7f7ff;
+      --danger-color: #e74c3c;
+      --success-color: #27ae60;
+      --theme-transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    }
+
+    body.dark-mode {
+      --bg-primary: #1a1a2e;
+      --bg-secondary: #16213e;
+      --bg-card: #1f2940;
+      --bg-input: #2a3a5a;
+      --bg-hover: #2a3a5a;
+      --text-primary: #e8e8e8;
+      --text-secondary: #b8b8b8;
+      --text-muted: #888;
+      --border-color: #3a4a6a;
+      --border-light: #2a3a5a;
+      --shadow-color: rgba(0,0,0,0.3);
+      --accent-color: #4da6ff;
+      --accent-hover: #3d96ef;
+      --accent-light: #1a3a5a;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: var(--theme-transition);
+    }
+
+    /* Header */
+    .header {
+      background: var(--bg-secondary);
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 8px var(--shadow-color);
+      transition: var(--theme-transition);
+    }
+
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent-color);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: var(--text-primary);
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      transition: var(--theme-transition);
+    }
+
+    .nav-links a:hover {
+      background: var(--accent-color);
+      color: #fff;
+    }
+
+    .user-badge {
+      background: var(--accent-light);
+      color: var(--accent-color);
+      padding: 0.4rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    /* Dark Mode Toggle */
+    .theme-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--bg-hover);
+      border: 2px solid var(--border-color);
+      cursor: pointer;
+      font-size: 1.2rem;
+      transition: var(--theme-transition);
+    }
+
+    .theme-toggle:hover {
+      background: var(--accent-light);
+      border-color: var(--accent-color);
+    }
+
+    .theme-toggle .sun-icon { display: none; }
+    .theme-toggle .moon-icon { display: block; }
+    body.dark-mode .theme-toggle .sun-icon { display: block; }
+    body.dark-mode .theme-toggle .moon-icon { display: none; }
+
+    /* Language Selector */
+    .lang-selector-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .lang-icon {
+      font-size: 1.1rem;
+    }
+
+    .lang-selector {
+      padding: 0.4rem 0.6rem;
+      font-size: 0.9rem;
+      border: 1.5px solid #0074d9;
+      border-radius: 5px;
+      background: #fff;
+      color: #0074d9;
+      cursor: pointer;
+      outline: none;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .lang-selector:hover {
+      background: #e7f7ff;
+    }
+
+    .lang-selector:focus {
+      box-shadow: 0 0 0 3px rgba(0, 116, 217, 0.15);
+    }
+
+    /* Cart Icon */
+    .cart-icon-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.5rem 1rem;
+      color: #333;
+      text-decoration: none;
+      border-radius: 4px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .cart-icon-wrapper:hover {
+      background: #0074d9;
+      color: #fff;
+    }
+    .cart-icon { font-size: 1.3rem; }
+    .cart-badge {
+      position: absolute;
+      top: -2px;
+      right: 2px;
+      background: #e74c3c;
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 700;
+      min-width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .cart-badge.hidden { display: none; }
+
+    /* Wishlist Icon */
+    .wishlist-icon-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.5rem 1rem;
+      color: #333;
+      text-decoration: none;
+      border-radius: 4px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .wishlist-icon-wrapper:hover {
+      background: #e74c3c;
+      color: #fff;
+    }
+    .wishlist-icon { font-size: 1.3rem; }
+    .wishlist-badge {
+      position: absolute;
+      top: -2px;
+      right: 2px;
+      background: #e74c3c;
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 700;
+      min-width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .wishlist-badge.hidden { display: none; }
+
+    /* Main Container */
+    .main-container {
+      flex: 1;
+      padding: 2rem;
+      max-width: 800px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* Profile Header */
+    .profile-header {
+      background: linear-gradient(135deg, #0074d9 0%, #005fa3 100%);
+      color: #fff;
+      padding: 2.5rem;
+      border-radius: 10px 10px 0 0;
+      text-align: center;
+    }
+
+    .profile-avatar {
+      width: 100px;
+      height: 100px;
+      background: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1rem;
+      font-size: 2.5rem;
+      color: #0074d9;
+      font-weight: 700;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .profile-name {
+      font-size: 1.8rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .profile-email {
+      opacity: 0.9;
+      font-size: 1rem;
+    }
+
+    /* Profile Body */
+    .profile-body {
+      background: var(--bg-card);
+      padding: 2rem;
+      border-radius: 0 0 10px 10px;
+      box-shadow: 0 4px 24px var(--shadow-color);
+      transition: var(--theme-transition);
+    }
+
+    /* Account Status */
+    .status-section {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.5rem;
+      background: var(--bg-hover);
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+    }
+
+    .status-label {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+    }
+
+    .status-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: #e8f8e8;
+      color: #27ae60;
+      padding: 0.4rem 1rem;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background: #27ae60;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    /* Info Cards */
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .info-card {
+      background: var(--bg-hover);
+      padding: 1.2rem;
+      border-radius: 8px;
+      border-left: 4px solid var(--accent-color);
+      transition: var(--theme-transition);
+    }
+
+    .info-card-label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 0.3rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .info-card-value {
+      font-size: 1.1rem;
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    /* Actions Section */
+    .actions-section {
+      border-top: 1px solid #eee;
+      padding-top: 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .btn {
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      border: none;
+    }
+
+    .btn-primary {
+      background: #0074d9;
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: #005fa3;
+    }
+
+    .btn-outline {
+      background: #fff;
+      color: #0074d9;
+      border: 2px solid #0074d9;
+    }
+
+    .btn-outline:hover {
+      background: #0074d9;
+      color: #fff;
+    }
+
+    .btn-danger {
+      background: #fff;
+      color: #e74c3c;
+      border: 2px solid #e74c3c;
+    }
+
+    .btn-danger:hover {
+      background: #e74c3c;
+      color: #fff;
+    }
+
+    /* Recent Activity Section */
+    .section-title {
+      font-size: 1.1rem;
+      color: #333;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid #0074d9;
+      display: inline-block;
+    }
+
+    .activity-list {
+      margin-top: 1.5rem;
+    }
+
+    .activity-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.8rem 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .activity-item:last-child {
+      border-bottom: none;
+    }
+
+    .activity-icon {
+      width: 40px;
+      height: 40px;
+      background: #e7f7ff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #0074d9;
+      font-size: 1.1rem;
+    }
+
+    .activity-details {
+      flex: 1;
+    }
+
+    .activity-text {
+      color: #333;
+      font-size: 0.95rem;
+    }
+
+    .activity-time {
+      color: #888;
+      font-size: 0.85rem;
+    }
+
+    /* Logout Confirmation Modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-overlay.show {
+      display: flex;
+    }
+
+    .modal {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 10px;
+      max-width: 400px;
+      width: 90%;
+      text-align: center;
+      animation: modalSlide 0.3s ease;
+    }
+
+    @keyframes modalSlide {
+      from {
+        transform: translateY(-20px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .modal-title {
+      font-size: 1.3rem;
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+
+    .modal-text {
+      color: #666;
+      margin-bottom: 1.5rem;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    /* ========================================
+       ORDER HISTORY SECTION STYLES
+       ======================================== */
+
+    /* Orders Section Container */
+    .orders-section {
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid #eee;
+    }
+
+    .orders-title {
+      font-size: 1.3rem;
+      color: #333;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .orders-title-icon {
+      font-size: 1.4rem;
+    }
+
+    /* Empty State */
+    .empty-orders {
+      text-align: center;
+      padding: 3rem 2rem;
+      background: #f9f9f9;
+      border-radius: 10px;
+      border: 2px dashed #ddd;
+    }
+
+    .empty-orders-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+
+    .empty-orders-title {
+      font-size: 1.2rem;
+      color: #555;
+      margin-bottom: 0.5rem;
+    }
+
+    .empty-orders-text {
+      color: #888;
+      font-size: 0.95rem;
+    }
+
+    /* Order Cards List */
+    .orders-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    /* Individual Order Card */
+    .order-card {
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 10px;
+      overflow: hidden;
+      transition: box-shadow 0.2s, border-color 0.2s;
+    }
+
+    .order-card:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      border-color: #0074d9;
+    }
+
+    /* Order Card Header */
+    .order-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 1rem 1.2rem;
+      background: #f9f9f9;
+      border-bottom: 1px solid #e0e0e0;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .order-id-section {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .order-id {
+      font-weight: 700;
+      color: #0074d9;
+      font-size: 1.05rem;
+    }
+
+    .order-date {
+      font-size: 0.85rem;
+      color: #777;
+    }
+
+    /* Status Badges */
+    .order-status-badge {
+      padding: 0.35rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .status-placed {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    .status-delivered {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .status-cancelled {
+      background: #f8d7da;
+      color: #721c24;
+    }
+
+    /* Order Card Body */
+    .order-card-body {
+      padding: 1rem 1.2rem;
+    }
+
+    .order-info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .order-info-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .order-info-label {
+      font-size: 0.8rem;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .order-info-value {
+      font-size: 1rem;
+      color: #333;
+      font-weight: 500;
+    }
+
+    .order-total-value {
+      color: #0074d9;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    /* Order Actions */
+    .order-actions {
+      display: flex;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+      padding-top: 1rem;
+      border-top: 1px solid #eee;
+    }
+
+    .order-btn {
+      padding: 0.5rem 1rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .btn-view-details {
+      background: #fff;
+      color: #0074d9;
+      border: 1.5px solid #0074d9;
+    }
+
+    .btn-view-details:hover {
+      background: #0074d9;
+      color: #fff;
+    }
+
+    .btn-download-invoice {
+      background: #27ae60;
+      color: #fff;
+      border: none;
+    }
+
+    .btn-download-invoice:hover {
+      background: #219a52;
+    }
+
+    /* Order Details (Expandable) */
+    .order-details {
+      display: none;
+      padding: 1rem 1.2rem;
+      background: #f9f9f9;
+      border-top: 1px solid #e0e0e0;
+      animation: slideDown 0.3s ease;
+    }
+
+    .order-details.show {
+      display: block;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .details-section-title {
+      font-size: 0.95rem;
+      color: #333;
+      font-weight: 600;
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    /* Product List in Details */
+    .product-list {
+      margin-bottom: 1rem;
+    }
+
+    .product-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.6rem 0.8rem;
+      background: #fff;
+      border-radius: 5px;
+      margin-bottom: 0.5rem;
+      border: 1px solid #e0e0e0;
+    }
+
+    .product-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .product-name {
+      font-weight: 500;
+      color: #333;
+    }
+
+    .product-quantity {
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    .product-price {
+      font-weight: 600;
+      color: #0074d9;
+    }
+
+    /* Bill Summary in Details */
+    .bill-summary {
+      background: #fff;
+      padding: 1rem;
+      border-radius: 5px;
+      border: 1px solid #e0e0e0;
+    }
+
+    .bill-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.4rem 0;
+      font-size: 0.95rem;
+    }
+
+    .bill-row.total {
+      border-top: 1px dashed #ccc;
+      margin-top: 0.5rem;
+      padding-top: 0.8rem;
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: #0074d9;
+    }
+
+    /* Invoice Print Styles */
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      .invoice-modal, .invoice-modal * {
+        visibility: visible;
+      }
+      .invoice-modal {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        background: #fff;
+        padding: 2rem;
+      }
+      .no-print {
+        display: none !important;
+      }
+    }
+
+    /* Invoice Modal */
+    .invoice-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1001;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+    }
+
+    .invoice-modal.show {
+      display: flex;
+    }
+
+    .invoice-content {
+      background: #fff;
+      border-radius: 10px;
+      max-width: 500px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      animation: modalSlide 0.3s ease;
+    }
+
+    .invoice-header {
+      background: linear-gradient(135deg, #0074d9 0%, #005fa3 100%);
+      color: #fff;
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    .invoice-logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .invoice-title {
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+
+    .invoice-body {
+      padding: 1.5rem;
+    }
+
+    .invoice-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .invoice-row:last-child {
+      border-bottom: none;
+    }
+
+    .invoice-row.highlight {
+      background: #f9f9f9;
+      margin: 0 -1.5rem;
+      padding: 0.8rem 1.5rem;
+      font-weight: 700;
+      color: #0074d9;
+    }
+
+    .invoice-products {
+      margin: 1rem 0;
+      padding: 1rem;
+      background: #f9f9f9;
+      border-radius: 5px;
+    }
+
+    .invoice-product-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.4rem 0;
+    }
+
+    .invoice-footer {
+      text-align: center;
+      padding: 1rem 1.5rem;
+      background: #f9f9f9;
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    .invoice-actions {
+      display: flex;
+      gap: 1rem;
+      padding: 1rem 1.5rem;
+      border-top: 1px solid #eee;
+      justify-content: center;
+    }
+
+    /* ========================================
+       ADDRESS BOOK SECTION STYLES
+       ======================================== */
+
+    /* Addresses Section Container */
+    .addresses-section {
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid #eee;
+    }
+
+    .addresses-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .addresses-title {
+      font-size: 1.3rem;
+      color: #333;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .addresses-title-icon {
+      font-size: 1.4rem;
+    }
+
+    .btn-add-address {
+      padding: 0.6rem 1.2rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      background: #0074d9;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: background 0.2s;
+    }
+
+    .btn-add-address:hover {
+      background: #005fa3;
+    }
+
+    /* Empty Addresses State */
+    .empty-addresses {
+      text-align: center;
+      padding: 3rem 2rem;
+      background: #f9f9f9;
+      border-radius: 10px;
+      border: 2px dashed #ddd;
+    }
+
+    .empty-addresses-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+
+    .empty-addresses-title {
+      font-size: 1.2rem;
+      color: #555;
+      margin-bottom: 0.5rem;
+    }
+
+    .empty-addresses-text {
+      color: #888;
+      font-size: 0.95rem;
+    }
+
+    /* Address Cards List */
+    .addresses-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+
+    /* Individual Address Card */
+    .address-card {
+      background: #fff;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      padding: 1.2rem;
+      transition: all 0.2s;
+      position: relative;
+    }
+
+    .address-card:hover {
+      border-color: #0074d9;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .address-card.default {
+      border-color: #27ae60;
+      background: #f8fff8;
+    }
+
+    /* Default Badge */
+    .default-badge {
+      position: absolute;
+      top: -10px;
+      right: 12px;
+      background: #27ae60;
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.3rem 0.8rem;
+      border-radius: 12px;
+      text-transform: uppercase;
+    }
+
+    /* Address Card Content */
+    .address-name {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 0.3rem;
+    }
+
+    .address-mobile {
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 0.8rem;
+    }
+
+    .address-details {
+      font-size: 0.95rem;
+      color: #555;
+      line-height: 1.5;
+      margin-bottom: 1rem;
+    }
+
+    /* Address Card Actions */
+    .address-actions {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      padding-top: 0.8rem;
+      border-top: 1px solid #eee;
+    }
+
+    .address-btn {
+      padding: 0.4rem 0.8rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .btn-edit-addr {
+      background: #fff;
+      color: #0074d9;
+      border: 1.5px solid #0074d9;
+    }
+
+    .btn-edit-addr:hover {
+      background: #0074d9;
+      color: #fff;
+    }
+
+    .btn-delete-addr {
+      background: #fff;
+      color: #e74c3c;
+      border: 1.5px solid #e74c3c;
+    }
+
+    .btn-delete-addr:hover {
+      background: #e74c3c;
+      color: #fff;
+    }
+
+    .btn-set-default {
+      background: #fff;
+      color: #27ae60;
+      border: 1.5px solid #27ae60;
+    }
+
+    .btn-set-default:hover {
+      background: #27ae60;
+      color: #fff;
+    }
+
+    /* Address Modal */
+    .address-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1002;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+    }
+
+    .address-modal.show {
+      display: flex;
+    }
+
+    .address-modal-content {
+      background: #fff;
+      border-radius: 10px;
+      max-width: 450px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      animation: modalSlide 0.3s ease;
+    }
+
+    .address-modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 1.5rem;
+      border-bottom: 1px solid #eee;
+    }
+
+    .address-modal-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .address-modal-close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: #888;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .address-modal-close:hover {
+      color: #333;
+    }
+
+    .address-modal-body {
+      padding: 1.5rem;
+    }
+
+    .address-form-group {
+      margin-bottom: 1rem;
+    }
+
+    .address-form-group label {
+      display: block;
+      margin-bottom: 0.4rem;
+      font-size: 0.95rem;
+      color: #333;
+      font-weight: 500;
+    }
+
+    .address-form-group input {
+      width: 100%;
+      padding: 0.7rem 1rem;
+      font-size: 1rem;
+      border: 1.5px solid #ddd;
+      border-radius: 6px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .address-form-group input:focus {
+      border-color: #0074d9;
+    }
+
+    .address-form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .address-modal-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: flex-end;
+      padding: 1rem 1.5rem;
+      border-top: 1px solid #eee;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .main-container {
+        padding: 1rem;
+      }
+
+      .profile-header {
+        padding: 1.5rem;
+      }
+
+      .profile-avatar {
+        width: 80px;
+        height: 80px;
+        font-size: 2rem;
+      }
+
+      .profile-name {
+        font-size: 1.4rem;
+      }
+
+      .profile-body {
+        padding: 1.5rem;
+      }
+
+      .status-section {
+        flex-direction: column;
+        gap: 0.8rem;
+        text-align: center;
+      }
+
+      .actions-section {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .header {
+        padding: 1rem;
+      }
+
+      .header-content {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      /* Order History Responsive */
+      .order-card-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .order-info-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .order-actions {
+        flex-direction: column;
+      }
+
+      .order-btn {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .invoice-content {
+        max-height: 95vh;
+      }
+
+      /* Address Book Responsive */
+      .addresses-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .btn-add-address {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .addresses-list {
+        grid-template-columns: 1fr;
+      }
+
+      .address-actions {
+        flex-direction: column;
+      }
+
+      .address-btn {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .address-form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ========================================
+       ORDER TRACKING MODAL STYLES
+       ======================================== */
+    .tracking-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1003;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+    }
+
+    .tracking-modal.show {
+      display: flex;
+    }
+
+    .tracking-modal-content {
+      background: var(--bg-card);
+      border-radius: 12px;
+      max-width: 550px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      animation: modalSlide 0.3s ease;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+
+    .tracking-modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+      background: linear-gradient(135deg, #0074d9 0%, #005fa3 100%);
+      color: #fff;
+      border-radius: 12px 12px 0 0;
+    }
+
+    .tracking-modal-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .tracking-modal-close {
+      background: rgba(255,255,255,0.2);
+      border: none;
+      font-size: 1.3rem;
+      color: #fff;
+      cursor: pointer;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+
+    .tracking-modal-close:hover {
+      background: rgba(255,255,255,0.3);
+    }
+
+    .tracking-modal-body {
+      padding: 1.5rem;
+    }
+
+    .tracking-order-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px dashed var(--border-color);
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .tracking-order-id {
+      font-weight: 700;
+      color: var(--accent-color);
+      font-size: 1.1rem;
+    }
+
+    .tracking-order-date {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    /* Progress Bar in Modal */
+    .modal-progress-tracker {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+      margin: 1.5rem 0;
+      padding: 0 5px;
+    }
+
+    .modal-progress-tracker::before {
+      content: '';
+      position: absolute;
+      top: 22px;
+      left: 25px;
+      right: 25px;
+      height: 4px;
+      background: var(--border-color);
+      border-radius: 2px;
+      z-index: 1;
+    }
+
+    .modal-progress-line {
+      position: absolute;
+      top: 22px;
+      left: 25px;
+      height: 4px;
+      background: linear-gradient(90deg, #2ecc40, #27ae60);
+      border-radius: 2px;
+      z-index: 2;
+      transition: width 0.5s ease;
+      width: 0%;
+    }
+
+    .modal-progress-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      z-index: 3;
+      flex: 1;
+    }
+
+    .modal-step-circle {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--bg-secondary);
+      border: 3px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      transition: all 0.3s ease;
+    }
+
+    .modal-step-circle .step-icon {
+      display: block;
+    }
+
+    .modal-step-circle .check-icon {
+      display: none;
+      color: #fff;
+      font-size: 1.2rem;
+    }
+
+    .modal-step-label {
+      margin-top: 0.6rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-align: center;
+      font-weight: 500;
+      max-width: 75px;
+      line-height: 1.3;
+    }
+
+    .modal-step-time {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      margin-top: 0.3rem;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    /* Completed Step */
+    .modal-progress-step.completed .modal-step-circle {
+      background: linear-gradient(135deg, #2ecc40, #27ae60);
+      border-color: #27ae60;
+    }
+
+    .modal-progress-step.completed .modal-step-circle .step-icon {
+      display: none;
+    }
+
+    .modal-progress-step.completed .modal-step-circle .check-icon {
+      display: block;
+    }
+
+    .modal-progress-step.completed .modal-step-label {
+      color: #27ae60;
+      font-weight: 600;
+    }
+
+    .modal-progress-step.completed .modal-step-time {
+      opacity: 1;
+      color: #27ae60;
+    }
+
+    /* Active Step */
+    .modal-progress-step.active .modal-step-circle {
+      background: var(--accent-color);
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 4px rgba(0, 116, 217, 0.2);
+      animation: modal-pulse 2s infinite;
+    }
+
+    .modal-progress-step.active .modal-step-circle .step-icon {
+      filter: brightness(0) invert(1);
+    }
+
+    .modal-progress-step.active .modal-step-label {
+      color: var(--accent-color);
+      font-weight: 700;
+    }
+
+    .modal-progress-step.active .modal-step-time {
+      opacity: 1;
+      color: var(--accent-color);
+    }
+
+    @keyframes modal-pulse {
+      0%, 100% { box-shadow: 0 0 0 4px rgba(0, 116, 217, 0.2); }
+      50% { box-shadow: 0 0 0 8px rgba(0, 116, 217, 0.1); }
+    }
+
+    /* Status Details in Modal */
+    .tracking-status-details {
+      background: var(--bg-hover);
+      padding: 1rem 1.2rem;
+      border-radius: 8px;
+      margin-top: 1.5rem;
+    }
+
+    .tracking-current-status {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .status-icon-large {
+      font-size: 2rem;
+    }
+
+    .status-info h4 {
+      font-size: 1.1rem;
+      color: var(--text-primary);
+      margin-bottom: 0.2rem;
+    }
+
+    .status-info p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    .tracking-timeline {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .timeline-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 0.8rem;
+    }
+
+    .timeline-item {
+      display: flex;
+      gap: 0.8rem;
+      padding: 0.5rem 0;
+      font-size: 0.85rem;
+    }
+
+    .timeline-time {
+      color: var(--text-muted);
+      min-width: 70px;
+    }
+
+    .timeline-event {
+      color: var(--text-primary);
+    }
+
+    .timeline-event.current {
+      color: var(--accent-color);
+      font-weight: 600;
+    }
+
+    /* Track Order Button */
+    .btn-track-order {
+      background: linear-gradient(135deg, #0074d9 0%, #005fa3 100%);
+      color: #fff;
+      border: none;
+    }
+
+    .btn-track-order:hover {
+      background: linear-gradient(135deg, #005fa3 0%, #004080 100%);
+      transform: translateY(-1px);
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .modal-progress-tracker::before {
+        left: 15px;
+        right: 15px;
+      }
+      .modal-progress-line {
+        left: 15px;
+      }
+      .modal-step-circle {
+        width: 40px;
+        height: 40px;
+        font-size: 1.1rem;
+      }
+      .modal-step-label {
+        font-size: 0.7rem;
+        max-width: 60px;
+      }
+      .modal-step-time {
+        font-size: 0.6rem;
+      }
+      .tracking-modal-body {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo" data-i18n="shopease">ShopEase</a>
+      <nav class="nav-links">
+        <!-- Dark Mode Toggle -->
+        <button class="theme-toggle" id="themeToggle" title="Toggle Dark Mode">
+          <span class="moon-icon">🌙</span>
+          <span class="sun-icon">☀️</span>
+        </button>
+        <div class="lang-selector-wrapper">
+          <span class="lang-icon">🌐</span>
+          <select id="language-selector" class="lang-selector">
+            <option value="en">English</option>
+            <option value="hi">हिंदी</option>
+            <option value="bho">भोजपुरी</option>
+          </select>
+        </div>
+        <a href="index.html" data-i18n="home">Home</a>
+        <!-- Wishlist Icon -->
+        <a href="wishlist.html" class="wishlist-icon-wrapper">
+          <span class="wishlist-icon">❤️</span>
+          <span class="wishlist-badge hidden" id="wishlistBadge">0</span>
+        </a>
+        <!-- Cart Icon -->
+        <a href="cart.html" class="cart-icon-wrapper">
+          <span class="cart-icon">🛒</span>
+          <span class="cart-badge hidden" id="cartBadge">0</span>
+        </a>
+        <span class="user-badge" id="headerUserName">User</span>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-container">
+    <!-- Profile Card -->
+    <div class="profile-card">
+      <div class="profile-header">
+        <div class="profile-avatar" id="profileAvatar">U</div>
+        <h1 class="profile-name" id="profileName">User Name</h1>
+        <p class="profile-email" id="profileEmail">user@email.com</p>
+      </div>
+
+      <div class="profile-body">
+        <!-- Account Status -->
+        <div class="status-section">
+          <span class="status-label" data-i18n="accountStatus">Account Status</span>
+          <div class="status-badge">
+            <span class="status-dot"></span>
+            <span data-i18n="active">Active</span>
+          </div>
+        </div>
+
+        <!-- Info Cards -->
+        <div class="info-grid">
+          <div class="info-card">
+            <div class="info-card-label" data-i18n="memberSince">Member Since</div>
+            <div class="info-card-value" id="memberSince">-</div>
+          </div>
+          <div class="info-card">
+            <div class="info-card-label" data-i18n="lastLogin">Last Login</div>
+            <div class="info-card-value" id="lastLogin">-</div>
+          </div>
+        </div>
+
+        <!-- Activity Section -->
+        <div class="activity-list">
+          <h3 class="section-title" data-i18n="quickActions">Quick Actions</h3>
+          <div class="activity-item">
+            <div class="activity-icon">🛒</div>
+            <div class="activity-details">
+              <div class="activity-text" data-i18n="continueShopping">Continue Shopping</div>
+              <div class="activity-time" data-i18n="browseProducts">Browse our latest products</div>
+            </div>
+            <a href="index.html" class="btn btn-outline" style="padding: 0.5rem 1rem; font-size: 0.9rem;" data-i18n="shopNow">Shop Now</a>
+          </div>
+        </div>
+
+        <!-- ========================================
+             MY ADDRESSES SECTION
+             ======================================== -->
+        <div class="addresses-section">
+          <div class="addresses-header">
+            <h3 class="addresses-title">
+              <span class="addresses-title-icon">📍</span>
+              <span data-i18n="myAddresses">My Addresses</span>
+            </h3>
+            <button class="btn-add-address" id="addAddressBtn">
+              <span>➕</span>
+              <span data-i18n="addNewAddress">Add New Address</span>
+            </button>
+          </div>
+
+          <!-- Addresses will be rendered here by JavaScript -->
+          <div id="addressesContainer">
+            <!-- Address cards will be injected here -->
+          </div>
+        </div>
+
+        <!-- ========================================
+             MY ORDERS SECTION
+             ======================================== -->
+        <div class="orders-section">
+          <h3 class="orders-title">
+            <span class="orders-title-icon">📦</span>
+            <span data-i18n="myOrders">My Orders</span>
+          </h3>
+
+          <!-- Orders will be rendered here by JavaScript -->
+          <div id="ordersContainer">
+            <!-- Order cards will be injected here -->
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="actions-section">
+          <a href="index.html" class="btn btn-primary">
+            <span>🏠</span> <span data-i18n="backToStore">Back to Store</span>
+          </a>
+          <button class="btn btn-danger" id="logoutBtn">
+            <span>🚪</span> <span data-i18n="logout">Logout</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Logout Confirmation Modal -->
+  <div class="modal-overlay" id="logoutModal">
+    <div class="modal">
+      <h2 class="modal-title" data-i18n="confirmLogout">Confirm Logout</h2>
+      <p class="modal-text" data-i18n="logoutConfirmMessage">Are you sure you want to logout from your account?</p>
+      <div class="modal-actions">
+        <button class="btn btn-outline" id="cancelLogout" data-i18n="cancel">Cancel</button>
+        <button class="btn btn-danger" id="confirmLogout" data-i18n="logout">Logout</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Invoice Modal -->
+  <div class="invoice-modal" id="invoiceModal">
+    <div class="invoice-content" id="invoiceContent">
+      <!-- Invoice content will be injected here -->
+    </div>
+  </div>
+
+  <!-- Order Tracking Modal -->
+  <div class="tracking-modal" id="trackingModal">
+    <div class="tracking-modal-content">
+      <div class="tracking-modal-header">
+        <h3 class="tracking-modal-title">
+          <span>📦</span>
+          <span data-i18n="trackOrder">Track Order</span>
+        </h3>
+        <button class="tracking-modal-close" id="closeTrackingModal">&times;</button>
+      </div>
+      <div class="tracking-modal-body">
+        <!-- Order Info -->
+        <div class="tracking-order-info">
+          <span class="tracking-order-id" id="trackingOrderId">OD123456</span>
+          <span class="tracking-order-date" id="trackingOrderDate">Jan 15, 2024</span>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="modal-progress-tracker">
+          <div class="modal-progress-line" id="modalProgressLine"></div>
+
+          <!-- Step 1: Order Placed -->
+          <div class="modal-progress-step" id="modal-step-placed">
+            <div class="modal-step-circle">
+              <span class="step-icon">📝</span>
+              <span class="check-icon">✓</span>
+            </div>
+            <span class="modal-step-label" data-i18n="orderPlaced">Order Placed</span>
+            <span class="modal-step-time" id="modal-time-placed">--</span>
+          </div>
+
+          <!-- Step 2: Packed -->
+          <div class="modal-progress-step" id="modal-step-packed">
+            <div class="modal-step-circle">
+              <span class="step-icon">📦</span>
+              <span class="check-icon">✓</span>
+            </div>
+            <span class="modal-step-label" data-i18n="packed">Packed</span>
+            <span class="modal-step-time" id="modal-time-packed">--</span>
+          </div>
+
+          <!-- Step 3: Out for Delivery -->
+          <div class="modal-progress-step" id="modal-step-out_for_delivery">
+            <div class="modal-step-circle">
+              <span class="step-icon">🚚</span>
+              <span class="check-icon">✓</span>
+            </div>
+            <span class="modal-step-label" data-i18n="outForDelivery">Out for Delivery</span>
+            <span class="modal-step-time" id="modal-time-out_for_delivery">--</span>
+          </div>
+
+          <!-- Step 4: Delivered -->
+          <div class="modal-progress-step" id="modal-step-delivered">
+            <div class="modal-step-circle">
+              <span class="step-icon">✅</span>
+              <span class="check-icon">✓</span>
+            </div>
+            <span class="modal-step-label" data-i18n="delivered">Delivered</span>
+            <span class="modal-step-time" id="modal-time-delivered">--</span>
+          </div>
+        </div>
+
+        <!-- Status Details -->
+        <div class="tracking-status-details">
+          <div class="tracking-current-status">
+            <span class="status-icon-large" id="trackingStatusIcon">📦</span>
+            <div class="status-info">
+              <h4 id="trackingStatusTitle">Processing</h4>
+              <p id="trackingStatusMessage">Your order is being processed</p>
+            </div>
+          </div>
+
+          <!-- Timeline -->
+          <div class="tracking-timeline">
+            <div class="timeline-title" data-i18n="statusHistory">Status History</div>
+            <div id="trackingTimeline">
+              <!-- Timeline items will be injected here -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Address Modal -->
+  <div class="address-modal" id="addressModal">
+    <div class="address-modal-content">
+      <div class="address-modal-header">
+        <h3 class="address-modal-title" id="addressModalTitle" data-i18n="addNewAddress">Add New Address</h3>
+        <button class="address-modal-close" id="closeAddressModal">&times;</button>
+      </div>
+      <div class="address-modal-body">
+        <form id="addressForm">
+          <input type="hidden" id="addressId">
+          <div class="address-form-group">
+            <label for="addrFullName" data-i18n="fullName">Full Name</label>
+            <input type="text" id="addrFullName" required>
+          </div>
+          <div class="address-form-group">
+            <label for="addrMobile" data-i18n="mobileNumber">Mobile Number</label>
+            <input type="text" id="addrMobile" required pattern="[0-9]{10}" maxlength="10">
+          </div>
+          <div class="address-form-group">
+            <label for="addrStreet" data-i18n="streetAddress">Street Address</label>
+            <input type="text" id="addrStreet" required>
+          </div>
+          <div class="address-form-row">
+            <div class="address-form-group">
+              <label for="addrCity" data-i18n="city">City</label>
+              <input type="text" id="addrCity" required>
+            </div>
+            <div class="address-form-group">
+              <label for="addrState" data-i18n="state">State</label>
+              <input type="text" id="addrState" required>
+            </div>
+          </div>
+          <div class="address-form-group">
+            <label for="addrPincode" data-i18n="pincode">Pincode</label>
+            <input type="text" id="addrPincode" required pattern="[0-9]{6}" maxlength="6">
+          </div>
+        </form>
+      </div>
+      <div class="address-modal-actions">
+        <button class="btn btn-outline" id="cancelAddressBtn" data-i18n="cancel">Cancel</button>
+        <button class="btn btn-primary" id="saveAddressBtn" data-i18n="saveAddress">Save Address</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Language/i18n Script -->
+  <script src="lang.js"></script>
+  <script>
+    // DOM Elements
+    const profileAvatar = document.getElementById('profileAvatar');
+    const profileName = document.getElementById('profileName');
+    const profileEmail = document.getElementById('profileEmail');
+    const headerUserName = document.getElementById('headerUserName');
+    const memberSince = document.getElementById('memberSince');
+    const lastLogin = document.getElementById('lastLogin');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const logoutModal = document.getElementById('logoutModal');
+    const cancelLogout = document.getElementById('cancelLogout');
+    const confirmLogout = document.getElementById('confirmLogout');
+
+    // Check if user is logged in
+    function checkAuth() {
+      const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+
+      if (!isLoggedIn) {
+        // Redirect to login page
+        window.location.href = 'login.html';
+        return false;
+      }
+
+      return true;
+    }
+
+    // Get user initials for avatar
+    function getInitials(name) {
+      if (!name) return 'U';
+      const parts = name.trim().split(' ');
+      if (parts.length >= 2) {
+        return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+      }
+      return parts[0][0].toUpperCase();
+    }
+
+    // Format date for display
+    function formatDate(dateString) {
+      if (!dateString) return '-';
+      const date = new Date(dateString);
+      const options = {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      };
+      return date.toLocaleDateString('en-US', options);
+    }
+
+    // Format relative time
+    function formatRelativeTime(dateString) {
+      if (!dateString) return '-';
+      const date = new Date(dateString);
+      const now = new Date();
+      const diffMs = now - date;
+      const diffMins = Math.floor(diffMs / 60000);
+      const diffHours = Math.floor(diffMs / 3600000);
+      const diffDays = Math.floor(diffMs / 86400000);
+
+      if (diffMins < 1) return 'Just now';
+      if (diffMins < 60) return diffMins + ' minutes ago';
+      if (diffHours < 24) return diffHours + ' hours ago';
+      if (diffDays === 1) return 'Yesterday';
+      return formatDate(dateString);
+    }
+
+    // Load user profile data
+    function loadUserProfile() {
+      const activeUser = JSON.parse(localStorage.getItem('activeUser'));
+
+      if (!activeUser) {
+        window.location.href = 'login.html';
+        return;
+      }
+
+      // Get full user data (including registration date)
+      const users = JSON.parse(localStorage.getItem('users')) || [];
+      const fullUserData = users.find(u => u.email.toLowerCase() === activeUser.email.toLowerCase());
+
+      // Update profile display
+      profileName.textContent = activeUser.name;
+      profileEmail.textContent = activeUser.email;
+      profileAvatar.textContent = getInitials(activeUser.name);
+      headerUserName.textContent = activeUser.name.split(' ')[0]; // First name only in header
+
+      // Member since (from registration)
+      if (fullUserData && fullUserData.createdAt) {
+        memberSince.textContent = formatDate(fullUserData.createdAt);
+      } else {
+        memberSince.textContent = 'N/A';
+      }
+
+      // Last login
+      if (activeUser.loginTime) {
+        lastLogin.textContent = formatRelativeTime(activeUser.loginTime);
+      } else {
+        lastLogin.textContent = 'N/A';
+      }
+    }
+
+    // Show logout modal
+    function showLogoutModal() {
+      logoutModal.classList.add('show');
+    }
+
+    // Hide logout modal
+    function hideLogoutModal() {
+      logoutModal.classList.remove('show');
+    }
+
+    // Perform logout
+    function performLogout() {
+      // Clear session data
+      localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('activeUser');
+      sessionStorage.removeItem('sessionActive');
+
+      // Redirect to login page
+      window.location.href = 'login.html';
+    }
+
+    // Event listeners
+    logoutBtn.addEventListener('click', showLogoutModal);
+    cancelLogout.addEventListener('click', hideLogoutModal);
+    confirmLogout.addEventListener('click', performLogout);
+
+    // Close modal on overlay click
+    logoutModal.addEventListener('click', function(e) {
+      if (e.target === logoutModal) {
+        hideLogoutModal();
+      }
+    });
+
+    // Close modal on Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && logoutModal.classList.contains('show')) {
+        hideLogoutModal();
+      }
+    });
+
+    // ========================================
+    // CART BADGE
+    // ========================================
+    function getCart() {
+      return JSON.parse(localStorage.getItem('cartItems')) || [];
+    }
+
+    function updateCartBadge() {
+      const cart = getCart();
+      const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+      const badge = document.getElementById('cartBadge');
+      if (badge) {
+        badge.textContent = totalItems;
+        if (totalItems > 0) {
+          badge.classList.remove('hidden');
+        } else {
+          badge.classList.add('hidden');
+        }
+      }
+    }
+
+    // ========================================
+    // WISHLIST BADGE
+    // ========================================
+    function getWishlist() {
+      return JSON.parse(localStorage.getItem('wishlistItems')) || [];
+    }
+
+    function updateWishlistBadge() {
+      const wishlist = getWishlist();
+      const badge = document.getElementById('wishlistBadge');
+      if (badge) {
+        badge.textContent = wishlist.length;
+        if (wishlist.length > 0) {
+          badge.classList.remove('hidden');
+        } else {
+          badge.classList.add('hidden');
+        }
+      }
+    }
+
+    // ========================================
+    // ORDER HISTORY FUNCTIONS
+    // ========================================
+
+    /**
+     * Get order history from localStorage
+     * Returns array of orders (newest first)
+     */
+    function getOrderHistory() {
+      return JSON.parse(localStorage.getItem('orderHistory')) || [];
+    }
+
+    /**
+     * Format date and time for display
+     * @param {string} dateString - ISO date string
+     * @returns {string} Formatted date string
+     */
+    function formatOrderDateTime(dateString) {
+      if (!dateString) return '-';
+      const date = new Date(dateString);
+      const options = {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      };
+      return date.toLocaleDateString('en-IN', options);
+    }
+
+    /**
+     * Get status badge class based on order status
+     * @param {string} status - Order status
+     * @returns {string} CSS class name
+     */
+    function getStatusClass(status) {
+      switch (status.toLowerCase()) {
+        case 'delivered': return 'status-delivered';
+        case 'cancelled': return 'status-cancelled';
+        default: return 'status-placed';
+      }
+    }
+
+    /**
+     * Get translated status text
+     * @param {string} status - Order status
+     * @returns {string} Translated status
+     */
+    function getStatusText(status) {
+      switch (status.toLowerCase()) {
+        case 'delivered': return t('statusDelivered');
+        case 'cancelled': return t('statusCancelled');
+        default: return t('statusPlaced');
+      }
+    }
+
+    /**
+     * Render empty state when no orders exist
+     */
+    function renderEmptyState() {
+      return `
+        <div class="empty-orders">
+          <div class="empty-orders-icon">📦</div>
+          <div class="empty-orders-title" data-i18n="noOrdersFound">${t('noOrdersFound')}</div>
+          <div class="empty-orders-text" data-i18n="noOrdersText">${t('noOrdersText')}</div>
+        </div>
+      `;
+    }
+
+    /**
+     * Render a single order card
+     * @param {object} order - Order object
+     * @param {number} index - Order index
+     * @returns {string} HTML string for order card
+     */
+    function renderOrderCard(order, index) {
+      // Build products list HTML
+      let productsHtml = '';
+      if (order.products && order.products.length > 0) {
+        order.products.forEach(product => {
+          productsHtml += `
+            <div class="product-item">
+              <div>
+                <span class="product-name">${product.name}</span>
+                <span class="product-quantity"> × ${product.quantity}</span>
+              </div>
+              <span class="product-price">₹${product.price * product.quantity}</span>
+            </div>
+          `;
+        });
+      }
+
+      // Calculate subtotal
+      let subtotal = 0;
+      if (order.products) {
+        subtotal = order.products.reduce((sum, p) => sum + (p.price * p.quantity), 0);
+      }
+
+      return `
+        <div class="order-card">
+          <!-- Order Card Header -->
+          <div class="order-card-header">
+            <div class="order-id-section">
+              <span class="order-id">${order.orderId}</span>
+              <span class="order-date">${formatOrderDateTime(order.dateTime)}</span>
+            </div>
+            <span class="order-status-badge ${getStatusClass(order.orderStatus)}">
+              ${getStatusText(order.orderStatus)}
+            </span>
+          </div>
+
+          <!-- Order Card Body -->
+          <div class="order-card-body">
+            <div class="order-info-grid">
+              <div class="order-info-item">
+                <span class="order-info-label" data-i18n="totalAmount">${t('totalAmount')}</span>
+                <span class="order-info-value order-total-value">₹${order.totalAmount}</span>
+              </div>
+              <div class="order-info-item">
+                <span class="order-info-label" data-i18n="paymentMethod">${t('paymentMethod')}</span>
+                <span class="order-info-value">${order.paymentMethod}</span>
+              </div>
+              <div class="order-info-item">
+                <span class="order-info-label" data-i18n="deliveryType">${t('deliveryType')}</span>
+                <span class="order-info-value">${order.deliveryType}</span>
+              </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="order-actions">
+              <button class="order-btn btn-track-order" onclick="showOrderTracking('${order.orderId}')">
+                <span>📍</span>
+                <span data-i18n="trackOrder">${t('trackOrder')}</span>
+              </button>
+              <button class="order-btn btn-view-details" onclick="toggleOrderDetails(${index})">
+                <span>📋</span>
+                <span data-i18n="viewDetails">${t('viewDetails')}</span>
+              </button>
+              <button class="order-btn btn-download-invoice" onclick="showInvoice(${index})">
+                <span>📄</span>
+                <span data-i18n="downloadInvoice">${t('downloadInvoice')}</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Expandable Order Details -->
+          <div class="order-details" id="orderDetails-${index}">
+            <div class="details-section-title">
+              <span>🛍️</span>
+              <span data-i18n="productsOrdered">${t('productsOrdered')}</span>
+            </div>
+            <div class="product-list">
+              ${productsHtml}
+            </div>
+
+            <div class="details-section-title">
+              <span>💰</span>
+              <span data-i18n="billSummary">${t('billSummary')}</span>
+            </div>
+            <div class="bill-summary">
+              <div class="bill-row">
+                <span data-i18n="subtotal">${t('subtotal')}</span>
+                <span>₹${subtotal}</span>
+              </div>
+              <div class="bill-row">
+                <span data-i18n="deliveryCharge">${t('deliveryCharge')}</span>
+                <span>₹${order.deliveryCharge || 0}</span>
+              </div>
+              <div class="bill-row total">
+                <span data-i18n="finalTotal">${t('finalTotal')}</span>
+                <span>₹${order.totalAmount}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    /**
+     * Render all orders to the orders container
+     */
+    function renderOrderHistory() {
+      const container = document.getElementById('ordersContainer');
+      const orders = getOrderHistory();
+
+      // If no orders, show empty state
+      if (orders.length === 0) {
+        container.innerHTML = renderEmptyState();
+        return;
+      }
+
+      // Render all order cards (orders are already sorted newest first)
+      let html = '<div class="orders-list">';
+      orders.forEach((order, index) => {
+        html += renderOrderCard(order, index);
+      });
+      html += '</div>';
+
+      container.innerHTML = html;
+    }
+
+    /**
+     * Toggle order details visibility
+     * @param {number} index - Order index
+     */
+    function toggleOrderDetails(index) {
+      const details = document.getElementById(`orderDetails-${index}`);
+      const btn = event.currentTarget;
+      const btnText = btn.querySelector('span:last-child');
+
+      if (details.classList.contains('show')) {
+        // Hide details
+        details.classList.remove('show');
+        btnText.textContent = t('viewDetails');
+        btnText.setAttribute('data-i18n', 'viewDetails');
+      } else {
+        // Show details
+        details.classList.add('show');
+        btnText.textContent = t('hideDetails');
+        btnText.setAttribute('data-i18n', 'hideDetails');
+      }
+    }
+
+    /**
+     * Show invoice modal for an order
+     * @param {number} index - Order index
+     */
+    function showInvoice(index) {
+      const orders = getOrderHistory();
+      const order = orders[index];
+      const modal = document.getElementById('invoiceModal');
+      const content = document.getElementById('invoiceContent');
+
+      // Build products list for invoice
+      let productsHtml = '';
+      let subtotal = 0;
+      if (order.products && order.products.length > 0) {
+        order.products.forEach(product => {
+          const itemTotal = product.price * product.quantity;
+          subtotal += itemTotal;
+          productsHtml += `
+            <div class="invoice-product-item">
+              <span>${product.name} × ${product.quantity}</span>
+              <span>₹${itemTotal}</span>
+            </div>
+          `;
+        });
+      }
+
+      // Build address string
+      let addressStr = '';
+      if (order.address) {
+        const addr = order.address;
+        addressStr = [addr.street, addr.city, addr.state, addr.pincode].filter(Boolean).join(', ');
+      }
+
+      // Render invoice content
+      content.innerHTML = `
+        <div class="invoice-header">
+          <div class="invoice-logo">ShopEase</div>
+          <div class="invoice-title" data-i18n="invoice">${t('invoice')}</div>
+        </div>
+        <div class="invoice-body">
+          <div class="invoice-row">
+            <span data-i18n="orderNumber">${t('orderNumber')}</span>
+            <strong>${order.orderId}</strong>
+          </div>
+          <div class="invoice-row">
+            <span data-i18n="orderDate">${t('orderDate')}</span>
+            <span>${formatOrderDateTime(order.dateTime)}</span>
+          </div>
+          <div class="invoice-row">
+            <span data-i18n="orderStatus">${t('orderStatus')}</span>
+            <span>${getStatusText(order.orderStatus)}</span>
+          </div>
+          ${order.customerName ? `
+          <div class="invoice-row">
+            <span data-i18n="customerName">${t('customerName')}</span>
+            <span>${order.customerName}</span>
+          </div>
+          ` : ''}
+          ${addressStr ? `
+          <div class="invoice-row">
+            <span data-i18n="address">${t('address')}</span>
+            <span style="text-align: right; max-width: 200px;">${addressStr}</span>
+          </div>
+          ` : ''}
+          ${order.mobile ? `
+          <div class="invoice-row">
+            <span data-i18n="mobile">${t('mobile')}</span>
+            <span>${order.mobile}</span>
+          </div>
+          ` : ''}
+
+          <div class="invoice-products">
+            <div style="font-weight: 600; margin-bottom: 0.5rem;" data-i18n="productsOrdered">${t('productsOrdered')}</div>
+            ${productsHtml}
+          </div>
+
+          <div class="invoice-row">
+            <span data-i18n="subtotal">${t('subtotal')}</span>
+            <span>₹${subtotal}</span>
+          </div>
+          <div class="invoice-row">
+            <span data-i18n="deliveryCharge">${t('deliveryCharge')}</span>
+            <span>₹${order.deliveryCharge || 0}</span>
+          </div>
+          <div class="invoice-row highlight">
+            <span data-i18n="finalTotal">${t('finalTotal')}</span>
+            <span>₹${order.totalAmount}</span>
+          </div>
+          <div class="invoice-row">
+            <span data-i18n="paymentMethod">${t('paymentMethod')}</span>
+            <span>${order.paymentMethod}</span>
+          </div>
+          <div class="invoice-row">
+            <span data-i18n="deliveryType">${t('deliveryType')}</span>
+            <span>${order.deliveryType}</span>
+          </div>
+        </div>
+        <div class="invoice-footer" data-i18n="thankYouOrder">${t('thankYouOrder')}</div>
+        <div class="invoice-actions no-print">
+          <button class="btn btn-primary" onclick="printInvoice()">
+            <span>🖨️</span> <span data-i18n="downloadInvoice">${t('downloadInvoice')}</span>
+          </button>
+          <button class="btn btn-outline" onclick="closeInvoice()">
+            <span data-i18n="close">${t('close')}</span>
+          </button>
+        </div>
+      `;
+
+      // Show modal
+      modal.classList.add('show');
+    }
+
+    /**
+     * Close invoice modal
+     */
+    function closeInvoice() {
+      const modal = document.getElementById('invoiceModal');
+      modal.classList.remove('show');
+    }
+
+    /**
+     * Print/download invoice
+     */
+    function printInvoice() {
+      window.print();
+    }
+
+    // Close invoice modal on overlay click
+    document.getElementById('invoiceModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeInvoice();
+      }
+    });
+
+    // Close invoice modal on Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        const invoiceModal = document.getElementById('invoiceModal');
+        if (invoiceModal.classList.contains('show')) {
+          closeInvoice();
+        }
+      }
+    });
+
+    // Re-render orders when language changes
+    window.addEventListener('languageChanged', function() {
+      renderOrderHistory();
+      renderAddresses();
+    });
+
+    // ========================================
+    // ADDRESS BOOK FUNCTIONS
+    // ========================================
+
+    /**
+     * Get all addresses from localStorage
+     * @returns {Array} Array of address objects
+     */
+    function getAddresses() {
+      return JSON.parse(localStorage.getItem('userAddresses')) || [];
+    }
+
+    /**
+     * Save addresses to localStorage
+     * @param {Array} addresses - Array of address objects
+     */
+    function saveAddresses(addresses) {
+      localStorage.setItem('userAddresses', JSON.stringify(addresses));
+    }
+
+    /**
+     * Generate unique ID for address
+     * @returns {string} Unique ID
+     */
+    function generateAddressId() {
+      return 'addr_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    }
+
+    /**
+     * Get default address
+     * @returns {Object|null} Default address or null
+     */
+    function getDefaultAddress() {
+      const addresses = getAddresses();
+      return addresses.find(addr => addr.isDefault) || null;
+    }
+
+    /**
+     * Set an address as default
+     * @param {string} addressId - ID of address to set as default
+     */
+    function setDefaultAddress(addressId) {
+      const addresses = getAddresses();
+      addresses.forEach(addr => {
+        addr.isDefault = (addr.id === addressId);
+      });
+      saveAddresses(addresses);
+      renderAddresses();
+    }
+
+    /**
+     * Add a new address
+     * @param {Object} addressData - Address data object
+     */
+    function addAddress(addressData) {
+      const addresses = getAddresses();
+
+      // If this is the first address, make it default
+      if (addresses.length === 0) {
+        addressData.isDefault = true;
+      }
+
+      addresses.push({
+        id: generateAddressId(),
+        ...addressData
+      });
+
+      saveAddresses(addresses);
+      renderAddresses();
+    }
+
+    /**
+     * Update an existing address
+     * @param {string} addressId - ID of address to update
+     * @param {Object} addressData - New address data
+     */
+    function updateAddressData(addressId, addressData) {
+      const addresses = getAddresses();
+      const index = addresses.findIndex(addr => addr.id === addressId);
+
+      if (index !== -1) {
+        addresses[index] = {
+          ...addresses[index],
+          ...addressData
+        };
+        saveAddresses(addresses);
+        renderAddresses();
+      }
+    }
+
+    /**
+     * Delete an address
+     * @param {string} addressId - ID of address to delete
+     */
+    function deleteAddress(addressId) {
+      if (!confirm(t('confirmDeleteAddress'))) {
+        return;
+      }
+
+      let addresses = getAddresses();
+      const deletedAddr = addresses.find(addr => addr.id === addressId);
+      addresses = addresses.filter(addr => addr.id !== addressId);
+
+      // If deleted address was default and there are other addresses, set first as default
+      if (deletedAddr && deletedAddr.isDefault && addresses.length > 0) {
+        addresses[0].isDefault = true;
+      }
+
+      saveAddresses(addresses);
+      renderAddresses();
+    }
+
+    /**
+     * Render empty state for addresses
+     * @returns {string} HTML string
+     */
+    function renderEmptyAddresses() {
+      return `
+        <div class="empty-addresses">
+          <div class="empty-addresses-icon">📍</div>
+          <div class="empty-addresses-title" data-i18n="noAddresses">${t('noAddresses')}</div>
+          <div class="empty-addresses-text" data-i18n="noAddressesText">${t('noAddressesText')}</div>
+        </div>
+      `;
+    }
+
+    /**
+     * Render a single address card
+     * @param {Object} address - Address object
+     * @returns {string} HTML string
+     */
+    function renderAddressCard(address) {
+      return `
+        <div class="address-card ${address.isDefault ? 'default' : ''}" data-id="${address.id}">
+          ${address.isDefault ? `<span class="default-badge" data-i18n="defaultAddress">${t('defaultAddress')}</span>` : ''}
+          <div class="address-name">${address.fullName}</div>
+          <div class="address-mobile">📞 ${address.mobile}</div>
+          <div class="address-details">
+            ${address.street}<br>
+            ${address.city}, ${address.state} - ${address.pincode}
+          </div>
+          <div class="address-actions">
+            <button class="address-btn btn-edit-addr" onclick="editAddress('${address.id}')">
+              <span>✏️</span>
+              <span data-i18n="editAddress">${t('editAddress')}</span>
+            </button>
+            <button class="address-btn btn-delete-addr" onclick="deleteAddress('${address.id}')">
+              <span>🗑️</span>
+              <span data-i18n="deleteAddress">${t('deleteAddress')}</span>
+            </button>
+            ${!address.isDefault ? `
+              <button class="address-btn btn-set-default" onclick="setDefaultAddress('${address.id}')">
+                <span>⭐</span>
+                <span data-i18n="setAsDefault">${t('setAsDefault')}</span>
+              </button>
+            ` : ''}
+          </div>
+        </div>
+      `;
+    }
+
+    /**
+     * Render all addresses
+     */
+    function renderAddresses() {
+      const container = document.getElementById('addressesContainer');
+      const addresses = getAddresses();
+
+      if (addresses.length === 0) {
+        container.innerHTML = renderEmptyAddresses();
+        return;
+      }
+
+      // Sort addresses to show default first
+      addresses.sort((a, b) => {
+        if (a.isDefault) return -1;
+        if (b.isDefault) return 1;
+        return 0;
+      });
+
+      let html = '<div class="addresses-list">';
+      addresses.forEach(addr => {
+        html += renderAddressCard(addr);
+      });
+      html += '</div>';
+
+      container.innerHTML = html;
+    }
+
+    /**
+     * Open address modal for adding new address
+     */
+    function openAddAddressModal() {
+      // Reset form
+      document.getElementById('addressForm').reset();
+      document.getElementById('addressId').value = '';
+
+      // Update modal title
+      document.getElementById('addressModalTitle').textContent = t('addNewAddress');
+      document.getElementById('addressModalTitle').setAttribute('data-i18n', 'addNewAddress');
+      document.getElementById('saveAddressBtn').textContent = t('saveAddress');
+      document.getElementById('saveAddressBtn').setAttribute('data-i18n', 'saveAddress');
+
+      // Show modal
+      document.getElementById('addressModal').classList.add('show');
+    }
+
+    /**
+     * Open address modal for editing existing address
+     * @param {string} addressId - ID of address to edit
+     */
+    function editAddress(addressId) {
+      const addresses = getAddresses();
+      const address = addresses.find(addr => addr.id === addressId);
+
+      if (!address) return;
+
+      // Populate form
+      document.getElementById('addressId').value = address.id;
+      document.getElementById('addrFullName').value = address.fullName;
+      document.getElementById('addrMobile').value = address.mobile;
+      document.getElementById('addrStreet').value = address.street;
+      document.getElementById('addrCity').value = address.city;
+      document.getElementById('addrState').value = address.state;
+      document.getElementById('addrPincode').value = address.pincode;
+
+      // Update modal title
+      document.getElementById('addressModalTitle').textContent = t('editAddress');
+      document.getElementById('addressModalTitle').setAttribute('data-i18n', 'editAddress');
+      document.getElementById('saveAddressBtn').textContent = t('updateAddress');
+      document.getElementById('saveAddressBtn').setAttribute('data-i18n', 'updateAddress');
+
+      // Show modal
+      document.getElementById('addressModal').classList.add('show');
+    }
+
+    /**
+     * Close address modal
+     */
+    function closeAddressModal() {
+      document.getElementById('addressModal').classList.remove('show');
+    }
+
+    /**
+     * Handle address form submission
+     */
+    function handleAddressSave() {
+      const form = document.getElementById('addressForm');
+
+      // Get form values
+      const addressId = document.getElementById('addressId').value;
+      const fullName = document.getElementById('addrFullName').value.trim();
+      const mobile = document.getElementById('addrMobile').value.trim();
+      const street = document.getElementById('addrStreet').value.trim();
+      const city = document.getElementById('addrCity').value.trim();
+      const state = document.getElementById('addrState').value.trim();
+      const pincode = document.getElementById('addrPincode').value.trim();
+
+      // Validate
+      if (!fullName || !mobile || !street || !city || !state || !pincode) {
+        alert(t('fillAllFields'));
+        return;
+      }
+
+      if (!/^[0-9]{10}$/.test(mobile)) {
+        alert(t('validMobile'));
+        return;
+      }
+
+      if (!/^[0-9]{6}$/.test(pincode)) {
+        alert(t('validPincode'));
+        return;
+      }
+
+      const addressData = {
+        fullName,
+        mobile,
+        street,
+        city,
+        state,
+        pincode
+      };
+
+      if (addressId) {
+        // Update existing address
+        updateAddressData(addressId, addressData);
+        alert(t('addressUpdated'));
+      } else {
+        // Add new address
+        addAddress(addressData);
+        alert(t('addressSaved'));
+      }
+
+      closeAddressModal();
+    }
+
+    // Address Modal Event Listeners
+    document.getElementById('addAddressBtn').addEventListener('click', openAddAddressModal);
+    document.getElementById('closeAddressModal').addEventListener('click', closeAddressModal);
+    document.getElementById('cancelAddressBtn').addEventListener('click', closeAddressModal);
+    document.getElementById('saveAddressBtn').addEventListener('click', handleAddressSave);
+
+    // Close modal on overlay click
+    document.getElementById('addressModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeAddressModal();
+      }
+    });
+
+    // Close address modal on Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        const addressModal = document.getElementById('addressModal');
+        if (addressModal.classList.contains('show')) {
+          closeAddressModal();
+        }
+      }
+    });
+
+    // ========================================
+    // DARK MODE FUNCTIONS
+    // ========================================
+    function getCurrentTheme() {
+      return localStorage.getItem('themeMode') || 'light';
+    }
+
+    function setTheme(theme) {
+      localStorage.setItem('themeMode', theme);
+    }
+
+    function applyTheme(theme) {
+      if (theme === 'dark') {
+        document.body.classList.add('dark-mode');
+      } else {
+        document.body.classList.remove('dark-mode');
+      }
+    }
+
+    function toggleTheme() {
+      const currentTheme = getCurrentTheme();
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      setTheme(newTheme);
+      applyTheme(newTheme);
+    }
+
+    function initDarkMode() {
+      const savedTheme = getCurrentTheme();
+      applyTheme(savedTheme);
+
+      const themeToggle = document.getElementById('themeToggle');
+      if (themeToggle) {
+        themeToggle.addEventListener('click', toggleTheme);
+      }
+    }
+
+    // ========================================
+    // ORDER TRACKING FUNCTIONS
+    // ========================================
+
+    /**
+     * Order status stages
+     */
+    const ORDER_STAGES = [
+      { key: 'placed', label: 'Order Placed', icon: '📝', message: 'Your order has been placed successfully!' },
+      { key: 'packed', label: 'Packed', icon: '📦', message: 'Your order has been packed and is ready for shipping.' },
+      { key: 'out_for_delivery', label: 'Out for Delivery', icon: '🚚', message: 'Your order is out for delivery!' },
+      { key: 'delivered', label: 'Delivered', icon: '✅', message: 'Your order has been delivered successfully!' }
+    ];
+
+    /**
+     * Get order tracking data from localStorage
+     * @returns {object} Order tracking data
+     */
+    function getOrderTracking() {
+      return JSON.parse(localStorage.getItem('orderTracking')) || {};
+    }
+
+    /**
+     * Get tracking info for specific order
+     * @param {string} orderId - Order ID
+     * @returns {object|null} Order tracking info
+     */
+    function getOrderTrackingInfo(orderId) {
+      const tracking = getOrderTracking();
+      return tracking[orderId] || null;
+    }
+
+    /**
+     * Get stage index by status key
+     * @param {string} status - Status key
+     * @returns {number} Stage index
+     */
+    function getTrackingStageIndex(status) {
+      return ORDER_STAGES.findIndex(s => s.key === status);
+    }
+
+    /**
+     * Calculate progress line width
+     * @param {number} stageIndex - Current stage index
+     * @returns {string} CSS width value
+     */
+    function calculateProgressWidth(stageIndex) {
+      if (stageIndex <= 0) return '0%';
+      if (stageIndex >= ORDER_STAGES.length - 1) return '100%';
+      const percentage = (stageIndex / (ORDER_STAGES.length - 1)) * 100;
+      return `${percentage}%`;
+    }
+
+    /**
+     * Format timestamp for tracking display
+     * @param {string} timestamp - ISO timestamp
+     * @returns {string} Formatted time
+     */
+    function formatTrackingTime(timestamp) {
+      if (!timestamp) return '--';
+      const date = new Date(timestamp);
+      return date.toLocaleTimeString('en-US', {
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+
+    /**
+     * Format timestamp for timeline
+     * @param {string} timestamp - ISO timestamp
+     * @returns {string} Formatted date and time
+     */
+    function formatTimelineDateTime(timestamp) {
+      if (!timestamp) return '--';
+      const date = new Date(timestamp);
+      return date.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+
+    /**
+     * Get status label text
+     * @param {string} statusKey - Status key
+     * @returns {string} Status label
+     */
+    function getStatusLabel(statusKey) {
+      const stage = ORDER_STAGES.find(s => s.key === statusKey);
+      return stage ? stage.label : statusKey;
+    }
+
+    /**
+     * Show order tracking modal
+     * @param {string} orderId - Order ID
+     */
+    function showOrderTracking(orderId) {
+      const orders = getOrderHistory();
+      const order = orders.find(o => o.orderId === orderId);
+
+      if (!order) {
+        alert('Order not found');
+        return;
+      }
+
+      // Get tracking info
+      let trackingInfo = getOrderTrackingInfo(orderId);
+
+      // If no tracking info, create default based on order status
+      if (!trackingInfo) {
+        // Map order status to tracking status
+        const statusMap = {
+          'Placed': 'placed',
+          'Packed': 'packed',
+          'Out for Delivery': 'out_for_delivery',
+          'Delivered': 'delivered'
+        };
+
+        const currentStatus = statusMap[order.orderStatus] || 'placed';
+
+        trackingInfo = {
+          status: currentStatus,
+          lastUpdated: order.dateTime,
+          statusHistory: [
+            {
+              status: 'placed',
+              timestamp: order.dateTime
+            }
+          ]
+        };
+
+        // Add more history entries based on current status
+        const currentIndex = getTrackingStageIndex(currentStatus);
+        for (let i = 1; i <= currentIndex; i++) {
+          const stageTime = new Date(order.dateTime);
+          stageTime.setMinutes(stageTime.getMinutes() + (i * 10));
+          trackingInfo.statusHistory.push({
+            status: ORDER_STAGES[i].key,
+            timestamp: stageTime.toISOString()
+          });
+        }
+      }
+
+      // Update modal with order info
+      document.getElementById('trackingOrderId').textContent = orderId;
+      document.getElementById('trackingOrderDate').textContent = formatOrderDateTime(order.dateTime);
+
+      // Update progress bar
+      updateModalProgressBar(trackingInfo);
+
+      // Update status details
+      updateStatusDetails(trackingInfo);
+
+      // Update timeline
+      updateTimeline(trackingInfo);
+
+      // Show modal
+      document.getElementById('trackingModal').classList.add('show');
+    }
+
+    /**
+     * Update modal progress bar UI
+     * @param {object} trackingInfo - Tracking info object
+     */
+    function updateModalProgressBar(trackingInfo) {
+      const currentStageIndex = getTrackingStageIndex(trackingInfo.status);
+      const progressLine = document.getElementById('modalProgressLine');
+
+      // Update progress line width
+      progressLine.style.width = calculateProgressWidth(currentStageIndex);
+
+      // Update each step
+      ORDER_STAGES.forEach((stage, index) => {
+        const stepElement = document.getElementById(`modal-step-${stage.key}`);
+        const timeElement = document.getElementById(`modal-time-${stage.key}`);
+
+        if (!stepElement) return;
+
+        // Remove all state classes
+        stepElement.classList.remove('completed', 'active');
+
+        // Find timestamp for this stage
+        const historyEntry = trackingInfo.statusHistory.find(h => h.status === stage.key);
+
+        if (index < currentStageIndex) {
+          // Completed step
+          stepElement.classList.add('completed');
+          if (historyEntry && timeElement) {
+            timeElement.textContent = formatTrackingTime(historyEntry.timestamp);
+          }
+        } else if (index === currentStageIndex) {
+          // Current/Active step
+          stepElement.classList.add('active');
+          if (historyEntry && timeElement) {
+            timeElement.textContent = formatTrackingTime(historyEntry.timestamp);
+          }
+        } else {
+          // Pending step
+          if (timeElement) {
+            timeElement.textContent = '--';
+          }
+        }
+      });
+    }
+
+    /**
+     * Update status details section
+     * @param {object} trackingInfo - Tracking info object
+     */
+    function updateStatusDetails(trackingInfo) {
+      const currentStage = ORDER_STAGES.find(s => s.key === trackingInfo.status);
+
+      if (currentStage) {
+        document.getElementById('trackingStatusIcon').textContent = currentStage.icon;
+        document.getElementById('trackingStatusTitle').textContent = currentStage.label;
+        document.getElementById('trackingStatusMessage').textContent = currentStage.message;
+      }
+    }
+
+    /**
+     * Update timeline section
+     * @param {object} trackingInfo - Tracking info object
+     */
+    function updateTimeline(trackingInfo) {
+      const timelineContainer = document.getElementById('trackingTimeline');
+      const currentStageIndex = getTrackingStageIndex(trackingInfo.status);
+
+      let html = '';
+
+      // Show history in reverse order (newest first)
+      const sortedHistory = [...trackingInfo.statusHistory].reverse();
+
+      sortedHistory.forEach((entry, index) => {
+        const isCurrent = index === 0;
+        const stage = ORDER_STAGES.find(s => s.key === entry.status);
+
+        html += `
+          <div class="timeline-item">
+            <span class="timeline-time">${formatTimelineDateTime(entry.timestamp)}</span>
+            <span class="timeline-event ${isCurrent ? 'current' : ''}">
+              ${stage ? stage.icon : '📦'} ${getStatusLabel(entry.status)}
+            </span>
+          </div>
+        `;
+      });
+
+      timelineContainer.innerHTML = html;
+    }
+
+    /**
+     * Close tracking modal
+     */
+    function closeTrackingModal() {
+      document.getElementById('trackingModal').classList.remove('show');
+    }
+
+    // Tracking Modal Event Listeners
+    document.getElementById('closeTrackingModal').addEventListener('click', closeTrackingModal);
+
+    // Close tracking modal on overlay click
+    document.getElementById('trackingModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeTrackingModal();
+      }
+    });
+
+    // Close tracking modal on Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        const trackingModal = document.getElementById('trackingModal');
+        if (trackingModal.classList.contains('show')) {
+          closeTrackingModal();
+        }
+      }
+    });
+
+    // Initialize
+    initDarkMode();
+    if (checkAuth()) {
+      loadUserProfile();
+    }
+    updateCartBadge();
+    updateWishlistBadge();
+    renderOrderHistory();
+    renderAddresses(); // Render addresses on page load
+  </script>
+</body>
+</html>

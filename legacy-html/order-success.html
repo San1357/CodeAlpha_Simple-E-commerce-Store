@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Order Success</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    /* CSS Variables for Theming */
+    :root {
+      --bg-primary: #f7f7f7;
+      --bg-secondary: #fff;
+      --bg-card: #fff;
+      --bg-input: #f1f1f1;
+      --text-primary: #333;
+      --text-secondary: #555;
+      --text-muted: #888;
+      --border-color: #ddd;
+      --shadow-color: rgba(0,0,0,0.08);
+      --accent-color: #0074d9;
+      --accent-hover: #005fa3;
+      --accent-light: #e7f7ff;
+      --success-color: #2ecc40;
+      --theme-transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    }
+    body.dark-mode {
+      --bg-primary: #1a1a2e;
+      --bg-secondary: #16213e;
+      --bg-card: #1f2940;
+      --bg-input: #2a3a5a;
+      --text-primary: #e8e8e8;
+      --text-secondary: #b8b8b8;
+      --text-muted: #888;
+      --border-color: #3a4a6a;
+      --shadow-color: rgba(0,0,0,0.3);
+      --accent-color: #4da6ff;
+      --accent-hover: #3d96ef;
+      --accent-light: #1a3a5a;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: var(--bg-primary);
+      font-family: Arial, sans-serif;
+      min-height: 100vh;
+      color: var(--text-primary);
+      transition: var(--theme-transition);
+    }
+    /* Header */
+    .header {
+      background: var(--bg-secondary);
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 8px var(--shadow-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: var(--theme-transition);
+    }
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent-color);
+      text-decoration: none;
+    }
+    .nav-links {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+    .nav-links a {
+      color: var(--text-primary);
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      transition: var(--theme-transition);
+    }
+    .nav-links a:hover {
+      background: var(--accent-color);
+      color: #fff;
+    }
+    /* Dark Mode Toggle */
+    .theme-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--bg-input);
+      border: 2px solid var(--border-color);
+      cursor: pointer;
+      font-size: 1.2rem;
+      transition: var(--theme-transition);
+    }
+    .theme-toggle:hover {
+      background: var(--accent-light);
+      border-color: var(--accent-color);
+    }
+    .theme-toggle .sun-icon { display: none; }
+    .theme-toggle .moon-icon { display: block; }
+    body.dark-mode .theme-toggle .sun-icon { display: block; }
+    body.dark-mode .theme-toggle .moon-icon { display: none; }
+    /* Language Selector */
+    .lang-selector-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .lang-icon { font-size: 1.1rem; }
+    .lang-selector {
+      padding: 0.4rem 0.6rem;
+      font-size: 0.9rem;
+      border: 1.5px solid var(--accent-color);
+      border-radius: 5px;
+      background: var(--bg-secondary);
+      color: var(--accent-color);
+      cursor: pointer;
+      outline: none;
+      font-weight: 500;
+      transition: var(--theme-transition);
+    }
+    .lang-selector:hover { background: var(--accent-light); }
+    .lang-selector:focus { box-shadow: 0 0 0 3px rgba(0, 116, 217, 0.15); }
+    /* Cart Icon */
+    .cart-icon-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.5rem 1rem;
+      color: #333;
+      text-decoration: none;
+      border-radius: 4px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .cart-icon-wrapper:hover {
+      background: #0074d9;
+      color: #fff;
+    }
+    .cart-icon { font-size: 1.3rem; }
+    .cart-badge {
+      position: absolute;
+      top: -2px;
+      right: 2px;
+      background: #e74c3c;
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 700;
+      min-width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .cart-badge.hidden { display: none; }
+    @media (max-width: 500px) {
+      .header { flex-direction: column; gap: 1rem; padding: 1rem; }
+    }
+    .container {
+      max-width: 430px;
+      margin: 3rem auto;
+      background: var(--bg-card);
+      border-radius: 10px;
+      box-shadow: 0 4px 24px var(--shadow-color);
+      padding: 2rem 2.5rem 2.5rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: var(--theme-transition);
+    }
+    .success-icon {
+      font-size: 3rem;
+      color: var(--success-color);
+      margin-bottom: 1rem;
+      animation: pop 0.5s;
+    }
+    @keyframes pop {
+      0% { transform: scale(0.5);}
+      100% { transform: scale(1);}
+    }
+    .section-title {
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: var(--accent-color);
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    .receipt {
+      width: 100%;
+      background: var(--bg-input);
+      border-radius: 7px;
+      padding: 1rem 1.2rem;
+      margin-bottom: 1.5rem;
+      box-sizing: border-box;
+      transition: var(--theme-transition);
+    }
+    .receipt-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.7rem;
+      font-size: 1.05rem;
+      color: var(--text-primary);
+    }
+    .receipt-row.total {
+      font-weight: bold;
+      color: var(--accent-color);
+      font-size: 1.15rem;
+      margin-top: 0.5rem;
+    }
+    .download-btn {
+      width: 100%;
+      padding: 0.8rem 0;
+      font-size: 1.1rem;
+      background: var(--accent-color);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: var(--theme-transition);
+      margin-bottom: 1.2rem;
+    }
+    .download-btn:hover {
+      background: var(--accent-hover);
+    }
+    .otp-section {
+      background: var(--accent-light);
+      color: var(--accent-color);
+      border-radius: 5px;
+      padding: 0.7rem;
+      margin-bottom: 1rem;
+      text-align: center;
+      font-size: 1.1rem;
+      font-weight: bold;
+      transition: var(--theme-transition);
+    }
+    @media (max-width: 500px) {
+      .container {
+        padding: 1rem 0.5rem;
+      }
+      .receipt {
+        padding: 0.7rem 0.5rem;
+      }
+    }
+
+    /* ========================================
+       ORDER TRACKING PROGRESS BAR STYLES
+       ======================================== */
+    .tracking-section {
+      width: 100%;
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px dashed var(--border-color);
+    }
+
+    .tracking-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--accent-color);
+      margin-bottom: 1.5rem;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    /* Progress Bar Container */
+    .progress-tracker {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+      margin: 0 auto;
+      max-width: 100%;
+      padding: 0 10px;
+    }
+
+    /* Progress Line (Background) */
+    .progress-tracker::before {
+      content: '';
+      position: absolute;
+      top: 20px;
+      left: 30px;
+      right: 30px;
+      height: 4px;
+      background: var(--border-color);
+      border-radius: 2px;
+      z-index: 1;
+    }
+
+    /* Progress Line (Filled) */
+    .progress-line {
+      position: absolute;
+      top: 20px;
+      left: 30px;
+      height: 4px;
+      background: linear-gradient(90deg, #2ecc40, #27ae60);
+      border-radius: 2px;
+      z-index: 2;
+      transition: width 0.5s ease;
+      width: 0%;
+    }
+
+    /* Individual Step */
+    .progress-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      z-index: 3;
+      flex: 1;
+    }
+
+    /* Step Circle */
+    .step-circle {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--bg-secondary);
+      border: 3px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .step-circle .step-icon {
+      display: block;
+    }
+
+    .step-circle .check-icon {
+      display: none;
+      color: #fff;
+      font-size: 1.1rem;
+    }
+
+    /* Step Label */
+    .step-label {
+      margin-top: 0.6rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-align: center;
+      font-weight: 500;
+      max-width: 70px;
+      line-height: 1.2;
+      transition: color 0.3s ease;
+    }
+
+    /* Step Time */
+    .step-time {
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      margin-top: 0.2rem;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    /* Completed Step */
+    .progress-step.completed .step-circle {
+      background: linear-gradient(135deg, #2ecc40, #27ae60);
+      border-color: #27ae60;
+      animation: stepComplete 0.4s ease;
+    }
+
+    .progress-step.completed .step-circle .step-icon {
+      display: none;
+    }
+
+    .progress-step.completed .step-circle .check-icon {
+      display: block;
+    }
+
+    .progress-step.completed .step-label {
+      color: #27ae60;
+      font-weight: 600;
+    }
+
+    .progress-step.completed .step-time {
+      opacity: 1;
+    }
+
+    /* Current/Active Step */
+    .progress-step.active .step-circle {
+      background: var(--accent-color);
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 4px rgba(0, 116, 217, 0.2);
+      animation: pulse-step 2s infinite;
+    }
+
+    .progress-step.active .step-circle .step-icon {
+      filter: brightness(0) invert(1);
+    }
+
+    .progress-step.active .step-label {
+      color: var(--accent-color);
+      font-weight: 700;
+    }
+
+    .progress-step.active .step-time {
+      opacity: 1;
+      color: var(--accent-color);
+    }
+
+    /* Animations */
+    @keyframes stepComplete {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes pulse-step {
+      0%, 100% { box-shadow: 0 0 0 4px rgba(0, 116, 217, 0.2); }
+      50% { box-shadow: 0 0 0 8px rgba(0, 116, 217, 0.1); }
+    }
+
+    /* Status Message */
+    .status-message {
+      text-align: center;
+      margin-top: 1.5rem;
+      padding: 0.8rem 1rem;
+      background: var(--accent-light);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      color: var(--accent-color);
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .status-message.delivered {
+      background: rgba(46, 204, 64, 0.1);
+      color: #27ae60;
+    }
+
+    .status-message .loading-spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid currentColor;
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Estimated Delivery */
+    .estimated-delivery {
+      text-align: center;
+      margin-top: 1rem;
+      padding: 0.6rem 1rem;
+      background: var(--bg-input);
+      border-radius: 6px;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    .estimated-delivery strong {
+      color: var(--text-primary);
+    }
+
+    /* Responsive */
+    @media (max-width: 500px) {
+      .progress-tracker::before {
+        left: 20px;
+        right: 20px;
+      }
+      .progress-line {
+        left: 20px;
+      }
+      .step-circle {
+        width: 36px;
+        height: 36px;
+        font-size: 1rem;
+      }
+      .step-label {
+        font-size: 0.65rem;
+        max-width: 55px;
+      }
+      .step-time {
+        font-size: 0.55rem;
+      }
+      .tracking-title {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <a href="index.html" class="logo" data-i18n="shopease">ShopEase</a>
+    <nav class="nav-links">
+      <button class="theme-toggle" id="themeToggle" title="Toggle Dark Mode">
+        <span class="moon-icon">🌙</span>
+        <span class="sun-icon">☀️</span>
+      </button>
+      <div class="lang-selector-wrapper">
+        <span class="lang-icon">🌐</span>
+        <select id="language-selector" class="lang-selector">
+          <option value="en">English</option>
+          <option value="hi">हिंदी</option>
+          <option value="bho">भोजपुरी</option>
+        </select>
+      </div>
+      <a href="index.html" data-i18n="home">Home</a>
+      <a href="cart.html" class="cart-icon-wrapper">
+        <span class="cart-icon">🛒</span>
+        <span class="cart-badge hidden" id="cartBadge">0</span>
+      </a>
+    </nav>
+  </header>
+
+  <div class="container" id="print-area">
+    <div class="success-icon">✔️</div>
+    <div class="section-title" data-i18n="orderPlacedSuccessfully">Order Placed Successfully!</div>
+    <div class="receipt" id="receipt">
+      <!-- Receipt details will be injected here -->
+    </div>
+    <button class="download-btn" onclick="window.print()" data-i18n="downloadBill">Download Bill</button>
+    <div class="otp-section" id="otp-section">
+      <!-- OTP will be shown here -->
+    </div>
+
+    <!-- Order Tracking Progress Bar -->
+    <div class="tracking-section" id="trackingSection">
+      <div class="tracking-title">
+        <span>📦</span>
+        <span data-i18n="trackYourOrder">Track Your Order</span>
+      </div>
+
+      <!-- Progress Bar -->
+      <div class="progress-tracker">
+        <div class="progress-line" id="progressLine"></div>
+
+        <!-- Step 1: Order Placed -->
+        <div class="progress-step" id="step-placed" data-step="placed">
+          <div class="step-circle">
+            <span class="step-icon">📝</span>
+            <span class="check-icon">✓</span>
+          </div>
+          <span class="step-label" data-i18n="orderPlaced">Order Placed</span>
+          <span class="step-time" id="time-placed">--</span>
+        </div>
+
+        <!-- Step 2: Packed -->
+        <div class="progress-step" id="step-packed" data-step="packed">
+          <div class="step-circle">
+            <span class="step-icon">📦</span>
+            <span class="check-icon">✓</span>
+          </div>
+          <span class="step-label" data-i18n="packed">Packed</span>
+          <span class="step-time" id="time-packed">--</span>
+        </div>
+
+        <!-- Step 3: Out for Delivery -->
+        <div class="progress-step" id="step-out_for_delivery" data-step="out_for_delivery">
+          <div class="step-circle">
+            <span class="step-icon">🚚</span>
+            <span class="check-icon">✓</span>
+          </div>
+          <span class="step-label" data-i18n="outForDelivery">Out for Delivery</span>
+          <span class="step-time" id="time-out_for_delivery">--</span>
+        </div>
+
+        <!-- Step 4: Delivered -->
+        <div class="progress-step" id="step-delivered" data-step="delivered">
+          <div class="step-circle">
+            <span class="step-icon">✅</span>
+            <span class="check-icon">✓</span>
+          </div>
+          <span class="step-label" data-i18n="delivered">Delivered</span>
+          <span class="step-time" id="time-delivered">--</span>
+        </div>
+      </div>
+
+      <!-- Status Message -->
+      <div class="status-message" id="statusMessage">
+        <span class="loading-spinner"></span>
+        <span id="statusText" data-i18n="orderBeingProcessed">Your order is being processed...</span>
+      </div>
+
+      <!-- Estimated Delivery -->
+      <div class="estimated-delivery" id="estimatedDelivery">
+        <span data-i18n="estimatedDelivery">Estimated Delivery:</span>
+        <strong id="deliveryDate">--</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- Language/i18n Script -->
+  <script src="lang.js"></script>
+  <script>
+    // Helper to generate random order number and OTP
+    function generateOrderNumber() {
+      return 'OD' + Math.floor(100000 + Math.random() * 900000);
+    }
+    function generateOTP() {
+      return Math.floor(1000 + Math.random() * 9000);
+    }
+
+    // Get order details from localStorage
+    const orderDetails = JSON.parse(localStorage.getItem('orderDetails') || '{}');
+    const paymentStatus = localStorage.getItem('paymentStatus') || 'SUCCESS';
+    const paymentMethod = localStorage.getItem('paymentMethod') || 'UPI';
+    const deliveryType = orderDetails.delivery === 'pickup' ? 'Pickup from Store' : 'Home Delivery';
+
+    // Generate order number and OTP (store in localStorage for delivery)
+    let orderNumber = localStorage.getItem('orderNumber');
+    if (!orderNumber) {
+      orderNumber = generateOrderNumber();
+      localStorage.setItem('orderNumber', orderNumber);
+    }
+    let otp = localStorage.getItem('deliveryOTP');
+    if (!otp) {
+      otp = generateOTP();
+      localStorage.setItem('deliveryOTP', otp);
+    }
+
+    // Render receipt (with i18n support)
+    function renderReceipt() {
+      const receiptDiv = document.getElementById('receipt');
+      if (!orderDetails.product) {
+        receiptDiv.innerHTML = `<div style="color:red;">${t('noOrderDetails')}</div>`;
+        return;
+      }
+      receiptDiv.innerHTML = `
+        <div class="receipt-row"><span>${t('orderNumber')}:</span><span>${orderNumber}</span></div>
+        <div class="receipt-row"><span>${t('productName')}:</span><span>${orderDetails.product.name}</span></div>
+        <div class="receipt-row"><span>${t('pricePerItem')}:</span><span>₹${orderDetails.product.price}</span></div>
+        <div class="receipt-row"><span>${t('quantity')}:</span><span>${orderDetails.product.quantity}</span></div>
+        <div class="receipt-row"><span>${t('deliveryCharge')}:</span><span>₹${orderDetails.deliveryCharge}</span></div>
+        <div class="receipt-row total"><span>${t('finalTotal')}:</span><span>₹${orderDetails.finalTotal}</span></div>
+        <div class="receipt-row"><span>${t('paymentMethod')}:</span><span>${paymentMethod}</span></div>
+        <div class="receipt-row"><span>${t('paymentStatus')}:</span><span>${paymentStatus}</span></div>
+        <div class="receipt-row"><span>${t('deliveryType')}:</span><span>${deliveryType}</span></div>
+      `;
+    }
+    renderReceipt();
+
+    // Show OTP for delivery (with i18n support)
+    function renderOTP() {
+      const otpDiv = document.getElementById('otp-section');
+      if (deliveryType === 'Home Delivery') {
+        otpDiv.innerHTML = `${t('shareOtpMessage')}<br>OTP: <b>${otp}</b>`;
+      } else {
+        otpDiv.innerHTML = '';
+      }
+    }
+    renderOTP();
+
+    // Re-render on language change
+    window.addEventListener('languageChanged', function() {
+      renderReceipt();
+      renderOTP();
+    });
+
+    // ========================================
+    // SAVE ORDER TO ORDER HISTORY
+    // ========================================
+    /**
+     * Save the current order to orderHistory in localStorage
+     * Only saves if the order hasn't been saved already (checks by orderId)
+     */
+    function saveOrderToHistory() {
+      // Check if order details exist
+      if (!orderDetails.product) {
+        console.log('No order details to save');
+        return;
+      }
+
+      // Get existing order history from localStorage
+      let orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
+
+      // Check if this order already exists in history (prevent duplicates)
+      const orderExists = orderHistory.some(order => order.orderId === orderNumber);
+      if (orderExists) {
+        console.log('Order already saved to history');
+        return;
+      }
+
+      // Prepare products array (supports both single product and cart items)
+      let products = [];
+      if (orderDetails.items && orderDetails.items.length > 0) {
+        // Multiple items from cart checkout
+        products = orderDetails.items.map(item => ({
+          name: item.name,
+          price: item.price,
+          quantity: item.quantity
+        }));
+      } else if (orderDetails.product) {
+        // Single product (Buy Now)
+        products = [{
+          name: orderDetails.product.name,
+          price: orderDetails.product.price,
+          quantity: orderDetails.product.quantity
+        }];
+      }
+
+      // Create new order object
+      const newOrder = {
+        orderId: orderNumber,
+        dateTime: new Date().toISOString(),
+        products: products,
+        totalAmount: orderDetails.finalTotal,
+        paymentMethod: paymentMethod,
+        deliveryType: deliveryType,
+        orderStatus: 'Placed', // Default status for new orders
+        deliveryCharge: orderDetails.deliveryCharge,
+        customerName: orderDetails.fullname || '',
+        address: {
+          street: orderDetails.street || '',
+          city: orderDetails.city || '',
+          state: orderDetails.state || '',
+          pincode: orderDetails.pincode || ''
+        },
+        mobile: orderDetails.mobile || '',
+        otp: otp
+      };
+
+      // Add new order to the beginning (latest first)
+      orderHistory.unshift(newOrder);
+
+      // Save updated history to localStorage
+      localStorage.setItem('orderHistory', JSON.stringify(orderHistory));
+      console.log('Order saved to history:', newOrder);
+    }
+
+    // Save order to history on page load
+    saveOrderToHistory();
+
+    // ========================================
+    // STOCK MANAGEMENT
+    // ========================================
+    const defaultStock = {
+      'Reynolds_Pen': 15,
+      'Cello_Pen': 8,
+      'Parker_Pen': 3,
+      'Linc_Pen': 20,
+      'Flair_Pen': 12,
+      'Pilot_Pen': 5,
+      'Nataraj_Pencil': 25,
+      'Apsara_Pencil': 18,
+      'Camlin_Pencil': 10,
+      'Classmate_Notebook': 7,
+      'Navneet_Notebook': 4,
+      'Doms_Notebook': 0,
+      'Apsara_Sharpener': 30,
+      'Nataraj_Sharpener': 15,
+      'Camlin_Sharpener': 2,
+      'Nataraj_Eraser': 22,
+      'Apsara_Eraser': 0,
+      'Camlin_Eraser': 6
+    };
+
+    function initializeStock() {
+      let stock = localStorage.getItem('productStock');
+      if (!stock) {
+        localStorage.setItem('productStock', JSON.stringify(defaultStock));
+      }
+    }
+
+    function getAllStock() {
+      initializeStock();
+      return JSON.parse(localStorage.getItem('productStock'));
+    }
+
+    function getProductStock(productId) {
+      const stock = getAllStock();
+      return stock[productId] !== undefined ? stock[productId] : 0;
+    }
+
+    function updateProductStock(productId, quantity) {
+      const stock = getAllStock();
+      stock[productId] = Math.max(0, quantity);
+      localStorage.setItem('productStock', JSON.stringify(stock));
+    }
+
+    function reduceStock(productId, quantity) {
+      const currentStock = getProductStock(productId);
+      const newStock = Math.max(0, currentStock - quantity);
+      updateProductStock(productId, newStock);
+      console.log(`Stock reduced for ${productId}: ${currentStock} -> ${newStock}`);
+      return newStock;
+    }
+
+    /**
+     * Reduce stock for all items in the order
+     * Should be called after order is successfully saved
+     */
+    function reduceStockForOrder() {
+      // Check if stock has already been reduced for this order
+      const stockReducedKey = 'stockReduced_' + orderNumber;
+      if (localStorage.getItem(stockReducedKey)) {
+        console.log('Stock already reduced for this order');
+        return;
+      }
+
+      // Get products from order details
+      let products = [];
+      if (orderDetails.items && orderDetails.items.length > 0) {
+        // Multiple items from cart checkout
+        products = orderDetails.items;
+      } else if (orderDetails.product) {
+        // Single product (Buy Now)
+        products = [orderDetails.product];
+      }
+
+      // Reduce stock for each product
+      products.forEach(item => {
+        const productId = item.id || item.name.replace(/\s+/g, '_');
+        reduceStock(productId, item.quantity);
+      });
+
+      // Mark stock as reduced for this order
+      localStorage.setItem(stockReducedKey, 'true');
+      console.log('Stock reduced for order:', orderNumber);
+    }
+
+    // Initialize stock and reduce for this order
+    initializeStock();
+    reduceStockForOrder();
+
+    // ========================================
+    // CART BADGE
+    // ========================================
+    function getCart() {
+      return JSON.parse(localStorage.getItem('cartItems')) || [];
+    }
+
+    function updateCartBadge() {
+      const cart = getCart();
+      const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+      const badge = document.getElementById('cartBadge');
+      if (badge) {
+        badge.textContent = totalItems;
+        if (totalItems > 0) {
+          badge.classList.remove('hidden');
+        } else {
+          badge.classList.add('hidden');
+        }
+      }
+    }
+
+    updateCartBadge();
+
+    // ========================================
+    // DARK MODE SYSTEM
+    // ========================================
+    function getCurrentTheme() {
+      return localStorage.getItem('themeMode') || 'light';
+    }
+    function setTheme(theme) {
+      localStorage.setItem('themeMode', theme);
+    }
+    function applyTheme(theme) {
+      if (theme === 'dark') {
+        document.body.classList.add('dark-mode');
+      } else {
+        document.body.classList.remove('dark-mode');
+      }
+    }
+    function toggleTheme() {
+      const current = getCurrentTheme();
+      const newTheme = current === 'dark' ? 'light' : 'dark';
+      setTheme(newTheme);
+      applyTheme(newTheme);
+    }
+    function initDarkMode() {
+      const savedTheme = getCurrentTheme();
+      applyTheme(savedTheme);
+      const toggle = document.getElementById('themeToggle');
+      if (toggle) {
+        toggle.addEventListener('click', toggleTheme);
+      }
+    }
+    initDarkMode();
+
+    // ========================================
+    // ORDER TRACKING SYSTEM
+    // ========================================
+
+    /**
+     * Order status stages in order
+     * Each stage has: key, label, icon, and message
+     */
+    const ORDER_STAGES = [
+      { key: 'placed', label: 'Order Placed', icon: '📝', message: 'Your order has been placed successfully!' },
+      { key: 'packed', label: 'Packed', icon: '📦', message: 'Your order is being packed...' },
+      { key: 'out_for_delivery', label: 'Out for Delivery', icon: '🚚', message: 'Your order is out for delivery!' },
+      { key: 'delivered', label: 'Delivered', icon: '✅', message: 'Your order has been delivered!' }
+    ];
+
+    /**
+     * Auto-simulation intervals (in milliseconds)
+     * Demo mode: fast transitions for demonstration
+     */
+    const SIMULATION_INTERVALS = {
+      placed_to_packed: 10000,        // 10 seconds
+      packed_to_out_for_delivery: 10000, // 10 seconds (20 total)
+      out_for_delivery_to_delivered: 10000 // 10 seconds (30 total)
+    };
+
+    /**
+     * Get order tracking data from localStorage
+     * @returns {object} Order tracking data
+     */
+    function getOrderTracking() {
+      return JSON.parse(localStorage.getItem('orderTracking')) || {};
+    }
+
+    /**
+     * Save order tracking data to localStorage
+     * @param {object} trackingData - Tracking data object
+     */
+    function saveOrderTracking(trackingData) {
+      localStorage.setItem('orderTracking', JSON.stringify(trackingData));
+    }
+
+    /**
+     * Get tracking info for specific order
+     * @param {string} orderId - Order ID
+     * @returns {object|null} Order tracking info
+     */
+    function getOrderTrackingInfo(orderId) {
+      const tracking = getOrderTracking();
+      return tracking[orderId] || null;
+    }
+
+    /**
+     * Initialize order tracking for new order
+     * @param {string} orderId - Order ID
+     */
+    function initializeOrderTracking(orderId) {
+      const tracking = getOrderTracking();
+
+      // Only initialize if not already tracked
+      if (!tracking[orderId]) {
+        tracking[orderId] = {
+          status: 'placed',
+          lastUpdated: new Date().toISOString(),
+          statusHistory: [
+            {
+              status: 'placed',
+              timestamp: new Date().toISOString()
+            }
+          ],
+          simulationStarted: false
+        };
+        saveOrderTracking(tracking);
+        console.log('Order tracking initialized for:', orderId);
+      }
+
+      return tracking[orderId];
+    }
+
+    /**
+     * Update order status
+     * @param {string} orderId - Order ID
+     * @param {string} newStatus - New status key
+     */
+    function updateOrderStatus(orderId, newStatus) {
+      const tracking = getOrderTracking();
+
+      if (!tracking[orderId]) {
+        console.warn('Order not found in tracking:', orderId);
+        return;
+      }
+
+      // Don't update if already at or past this status
+      const currentStageIndex = ORDER_STAGES.findIndex(s => s.key === tracking[orderId].status);
+      const newStageIndex = ORDER_STAGES.findIndex(s => s.key === newStatus);
+
+      if (newStageIndex <= currentStageIndex) {
+        return;
+      }
+
+      tracking[orderId].status = newStatus;
+      tracking[orderId].lastUpdated = new Date().toISOString();
+      tracking[orderId].statusHistory.push({
+        status: newStatus,
+        timestamp: new Date().toISOString()
+      });
+
+      saveOrderTracking(tracking);
+
+      // Also update order history
+      updateOrderHistoryStatus(orderId, newStatus);
+
+      // Update UI
+      updateTrackingUI(orderId);
+
+      console.log('Order status updated:', orderId, '->', newStatus);
+    }
+
+    /**
+     * Update order status in order history
+     * @param {string} orderId - Order ID
+     * @param {string} newStatus - New status
+     */
+    function updateOrderHistoryStatus(orderId, newStatus) {
+      const orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
+      const orderIndex = orderHistory.findIndex(o => o.orderId === orderId);
+
+      if (orderIndex !== -1) {
+        // Map status to display text
+        const statusMap = {
+          'placed': 'Placed',
+          'packed': 'Packed',
+          'out_for_delivery': 'Out for Delivery',
+          'delivered': 'Delivered'
+        };
+        orderHistory[orderIndex].orderStatus = statusMap[newStatus] || newStatus;
+        localStorage.setItem('orderHistory', JSON.stringify(orderHistory));
+      }
+    }
+
+    /**
+     * Get stage index by status key
+     * @param {string} status - Status key
+     * @returns {number} Stage index
+     */
+    function getStageIndex(status) {
+      return ORDER_STAGES.findIndex(s => s.key === status);
+    }
+
+    /**
+     * Calculate progress line width based on current stage
+     * @param {number} stageIndex - Current stage index
+     * @returns {string} CSS width value
+     */
+    function calculateProgressWidth(stageIndex) {
+      if (stageIndex <= 0) return '0%';
+      if (stageIndex >= ORDER_STAGES.length - 1) return '100%';
+      // Calculate percentage based on completed steps
+      const percentage = (stageIndex / (ORDER_STAGES.length - 1)) * 100;
+      return `${percentage}%`;
+    }
+
+    /**
+     * Format timestamp to time string
+     * @param {string} timestamp - ISO timestamp
+     * @returns {string} Formatted time
+     */
+    function formatTrackingTime(timestamp) {
+      if (!timestamp) return '--';
+      const date = new Date(timestamp);
+      return date.toLocaleTimeString('en-US', {
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+
+    /**
+     * Update tracking UI based on order status
+     * @param {string} orderId - Order ID
+     */
+    function updateTrackingUI(orderId) {
+      const trackingInfo = getOrderTrackingInfo(orderId);
+      if (!trackingInfo) return;
+
+      const currentStageIndex = getStageIndex(trackingInfo.status);
+      const progressLine = document.getElementById('progressLine');
+      const statusMessage = document.getElementById('statusMessage');
+      const statusText = document.getElementById('statusText');
+
+      // Update progress line width
+      progressLine.style.width = calculateProgressWidth(currentStageIndex);
+
+      // Update each step
+      ORDER_STAGES.forEach((stage, index) => {
+        const stepElement = document.getElementById(`step-${stage.key}`);
+        const timeElement = document.getElementById(`time-${stage.key}`);
+
+        if (!stepElement) return;
+
+        // Remove all state classes
+        stepElement.classList.remove('completed', 'active');
+
+        // Find timestamp for this stage
+        const historyEntry = trackingInfo.statusHistory.find(h => h.status === stage.key);
+
+        if (index < currentStageIndex) {
+          // Completed step
+          stepElement.classList.add('completed');
+          if (historyEntry && timeElement) {
+            timeElement.textContent = formatTrackingTime(historyEntry.timestamp);
+          }
+        } else if (index === currentStageIndex) {
+          // Current/Active step
+          stepElement.classList.add('active');
+          if (historyEntry && timeElement) {
+            timeElement.textContent = formatTrackingTime(historyEntry.timestamp);
+          }
+        }
+      });
+
+      // Update status message
+      const currentStage = ORDER_STAGES[currentStageIndex];
+      if (currentStage) {
+        statusText.textContent = currentStage.message;
+
+        // Update message style for delivered status
+        if (currentStage.key === 'delivered') {
+          statusMessage.classList.add('delivered');
+          statusMessage.innerHTML = `<span>🎉</span><span id="statusText">${currentStage.message}</span>`;
+        } else {
+          statusMessage.classList.remove('delivered');
+        }
+      }
+
+      // Update estimated delivery
+      updateEstimatedDelivery(trackingInfo.status);
+    }
+
+    /**
+     * Update estimated delivery display
+     * @param {string} currentStatus - Current order status
+     */
+    function updateEstimatedDelivery(currentStatus) {
+      const deliveryDateEl = document.getElementById('deliveryDate');
+      const estimatedEl = document.getElementById('estimatedDelivery');
+
+      if (currentStatus === 'delivered') {
+        estimatedEl.innerHTML = '<span style="color: #27ae60;">✅ Order Delivered Successfully!</span>';
+      } else {
+        // Calculate estimated delivery (demo: today or tomorrow)
+        const now = new Date();
+        const delivery = new Date(now);
+        delivery.setHours(delivery.getHours() + 2); // Add 2 hours for demo
+
+        const options = { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+        deliveryDateEl.textContent = delivery.toLocaleDateString('en-US', options);
+      }
+    }
+
+    /**
+     * Start auto-simulation of order status updates
+     * @param {string} orderId - Order ID
+     */
+    function startStatusSimulation(orderId) {
+      const tracking = getOrderTracking();
+
+      if (!tracking[orderId]) {
+        console.warn('Cannot start simulation - order not found:', orderId);
+        return;
+      }
+
+      // Check if simulation already started
+      if (tracking[orderId].simulationStarted) {
+        console.log('Simulation already started for order:', orderId);
+        return;
+      }
+
+      // Mark simulation as started
+      tracking[orderId].simulationStarted = true;
+      saveOrderTracking(tracking);
+
+      console.log('Starting status simulation for order:', orderId);
+
+      // Get current status
+      const currentStatus = tracking[orderId].status;
+      const currentIndex = getStageIndex(currentStatus);
+
+      // Schedule remaining transitions
+      let delay = 0;
+
+      // Transition to Packed
+      if (currentIndex < 1) {
+        delay = SIMULATION_INTERVALS.placed_to_packed;
+        setTimeout(() => {
+          updateOrderStatus(orderId, 'packed');
+        }, delay);
+      }
+
+      // Transition to Out for Delivery
+      if (currentIndex < 2) {
+        delay = currentIndex < 1
+          ? SIMULATION_INTERVALS.placed_to_packed + SIMULATION_INTERVALS.packed_to_out_for_delivery
+          : SIMULATION_INTERVALS.packed_to_out_for_delivery;
+        setTimeout(() => {
+          updateOrderStatus(orderId, 'out_for_delivery');
+        }, delay);
+      }
+
+      // Transition to Delivered
+      if (currentIndex < 3) {
+        delay = currentIndex < 1
+          ? SIMULATION_INTERVALS.placed_to_packed + SIMULATION_INTERVALS.packed_to_out_for_delivery + SIMULATION_INTERVALS.out_for_delivery_to_delivered
+          : currentIndex < 2
+            ? SIMULATION_INTERVALS.packed_to_out_for_delivery + SIMULATION_INTERVALS.out_for_delivery_to_delivered
+            : SIMULATION_INTERVALS.out_for_delivery_to_delivered;
+        setTimeout(() => {
+          updateOrderStatus(orderId, 'delivered');
+        }, delay);
+      }
+    }
+
+    /**
+     * Resume simulation based on elapsed time
+     * Handles page reload - calculates what status should be based on time elapsed
+     * @param {string} orderId - Order ID
+     */
+    function resumeSimulation(orderId) {
+      const trackingInfo = getOrderTrackingInfo(orderId);
+      if (!trackingInfo || !trackingInfo.simulationStarted) return;
+
+      // Get time since order was placed
+      const placedEntry = trackingInfo.statusHistory.find(h => h.status === 'placed');
+      if (!placedEntry) return;
+
+      const placedTime = new Date(placedEntry.timestamp).getTime();
+      const now = Date.now();
+      const elapsed = now - placedTime;
+
+      // Calculate what status should be based on elapsed time
+      let expectedStatus = 'placed';
+      let totalTime = 0;
+
+      totalTime += SIMULATION_INTERVALS.placed_to_packed;
+      if (elapsed >= totalTime) expectedStatus = 'packed';
+
+      totalTime += SIMULATION_INTERVALS.packed_to_out_for_delivery;
+      if (elapsed >= totalTime) expectedStatus = 'out_for_delivery';
+
+      totalTime += SIMULATION_INTERVALS.out_for_delivery_to_delivered;
+      if (elapsed >= totalTime) expectedStatus = 'delivered';
+
+      // Update to expected status if different
+      const currentIndex = getStageIndex(trackingInfo.status);
+      const expectedIndex = getStageIndex(expectedStatus);
+
+      if (expectedIndex > currentIndex) {
+        // Fast-forward through missed statuses
+        for (let i = currentIndex + 1; i <= expectedIndex; i++) {
+          updateOrderStatus(orderId, ORDER_STAGES[i].key);
+        }
+      }
+
+      // Schedule remaining transitions
+      if (expectedStatus !== 'delivered') {
+        const currentStageIndex = getStageIndex(expectedStatus);
+        let remainingDelay = 0;
+
+        if (currentStageIndex === 0) {
+          // Still at placed - schedule all
+          remainingDelay = SIMULATION_INTERVALS.placed_to_packed - (elapsed % SIMULATION_INTERVALS.placed_to_packed);
+          setTimeout(() => updateOrderStatus(orderId, 'packed'), remainingDelay);
+
+          remainingDelay = SIMULATION_INTERVALS.placed_to_packed + SIMULATION_INTERVALS.packed_to_out_for_delivery - elapsed;
+          if (remainingDelay > 0) setTimeout(() => updateOrderStatus(orderId, 'out_for_delivery'), remainingDelay);
+
+          remainingDelay = SIMULATION_INTERVALS.placed_to_packed + SIMULATION_INTERVALS.packed_to_out_for_delivery + SIMULATION_INTERVALS.out_for_delivery_to_delivered - elapsed;
+          if (remainingDelay > 0) setTimeout(() => updateOrderStatus(orderId, 'delivered'), remainingDelay);
+        } else if (currentStageIndex === 1) {
+          // At packed - schedule remaining
+          const packedTime = SIMULATION_INTERVALS.placed_to_packed;
+          remainingDelay = packedTime + SIMULATION_INTERVALS.packed_to_out_for_delivery - elapsed;
+          if (remainingDelay > 0) setTimeout(() => updateOrderStatus(orderId, 'out_for_delivery'), remainingDelay);
+
+          remainingDelay = packedTime + SIMULATION_INTERVALS.packed_to_out_for_delivery + SIMULATION_INTERVALS.out_for_delivery_to_delivered - elapsed;
+          if (remainingDelay > 0) setTimeout(() => updateOrderStatus(orderId, 'delivered'), remainingDelay);
+        } else if (currentStageIndex === 2) {
+          // At out_for_delivery - schedule delivered
+          const outTime = SIMULATION_INTERVALS.placed_to_packed + SIMULATION_INTERVALS.packed_to_out_for_delivery;
+          remainingDelay = outTime + SIMULATION_INTERVALS.out_for_delivery_to_delivered - elapsed;
+          if (remainingDelay > 0) setTimeout(() => updateOrderStatus(orderId, 'delivered'), remainingDelay);
+        }
+      }
+    }
+
+    /**
+     * Initialize order tracking on page load
+     */
+    function initOrderTracking() {
+      // Check if we have order details
+      if (!orderDetails.product && (!orderDetails.items || orderDetails.items.length === 0)) {
+        // Hide tracking section if no order
+        const trackingSection = document.getElementById('trackingSection');
+        if (trackingSection) {
+          trackingSection.style.display = 'none';
+        }
+        return;
+      }
+
+      // Initialize tracking for this order
+      const trackingInfo = initializeOrderTracking(orderNumber);
+
+      // Update UI with current status
+      updateTrackingUI(orderNumber);
+
+      // Start or resume simulation
+      if (!trackingInfo.simulationStarted) {
+        startStatusSimulation(orderNumber);
+      } else {
+        resumeSimulation(orderNumber);
+      }
+    }
+
+    // Initialize order tracking
+    initOrderTracking();
+
+    // Re-render on language change
+    window.addEventListener('languageChanged', function() {
+      updateTrackingUI(orderNumber);
+    });
+  </script>
+</body>
+</html>
